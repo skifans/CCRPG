@@ -620,6 +620,23 @@ def combat():
 
 #end of combat system
 #-----------------------------------------------------------------------------------
+global map_x
+global map_y
+map_x=0
+map_y=0
+def new_map(direction):
+    global map_x
+    global map_y
+    pygame.display.flip() #suppost to update whole map
+    if direction=="up":
+        map_y=map_y+1
+    if direction=="down":
+        map_y=map_y-1
+    if direction=="right":
+        map_x=map_x+1
+    if direction=="left":
+        map_x=map_x-1
+    print("map x",map_x,"map y",map_y)
 
 print("Movement enabled, use arrow keys or WASD keys")
 
@@ -650,6 +667,8 @@ while running:
                     pygame.display.update(to_update)
                 else:
                     print("Off edge of map.")
+                    player.x=780
+                    new_map("left")
 
             elif (event.key == K_RIGHT or event.key == K_d):
                 if player.x != 780:
@@ -665,6 +684,8 @@ while running:
                     pygame.display.update(to_update)
                 else:
                     print("off edge of map")
+                    player.x=0
+                    new_map("right")
 
             elif (event.key == K_UP or event.key == K_w):
                 if player.y != 0:
@@ -680,6 +701,8 @@ while running:
                     pygame.display.update(to_update)
                 else:
                     print("off edge of map")
+                    player.y=580
+                    new_map("up")
 
             elif (event.key == K_DOWN or event.key == K_s):
                 if player.y!=(windowHeight-20):
@@ -695,3 +718,5 @@ while running:
                     pygame.display.update(to_update)
                 else:
                     print("off edge of map")
+                    player.y=0
+                    new_map("down")
