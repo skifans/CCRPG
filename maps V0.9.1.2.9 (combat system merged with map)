@@ -3,6 +3,7 @@
 #Imports
 import pygame, random, time, os, ctypes
 from pygame.locals import *
+from tkinter import *
 
 #Colour Grid
 WHITE     = (255, 255, 255)
@@ -511,9 +512,15 @@ def enemyturn ():
 def player1turn(player1,darkness):
     global combatover
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+    global pchoice
     print("Choose your action:")
     print("attack spell run")
-    pchoice = str(input())
+    app = Application(master=root)
+    #thigns before button is pressed
+    app.mainloop()
+    #things after button is pressed
+    ##pchoice="run"
+    root.quit()
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
@@ -541,7 +548,7 @@ def player1turn(player1,darkness):
         run = random.randint(1,10)
         if run < 3:
             print("You fail to run away")
-        if run > 3:
+        if run > 3 or run==3:
             print("You manage to run away")
             combatover = True
 
@@ -618,6 +625,51 @@ def combat():
     while combatover == False:
         turn (player1,darkness)
 
+global pchoice
+class Application(Frame):
+    def say_hi(self):
+        global pchoice
+        print("Run")
+        pchoice="run"
+        root.quit()
+
+    def say_hi1(self):
+        global pchoice
+        print("Spell")
+        pchoice="spell"
+        root.quit()
+
+    def say_hi2(self):
+        global pchoice
+        print("Attack")
+        pchoice="attack"
+        root.quit()
+
+    def createWidgets(self):
+        self.run = Button(self)
+        self.run["text"] = "Run",
+        self.run["command"] = self.say_hi
+
+        self.run.pack({"side": "left"})
+
+
+        self.spell = Button(self)
+        self.spell["text"] = "Spell",
+        self.spell["command"] = self.say_hi1
+
+        self.spell.pack({"side": "left"})
+
+        self.attack = Button(self)
+        self.attack["text"] = "Attack",
+        self.attack["command"] = self.say_hi2
+
+        self.attack.pack({"side": "left"})
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.pack()
+        self.createWidgets()
+root = Tk()
 #end of combat system
 #-----------------------------------------------------------------------------------
 global map_x
@@ -637,6 +689,7 @@ def new_map(direction):
     if direction=="left":
         map_x=map_x-1
     print("map x",map_x,"map y",map_y)
+
 
 print("Movement enabled, use arrow keys or WASD keys")
 
