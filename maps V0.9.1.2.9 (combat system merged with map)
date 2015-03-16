@@ -377,37 +377,31 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
     player1_class = player1_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
     if player1_class == "barbarian":
             player1 = barbarian
-            print ("Are you ready?")
     elif player1_class == "warrior": #changed the if to an elif to cut down lag
             player1 = warrior
-            print ("Are you ready?")
     elif player1_class == "mage":    #changed the if to an elif to cut down lag
             player1 = mage
-            print ("Are you ready?")
     elif player1_class == "paladin": #changed the if to an elif to cut down lag
             player1 = paladin
-            print ("Are you ready?")
     elif player1_class == "necromancer": #changed the if to an elif to cut down lag
             player1 = necromancer
-            print ("Are you ready?")
     elif player1_class == "lancer":  #changed the if to an elif to cut down lag
             player1 = lancer
-            print ("Are you ready?")
     elif player1_class == "archer":  #changed the if to an elif to cut down lag
             player1 = archer
-            print ("Are you ready?")
     elif player1_class == "samurai":#changed the if to an elif to cut down lag
             player1 = samurai
-            print ("Are you ready?")    #added are you ready to this and the one below
     elif player1_class == "ninja":   #changed the if to an elif to cut down lag
             player1 = ninja
-            print ("Are you ready?")
+
     else:
             ctypes.windll.user32.MessageBoxW(0, "Error - player1 class entered incorectly", "error", 0)
             print("Error - player1 class entered incorectly")
             player1 = "error"
             while player1 == "error":
                 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+
+    print ("Are you ready?")
 
 """
 This is the level up system
