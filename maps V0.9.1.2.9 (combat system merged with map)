@@ -370,10 +370,10 @@ simple_katanna = [60,0,0,0,"Katanna",8,0,"In the right hands this weapon is as d
 def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja):
     global player1   #moved global from the if statments to the top to cut down on the ammount needed
     print("What is you're name?")
-    name = input("my name is:")
+    name = str(input("my name is:"))
     print("Choose you're class " + name)
     print(classes)
-    player1_class = input()
+    player1_class = str(input())
     player1_class = player1_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
     if player1_class == "barbarian":
             player1 = barbarian
@@ -519,7 +519,7 @@ def player1turn(player1,darkness):
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
     print("Choose your action:")
     print("attack spell run")
-    pchoice = input()
+    pchoice = str(input())
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
@@ -560,7 +560,7 @@ def turn (player1,darkness):
         print("The enemy has " + str(ehp) + "health")
         print("Choose your action:")
         print("attack spell run")
-        pchoice = input()
+        pchoice = str(input())
         if pchoice == "attack":
             phit = pdex*random.randint(1,4) - edex
             if phit > 0:
