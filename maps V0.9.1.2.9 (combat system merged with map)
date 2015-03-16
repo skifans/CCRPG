@@ -1,0 +1,703 @@
+#Map
+
+#Imports
+import pygame, random, time, os, ctypes
+from pygame.locals import *
+
+#Colour Grid
+WHITE     = (255, 255, 255)
+BLACK     = (  0,   0,   0)
+RED       = (255,   0,   0)
+DARKPINK  = (255,  20, 147)
+GREEN     = (  0, 255,   0)
+DARKGREEN = (  0, 155,   0)
+ORANGE    = (255, 153,  18)
+DARKGRAY  = ( 40,  40,  40)
+YELLOW    = (255, 255,   0)
+BLUE      = (  0,   0, 255)
+KHAKI     = (139, 134,  78)
+
+windowWidth = 800
+windowHeight = 600
+lineColour = WHITE
+cellSize = 20
+assert windowHeight % cellSize == 0
+assert windowWidth % cellSize == 0
+cellWidth = int(windowWidth / cellSize)
+cellHeight = int(windowHeight / cellSize)
+
+
+pygame.init()
+
+#Initiate the window and the basic grid background when called.
+def drawGrid():
+    global window
+    window = pygame.display.set_mode((windowWidth, windowHeight))
+    for x in range(0, windowWidth, cellSize): # draw vertical lines
+        pygame.draw.line(window, lineColour, (x, 0), (x, windowHeight))
+    for y in range(0, windowHeight, cellSize): # draw horizontal lines
+        pygame.draw.line(window, lineColour, (0, y), (windowWidth, y))
+    pygame.display.update() #removing this will make grid and loading appear at the same time
+
+class textures():
+
+    waterCoords = []
+    lavaCoords = []
+    roadCoords = []
+
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+
+    class playerTexture():
+
+        x = 0
+        y = 0
+
+        def loadTextures(self, x, y):
+            self.texture = pygame.image.load(os.path.join("textures","necromancer.png"))
+            self.texturerect = self.texture.get_rect()
+            self.coords = (x, y)
+            self.texturerect.move_ip(self.coords)
+            window.blit(self.texture, self.texturerect)
+
+    #Class for the Water Texture
+    class waterTexture():
+        def __init__(self):
+            self.y = 0
+            self.x = 0
+
+    #When Called Loads Texture in Specified Coords
+        def loadTexture(self, x, y):
+            self.texture = pygame.image.load(os.path.join("textures","waterTexture.gif"))
+            self.texturerect = self.texture.get_rect()
+            self.coords = (x, y)
+            self.texturerect.move_ip(self.coords)
+            window.blit(self.texture, self.texturerect)
+            #pygame.display.flip()
+
+    #Class for General Grass Texture
+    class grassTexture():
+        def __init__(self):
+            self.x = 0
+            self.y = 0
+
+        def loadTexture(self, x, y):
+            self.texture = pygame.image.load(os.path.join("textures","fieldTexture.gif"))
+            self.texturerect = self.texture.get_rect()
+            self.coords = (x, y)
+            self.texturerect.move_ip(self.coords)
+            window.blit(self.texture, self.texturerect)
+            #pygame.display.flip()
+
+    class lavaTexture():
+        def __init__(self):
+            self.x = 0
+            self.y = 0
+
+        def loadTexture(self, x, y):
+            self.texture = pygame.image.load(os.path.join("textures","lavaTexture.gif"))
+            self.texturerect = self.texture.get_rect()
+            self.coords = (x, y)
+            self.texturerect.move_ip(self.coords)
+            window.blit(self.texture, self.texturerect)
+            #pygame.display.flip()
+
+    class roadTexture():
+        def __init__(self):
+            self.x = 0
+            self.y = 0
+
+        def loadTexture(self, x, y):
+            self.leftTexture = pygame.image.load(os.path.join("textures","leftRoadSegment.png"))
+            self.leftTextureRect = self.leftTexture.get_rect()
+            self.rightTexture = pygame.image.load(os.path.join("textures","rightRoadSegment.png"))
+            self.rightTextureRect = self.rightTexture.get_rect()
+            self.leftCoords = (x,y)
+            self.rightCoords = ((x+20),y)
+            self.leftTextureRect.move_ip(self.leftCoords)
+            self.rightTextureRect.move_ip(self.rightCoords)
+            window.blit(self.leftTexture, self.leftTextureRect)
+            window.blit(self.rightTexture, self.rightTextureRect)
+            #pygame.display.flip()
+
+    class loadigTexture():
+        def __init__(self):
+            self.x = 0
+            self.y = 0
+
+        def loadTexture(self, x, y):
+            self.texture = pygame.image.load(os.path.join("textures","whiteTexture.gif"))
+            self.texturerect = self.texture.get_rect()
+            self.coords = (x, y)
+            self.texturerect.move_ip(self.coords)
+            window.blit(self.texture, self.texturerect)
+            #pygame.display.flip()
+
+player = textures.playerTexture()
+
+#Loads vertical line of texture - currently only way of rendering textures for most textures.
+#Takes four arguments: 2 coords to print textures between MUST BE VERTICAL STRAIGHT LINE
+def loadWaterVertLine(x, y, a, b):
+    img = textures.waterTexture()
+    while y < b:
+        img.loadTexture(x, y)
+        textures.waterCoords.append((x, y))
+        y += 20
+
+    #Similar to the Vertical Line However MUST BE HORIZONTAL STRAIGHT LINE
+def loadWaterHoriLine(x, y, a, b):
+    img = textures.waterTexture()
+    while x < a:
+        img.loadTexture(x, y)
+        x += 20
+
+def loadGrassVertLine(x, y, a, b):
+    img = textures.grassTexture()
+    while y < b:
+        img.loadTexture(x, y)
+        textures.waterCoords.append((x, y))
+        y += 20
+
+def loadLavaVertLine(x, y, a, b):
+    img = textures.lavaTexture()
+    while y < b:
+        img.loadTexture(x, y)
+        textures.lavaCoords.append((x, y))
+        y += 20
+
+def loadRoadVertLine(x, y, a, b):
+    img = textures.roadTexture()
+    while y < b:
+        img.loadTexture(x, y)
+        textures.roadCoords.append((x,y))
+        y += 20
+
+def loadWhiteVertLine(x, y, a, b):
+    img = textures.loadigTexture()
+    while y < b:
+        img.loadTexture(x, y)
+        #textures.loadCoords.append((x,y))
+        y += 20
+
+#Not very clever way of loading all the water textures for the main map...
+def loadWaterMap():
+    #Castle Moat Area
+    loadWaterVertLine(0, 520, 0, 600)
+    loadWaterVertLine(20, 480, 20, 600)
+    loadWaterVertLine(40, 460, 20, 600)
+    loadWaterVertLine(60, 440, 20, 600)
+    loadWaterVertLine(80, 440, 20, 600)
+    loadWaterVertLine(100, 420, 20, 600)
+    loadWaterVertLine(120, 420, 20, 600)
+    loadWaterVertLine(140, 420, 20, 600)
+    loadWaterVertLine(160, 440, 20, 600)
+    loadWaterVertLine(180, 440, 20, 600)
+    loadWaterVertLine(200, 460, 20, 600)
+    loadWaterVertLine(220, 480, 20, 600)
+    loadWaterVertLine(240, 520, 20, 600)
+    #Main Sea Water Segment
+    loadWaterHoriLine(280, 580, 800, 580)
+    loadWaterHoriLine(300, 560, 800, 560)
+
+def loadLavaMap():
+    #loadLavaVertLine(400, 200, 400, 300)
+    #loadLavaVertLine(420, 220, 420, 320)
+    #Lava Texture Does Not Tessalate
+    return
+
+def loadRoadMap():
+    loadRoadVertLine(500, 200, 500, 400)
+
+def loadWhiteMap():
+    #arial font used
+    #l
+    loadWhiteVertLine(40, 220, 60, 360)
+    #o
+    loadWhiteVertLine(80, 260, 80, 340)
+    loadWhiteVertLine(100, 240, 100, 260)
+    loadWhiteVertLine(100, 340, 100, 360)
+    loadWhiteVertLine(120, 240, 120, 260)
+    loadWhiteVertLine(120, 340, 120, 360)
+    loadWhiteVertLine(140, 240, 140, 260)
+    loadWhiteVertLine(140, 340, 140, 360)
+    loadWhiteVertLine(160, 260, 160, 340)
+    #a
+    loadWhiteVertLine(200, 260, 200, 280)
+    loadWhiteVertLine(200, 300, 200, 340)
+    loadWhiteVertLine(220, 240, 220, 260)
+    loadWhiteVertLine(220, 280, 220, 300)
+    loadWhiteVertLine(220, 340, 220, 360)
+    loadWhiteVertLine(240, 240, 240, 260)
+    loadWhiteVertLine(240, 280, 240, 300)
+    loadWhiteVertLine(240, 340, 240, 360)
+    loadWhiteVertLine(260, 240, 260, 260)
+    loadWhiteVertLine(260, 280, 260, 300)
+    loadWhiteVertLine(260, 320, 260, 340)
+    loadWhiteVertLine(280, 260, 280, 360)
+    #d
+    loadWhiteVertLine(320, 260, 320, 340)
+    loadWhiteVertLine(340, 240, 340, 260)
+    loadWhiteVertLine(340, 340, 340, 360)
+    loadWhiteVertLine(360, 240, 360, 260)
+    loadWhiteVertLine(360, 340, 360, 360)
+    loadWhiteVertLine(380, 260, 380, 280)
+    loadWhiteVertLine(380, 320, 380, 340)
+    loadWhiteVertLine(400, 200, 400, 360)
+    #i
+    loadWhiteVertLine(440, 200, 440, 220)
+    loadWhiteVertLine(440, 240, 440, 360)
+    #n
+    loadWhiteVertLine(480, 240, 480, 360)
+    loadWhiteVertLine(500, 240, 500, 260)
+    loadWhiteVertLine(520, 240, 520, 260)
+    loadWhiteVertLine(540, 240, 540, 260)
+    loadWhiteVertLine(560, 260, 560, 360)
+    #g
+    loadWhiteVertLine(600, 260, 600, 340)
+    loadWhiteVertLine(600, 380, 600, 400)
+    loadWhiteVertLine(620, 240, 620, 260)
+    loadWhiteVertLine(620, 340, 620, 360)
+    loadWhiteVertLine(620, 380, 620, 400)
+    loadWhiteVertLine(640, 240, 640, 260)
+    loadWhiteVertLine(640, 340, 640, 360)
+    loadWhiteVertLine(640, 380, 640, 400)
+    loadWhiteVertLine(660, 260, 660, 280)
+    loadWhiteVertLine(660, 320, 660, 340)
+    loadWhiteVertLine(660, 380, 660, 400)
+    loadWhiteVertLine(680, 240, 660, 380)
+
+
+#Fills Background With Grass
+def fillGrass(player_x, player_y):
+    x=0
+    #while x < windowWidth:
+    loadGrassVertLine(player_x-20,player_y-20,player_x-20,player_y+20) #refresh 1 collum to the left, from player y -20 to player y +20
+    loadGrassVertLine(player_x,player_y-20,player_x,player_y+40) #not sure way this needs to be 40, but dosnt work otherwise, refreshes collum you are in
+    loadGrassVertLine(player_x+20,player_y-20,player_x+20,player_y+20) #refresh 1 collum to the right, same range as top
+        #x += 20
+
+def fillGrass_first_time():
+    x=0
+    while x < windowWidth:
+        loadGrassVertLine(x,0,x,windowHeight)
+        x += 20
+
+#Refresh Textures Will Take Current Logged Appropriate Coords For Each Texture & Re-Render It (Pre-".flip")
+def refreshTextures(texture, coords):
+    img = texture()
+    for i in coords:
+        img.loadTexture(i[0], i[1])
+
+def refreshAllTextures():
+    refreshTextures(textures.roadTexture, textures.roadCoords)
+    loadWaterMap()
+    refreshTextures(textures.lavaTexture, textures.lavaCoords)
+    player.loadTextures(player.x, player.y)
+
+#General "Main-loop" equivalent for testing.
+def loadTextures():
+    drawGrid()
+    loadWhiteMap()
+    pygame.display.flip()
+    #time.sleep(3) #this will keep the loading screen on for an extra 3 seconds
+    fillGrass_first_time()
+    loadWaterMap()
+    loadLavaMap()
+    loadRoadMap()
+    pygame.display.flip()
+
+#Closes The Window & Game
+def terminate():
+    pygame.quit()
+
+#anything in this function will be done each time the player moves - regardless if direction
+boss_list=[[20,40,60],[20,40,60],[0,1,1],[0,1,2]]
+def after_movement(player_x, player_y, boss_list):
+    #x of boss, y of boss, 0 = one time only (the first time player lands of square) or 1 = repeate (repeate regarless of how many times player lands on square), boss ID
+    refreshAllTextures()
+    if player_x in boss_list[0]: #check if x of player is contaiend in x section of array
+        location_in_array=boss_list[0].index(int(player_x)) #if so then take the possition of that x value and save it
+        if player_y==boss_list[1][location_in_array]: #check the y value of the player against the 2nd diminsion of the array to see if they match
+            if boss_list[2][location_in_array]==1: #see if cordinates needs to be cleated
+                del boss_list[0][location_in_array] #since only on first landing of sqaure does this need to happen then delete relevent parts of array
+                del boss_list[1][location_in_array]
+                del boss_list[2][location_in_array]
+                del boss_list[3][location_in_array]
+            print("boss square triggered")
+            combat()
+
+def collision_detection(player_x, player_y):
+    player_position = (player_x, player_y)
+    cannot_go_onto=[(0,520), (20,500), (20,480), (40,460), (60,440), (80,440), (100,420), (120,420), (140,420), (160,440), (180,440), (200,460), (220,480), (220,500), (240,520), (240,540), (240,560), (240,560), (240,580), (280,580), (300,560), (320,560), (340,560), (360,560), (380,560), (400,560), (420,560), (440,560), (460,560), (480,560), (500,560), (520,560), (540,560), (560,560), (580,560), (600,560), (620,560), (640,560), (660,560), (680,560), (700,560), (720,560), (740,560), (760,560), (780,560)]
+    if player_position in cannot_go_onto:
+        print("collision detection")
+        return False
+    return True
+
+#---------------------------------------------------------------------------------------------------------------------------------------------
+#combat system
+name = "x"
+global combatover
+class darkness:
+    magnus = [100,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",60,1,0,0,0]
+
+#list of classes and stats
+#lancer is high attack, high dex, low defence, focused on killing the enemy very quickly
+lancer = [40,30,80,10,90,["lance",35],["super_light_armour",2],name,[0,20,1],0,0,0]
+#archeris a ranged high dex class, it has a wide range of abilities, like befriend and forage
+archer = [30,30,100,40,50,["bow", 15],["furs",10],name,[0,20,1],10,0,0,0]
+#necromancer summons minions to fight
+necromancer = [70,40,40,60,40,["staff",5],["light_armour",5],name,[0,20,1],10,0,0,0]
+#warriors are the balanced baseline, and ok at everything
+warrior = [50,50,50,50,50,["sword",20],["medium_armour",20],name,[0,20,1],10,0,0,0]
+#mages are a spell casters with basic damage spells
+mage = [45,30,75,85,45,["wand",5],["light_armour",5],name,[0,20,1],0,0,0]
+#paladins are endurance tanks, but don't have much attack
+paladin = [70,95,40,20,25,["shield",5],["heavy_armour",35],name,[0,20,1],10,0,0,0]
+#barbarian is a high attack and health tank
+barbarian = [80,40,40,10,80,["great_sword",50],["Abs",30],name,[0,20,1],10,0,0,0]
+#Samurai is a dexhealth  class
+samurai = [70,30,90,20,40,["Katana",19],["Ancient armour",20],name,[0,20,1],10,0,0,0]
+#ninja has high dex, but low everything else, they rely on using skills, like dodge and counter
+ninja = [30,20,150,20,30,["Short sword",15],["Kimono",5],name,[0,20,1],10,0,0,0]
+
+classes = ["Warrior","Mage","Paladin","Necromancer","Barbarian","Lancer","Archer","Samurai","Ninja"]
+#Tester weapons
+sakaretsu_armour = [50,30,20,0,"Sakaretsu armour",8,1,"Armour that increases offensive capability",0,0,10,0,0]
+simple_katanna = [60,0,0,0,"Katanna",8,0,"In the right hands this weapon is as deadly as any blade",0,60,0,0,0]
+
+def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja):
+    global player1   #moved global from the if statments to the top to cut down on the ammount needed
+    print("What is you're name?")
+    name = input("my name is:")
+    print("Choose you're class " + name)
+    print(classes)
+    player1_class = input()
+    player1_class = player1_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
+    if player1_class == "barbarian":
+            player1 = barbarian
+            print ("Are you ready?")
+    elif player1_class == "warrior": #changed the if to an elif to cut down lag
+            player1 = warrior
+            print ("Are you ready?")
+    elif player1_class == "mage":    #changed the if to an elif to cut down lag
+            player1 = mage
+            print ("Are you ready?")
+    elif player1_class == "paladin": #changed the if to an elif to cut down lag
+            player1 = paladin
+            print ("Are you ready?")
+    elif player1_class == "necromancer": #changed the if to an elif to cut down lag
+            player1 = necromancer
+            print ("Are you ready?")
+    elif player1_class == "lancer":  #changed the if to an elif to cut down lag
+            player1 = lancer
+            print ("Are you ready?")
+    elif player1_class == "archer":  #changed the if to an elif to cut down lag
+            player1 = archer
+            print ("Are you ready?")
+    elif player1_class == "samurai":#changed the if to an elif to cut down lag
+            player1 = samurai
+            print ("Are you ready?")    #added are you ready to this and the one below
+    elif player1_class == "ninja":   #changed the if to an elif to cut down lag
+            player1 = ninja
+            print ("Are you ready?")
+    else:
+            ctypes.windll.user32.MessageBoxW(0, "Error - player1 class entered incorectly", "error", 0)
+            print("Error - player1 class entered incorectly")
+            player1 = "error"
+            while player1 == "error":
+                classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+
+"""
+This is the level up system
+It is ready to go into the game (I think)
+"""
+
+def levelupcheck():
+    global player1
+    statmulti = player1[8][2] + 10
+    if player1[8][0] >= player1[8][1]:
+        player1[8][2] = player1[8][2] + 1
+        multi = player1[8][2] + 1
+        player1[8][1] = player1[8][1] + (40 * multi)
+
+        print("You leveled up!")
+        print("You are now level ",player1[8][2] )
+        if player1 == warrior:
+            player1[0] += statmulti+5
+            player1[4] += statmulti+5
+            player1[1] += statmulti+5
+            player1[3] += statmulti+1
+            player1[2] += statmulti+5
+        if player1 == mage:
+            player1[0] += statmulti+1
+            player1[4] += statmulti+2
+            player1[1] += statmulti+1
+            player1[3] += statmulti+16
+            player1[2] += statmulti+2
+        if player1 == paladin:
+            player1[0] += statmulti+9
+            player1[4] += statmulti+2
+            player1[1] += statmulti+8
+            player1[3] += statmulti+1
+            player1[2] += statmulti+1
+        if player1 == necromancer:
+            player1[0] += statmulti+4
+            player1[4] += statmulti+1
+            player1[1] += statmulti+4
+            player1[3] += statmulti+7
+            player1[2] += statmulti+3
+        if player1 == barbarian:
+            player1[0] += statmulti+7
+            player1[4] += statmulti+10
+            player1[1] += statmulti+1
+            player1[2] += statmulti+3
+        if player1 == samurai:
+            player1[0] += statmulti+7
+            player1[4] += statmulti+3
+            player1[1] += statmulti+4
+            player1[3] += statmulti
+            player1[2] += statmulti+7
+        if player1 == ninja:
+            player1[4] += statmulti+2
+            player1[3] += statmulti+1
+            player1[2] += statmulti+18
+    print("Your stats are:")
+    print("Vitality: " + str(player1[0]))
+    print("Endurance: " + str(player1[1]))
+    print("Dexterity: " + str(player1[2]))
+    print("Inteligence " + str(player1[3]))
+    print("Strength " + str(player1[4]))
+    return
+def statsetup (player1,darkness,sakaretsu_armour,simple_katanna):
+    enemy = darkness.magnus
+    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp
+    print("A new enamy approches \n")
+    ehp = enemy[0]
+    eend = enemy[1]
+    edex = enemy[2]
+    eint = enemy[3]
+    estr = enemy[4]
+    exp = enemy[8]
+    php = player1[0]
+    pend = player1[1]
+    pdex = player1[2]
+    pint = player1[3]
+    pstr = player1[4]
+    pw = simple_katanna
+    pa = sakaretsu_armour
+    return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+
+# defining the function for the enemy turn
+def enemyturn ():
+    global combatover
+    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+    echoice = random.randint(1,2)
+    if echoice == 1:
+        print("The enemy attacks you")
+        enemyhit = estr - (pend+pa[1])
+        ehit = edex*random.randint(1,4) - pdex
+        if ehit < 0:
+            if enemyhit > 0:
+                php = php - enemyhit
+                print("the enemy hits you for "+ str(enemyhit))
+                if php <= 0:
+                    print("You died")
+                    combatover = True
+            if enemyhit <= 0:
+                print("The enemy does no damage")
+        else:
+            print("the enemy misses")
+    else:
+        print("The enemy tries to cast a spell!")
+        print("It fails!")
+
+#defining the player1s turn
+def player1turn(player1,darkness):
+    global combatover
+    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+    print("Choose your action:")
+    print("attack spell run")
+    pchoice = input()
+    if pchoice == "attack":
+        phit = pdex*random.randint(1,4) - edex
+        if phit > 0:
+            if player1 == lancer:
+                player1hit = (pstr+pdex+pw[0]) - eend
+            elif player1 == archer:
+                player1hit = (pw[0]+pdex+pstr/2) - eend
+            elif player1 == samurai:
+                player1hit = (pw[0]+pdex) - eend
+            elif player1 == ninja:
+                player1hit = (pw[0]+pdex) - eend
+            else:
+                player1hit = pw[0]+pstr - eend
+            if player1hit > 0:
+                print("You hit the enemy for " + str(player1hit) + " damage")
+                ehp = ehp-player1hit
+            else:
+                print("You do no damage")
+        else:
+            print("You miss")
+    elif pchoice == "spell":
+        print("You don't have any spells")
+    elif pchoice == "run":
+        print("You try to run")
+        run = random.randint(1,10)
+        if run < 3:
+            print("You fail to run away")
+        if run > 3:
+            print("You manage to run away")
+            combatover = True
+
+# Running the actual turn
+def turn (player1,darkness):
+    global combatover
+    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+    if pw[8] == 1:
+        print("You have " + str(php) + " health")
+        print("The enemy has " + str(ehp) + "health")
+        print("Choose your action:")
+        print("attack spell run")
+        pchoice = input()
+        if pchoice == "attack":
+            phit = pdex*random.randint(1,4) - edex
+            if phit > 0:
+                if player1 == lancer:
+                    player1hit = (pstr+pdex+pw[0]) - eend
+                elif player1 == archer:
+                    player1hit = (pw[0]+pdex+pstr/2) - eend
+                elif player1 == samurai:
+                    player1hit = (pw[0]+pdex) - eend
+                elif player1 == ninja:
+                    player1hit = (pw[0]+pdex) - eend
+                else:
+                    player1hit = pw[0]+pstr - eend
+                if player1hit > 0:
+                    print("You hit the enemy for " + str(player1hit) + " damage")
+                    ehp = ehp-player1hit
+                    if ehp > 0:
+                        enemyturn()
+                    else:
+                        print("The enemy is slain")
+                        player1[8][1] = player1[8][1] + exp
+                        levelupcheck()
+                        combatover = True
+                else:
+                    print("you deal no damage")
+            else:
+                print("You miss")
+                enemyturn()
+        elif pchoice == "spell":
+            print("You don't have any spells")
+        elif pchoice == "run":
+            print("You try to run")
+            run = random.randint(1,10)
+            if run < 3:
+                print("You fail to run away")
+            if run > 3:
+                print("You manage to run away")
+                combatover = True
+    else:
+        enemyturn()
+        if php > 0:
+            player1turn(player1,darkness)
+            if ehp <= 0:
+                print("The enemy is slain")
+                player1[8][0] = player1[8][0] + exp
+                levelupcheck()
+                combatover = True
+        else:
+            print("You died")
+            combatover = True
+classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+statsetup (player1,darkness,sakaretsu_armour,simple_katanna)
+
+def combat():
+    global combatover
+    combatover = False
+    while combatover == False:
+        turn (player1,darkness)
+    combatover = False
+    statsetup (player1,darkness,sakaretsu_armour,simple_katanna)
+    while combatover == False:
+        turn (player1,darkness)
+
+#end of combat system
+#-----------------------------------------------------------------------------------
+
+print("Movement enabled, use arrow keys or WASD keys")
+
+loadTextures()
+
+running=True
+while running:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+                terminate()
+                pygame.display.quit()
+                running=False
+                break
+        elif event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                terminate()
+            elif (event.key == K_LEFT or event.key == K_a):
+                if player.x!=0:
+                    player.x = player.x-20
+                    movment_ok=collision_detection(player.x,player.y)
+                    if movment_ok==False:
+                        player.x=player.x+20
+                    print("placeholder for left code")
+                    print("now at, (" ,player.x,",", player.y,")")
+                    fillGrass(player.x, player.y)
+                    after_movement(player.x, player.y, boss_list)
+                    to_update=(player.x, player.y, 40, 20) #left, top, width, hight
+                    pygame.display.update(to_update)
+                else:
+                    print("Off edge of map.")
+
+            elif (event.key == K_RIGHT or event.key == K_d):
+                if player.x != 780:
+                    player.x = player.x+20
+                    movment_ok=collision_detection(player.x,player.y)
+                    if movment_ok==False:
+                        player.x=player.x-20
+                    print("placeholder for right code")
+                    print("now at, (" ,player.x,",", player.y,")")
+                    fillGrass(player.x, player.y)
+                    after_movement(player.x, player.y, boss_list)
+                    to_update=(player.x-20, player.y, 40, 20) #left, top, width, hight
+                    pygame.display.update(to_update)
+                else:
+                    print("off edge of map")
+
+            elif (event.key == K_UP or event.key == K_w):
+                if player.y != 0:
+                    player.y -= cellSize
+                    movment_ok=collision_detection(player.x,player.y)
+                    if movment_ok==False:
+                        player.y += cellSize
+                    print("placeholder for up code")
+                    print("now at, (" ,player.x,",", player.y,")")
+                    fillGrass(player.x, player.y)
+                    after_movement(player.x, player.y, boss_list)
+                    to_update=(player.x, player.y, 20, 40) #left, top, width, hight
+                    pygame.display.update(to_update)
+                else:
+                    print("off edge of map")
+
+            elif (event.key == K_DOWN or event.key == K_s):
+                if player.y!=(windowHeight-20):
+                    player.y += 20
+                    movment_ok=collision_detection(player.x,player.y)
+                    if movment_ok==False:
+                        player.y -= 20
+                    print("placeholder for down code")
+                    print("now at, (" ,player.x,",", player.y,")")
+                    fillGrass(player.x, player.y)
+                    after_movement(player.x, player.y, boss_list)
+                    to_update=(player.x, player.y-20, 20, 40) #left, top, width, hight
+                    pygame.display.update(to_update)
+                else:
+                    print("off edge of map")
