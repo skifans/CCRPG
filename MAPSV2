@@ -678,10 +678,15 @@ def new_map(direction, playert):
     if direction=="down":
         player[15]=player[15]-1
     if direction=="right":
-        player[15]=player[15]+5
+        player[15]=player[15]+3
     if direction=="left":
-        player[15]=player[15]-5
+        player[15]=player[15]-3
+    image_path="map"+str(player[15])+".gif"
     print(str(player[15]))
+    img=pygame.image.load(image_path)
+    screen=pygame.display.set_mode((0,0))
+    screen.blit(img,(0,0))
+    pygame.display.flip()
 
 
 print("Movement enabled, use arrow keys or WASD keys")
