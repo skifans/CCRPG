@@ -466,22 +466,22 @@ enemy1 = [darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus,darkne
 def statsetup (player,darkness,sakaretsu_armour,simple_katanna):
     if player[15] == 1:
         enemy = enemy1[random.randint(0,5)]
-    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp
-    print("A new enemy approches \n")
-    ehp = enemy[0]
-    eend = enemy[1]
-    edex = enemy[2]
-    eint = enemy[3]
-    estr = enemy[4]
-    exp = enemy[8]
-    php = player[0]
-    pend = player[1]
-    pdex = player[2]
-    pint = player[3]
-    pstr = player[4]
-    pw = simple_katanna
-    pa = sakaretsu_armour
-    return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+        global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp
+        print("A new enemy approches \n")
+        ehp = enemy[0]
+        eend = enemy[1]
+        edex = enemy[2]
+        eint = enemy[3]
+        estr = enemy[4]
+        exp = enemy[8]
+        php = player[0]
+        pend = player[1]
+        pdex = player[2]
+        pint = player[3]
+        pstr = player[4]
+        pw = simple_katanna
+        pa = sakaretsu_armour
+        return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
 
 # defining the function for the enemy turn
 def enemyturn ():
@@ -672,15 +672,20 @@ root = Tk()
 #end of combat system
 #-----------------------------------------------------------------------------------
 def new_map(direction, playert):
+    hight=3 #the amount of vertical maps
     pygame.display.flip() #suppost to update whole map
     if direction=="up":
-        player[15]=player[15]+1
+        move=player[15]/hight
+        if move.is_integer():
+            print("off edge of map")
+        else:
+             player[15]=player[15]+1
     if direction=="down":
         player[15]=player[15]-1
     if direction=="right":
-        player[15]=player[15]+3
+        player[15]=player[15]+hight
     if direction=="left":
-        player[15]=player[15]-3
+        player[15]=player[15]-hight
     image_path="map"+str(player[15])+".gif"
     print(str(player[15]))
     img=pygame.image.load(image_path)
