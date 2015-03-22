@@ -192,9 +192,9 @@ def loadTextures():
     loadWhiteMap()
     pygame.display.flip()
     #time.sleep(3) #this will keep the loading screen on for an extra 3 seconds
-    img=pygame.image.load("map1.gif")
+    background=pygame.image.load("map1.gif")
     screen=pygame.display.set_mode((0,0))
-    screen.blit(img,(0,0))
+    screen.blit(background,(0,0))
     pygame.display.flip()
 
 #Closes The Window & Game
@@ -609,9 +609,9 @@ print("Movement enabled, use arrow keys or WASD keys")
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 loadTextures()
-x=0###
-y=0###
-image = pygame.image.load(os.path.join("textures","necromancer.png"))###
+x=0
+y=0
+image = pygame.image.load(os.path.join("textures","necromancer.png"))
 running=True
 while running:
     for event in pygame.event.get():
@@ -695,7 +695,8 @@ while running:
 ##                    #playert.y=0
 ##                    new_map("down",playert)
         elif event.type == KEYDOWN:
-            background = pygame.image.load(os.path.join("textures","map1.gif"))
+            map_name="map"+str(player[15])+".gif"
+            background = pygame.image.load(os.path.join("textures",map_name))
             screen.blit(background, (0,0))
             pygame.display.update()
             key = pygame.key.get_pressed()
@@ -710,7 +711,15 @@ while running:
                 if movment_ok==False:
                     print("collision")
                 else:
-                    playert.y -= cellSize
+                    if playert.y!=0: #if play isnt at top of level
+                        playert.y -= cellSize
+                        after_movement(playert.x,playert.y,boss_list)
+                    else:
+                        if (player[15]/3).is_integer(): #is player at very top
+                            print("cannot move off map")
+                        else:
+                            new_map("up",playert) #load new map
+                            playert.y=580 #move player to buttom for new map
             if key[pygame.K_RIGHT]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y)
                 if movment_ok==False:
