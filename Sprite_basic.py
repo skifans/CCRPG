@@ -219,7 +219,7 @@ def after_movement(playert_x, playert_y, boss_list):
 
 def collision_detection(playert_x, playert_y):
     playert_position = (playert_x, playert_y)
-    cannot_go_onto=[(760,560), (780,560)] #needs to be in format [(x position,y position), (x position,y position), ...
+    cannot_go_onto=[(40,40), (40,40)] #needs to be in format [(x position,y position), (x position,y position), ... (you only need it in there once, just an example to show what more would look like)
     if playert_position in cannot_go_onto:
         print("collision detection")
         return False
@@ -700,16 +700,29 @@ while running:
             pygame.display.update()
             key = pygame.key.get_pressed()
             if key[pygame.K_DOWN]:
-                playert.y += cellSize
+                movment_ok=collision_detection(playert.x,playert.y+cellSize)
+                if movment_ok==False:
+                    print("collision")
+                else:
+                    playert.y += cellSize
             elif key[pygame.K_UP]:
-                playert.y -= cellSize
+                movment_ok=collision_detection(playert.x,playert.y-cellSize)
+                if movment_ok==False:
+                    print("collision")
+                else:
+                    playert.y -= cellSize
             if key[pygame.K_RIGHT]:
-                playert.x += cellSize
+                movment_ok=collision_detection(playert.x+cellSize,playert.y)
+                if movment_ok==False:
+                    print("collision")
+                else:
+                    playert.x += cellSize
             elif key[pygame.K_LEFT]:
-                playert.x -= cellSize
-    ##            Player.handle_keys()
-    ##            Player.draw(screen)
-    ##            pygame.display.update()
+                movment_ok=collision_detection(playert.x-cellSize,playert.y)
+                if movment_ok==False:
+                    print("collision")
+                else:
+                    playert.x -= cellSize
             clock.tick(10)
             screen.blit(image, (playert.x, playert.y))
             print(playert.x)
