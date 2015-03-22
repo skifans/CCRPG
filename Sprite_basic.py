@@ -705,7 +705,17 @@ while running:
                 if movment_ok==False:
                     print("collision")
                 else:
-                    playert.y += cellSize
+                    if playert.y!=580: #if play isnt at top of level
+                        playert.y += cellSize
+                        after_movement(playert.x,playert.y,boss_list)
+                    else:
+                        if player[15]==1: #is player at very top
+                            print("cannot move off map")
+                        else:
+                            new_map("down",playert) #load new map
+                            playert.y=0 #move player to buttom for new map
+
+
             elif key[pygame.K_UP]:
                 movment_ok=collision_detection(playert.x,playert.y-cellSize)
                 if movment_ok==False:
@@ -720,6 +730,7 @@ while running:
                         else:
                             new_map("up",playert) #load new map
                             playert.y=580 #move player to buttom for new map
+
             if key[pygame.K_RIGHT]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y)
                 if movment_ok==False:
