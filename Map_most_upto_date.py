@@ -609,8 +609,7 @@ print("Movement enabled, use arrow keys or WASD keys")
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 loadTextures()
-x=0
-y=0
+hight=3
 image = pygame.image.load(os.path.join("textures","necromancer.png"))
 running=True
 while running:
@@ -620,80 +619,6 @@ while running:
                 pygame.display.quit()
                 running=False
                 break
-##        elif event.type == KEYDOWN:
-##            if event.key == K_ESCAPE:
-##                terminate()
-##            elif (event.key == K_LEFT or event.key == K_a):
-##                if playert.x!=0:
-##                    #playert.x = playert.x-20
-##                    movment_ok=collision_detection(playert.x,playert.y)
-##                    #if movment_ok==False:
-##                        #playert.x=playert.x+20
-##                    print("placeholder for left code")
-##                    print("now at, (" ,playert.x,",", playert.y,")")
-##                    fillGrass(playert.x, playert.y)
-##                    after_movement(playert.x, playert.y, boss_list)
-##                    to_update=(playert.x, playert.y, 40, 20) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                else:
-##                    to_update=(playert.x, playert.y, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                    #playert.x=780
-##                    new_map("left",playert)
-##
-##            elif (event.key == K_RIGHT or event.key == K_d):
-##                if playert.x != 780:
-##                    #playert.x = playert.x+20
-##                    movment_ok=collision_detection(playert.x,playert.y)
-##                    #if movment_ok==False:
-##                        #playert.x=playert.x-20
-##                    print("placeholder for right code")
-##                    print("now at, (" ,playert.x,",", playert.y,")")
-##                    fillGrass(playert.x, playert.y)
-##                    after_movement(playert.x, playert.y, boss_list)
-##                    to_update=(playert.x-20, playert.y, 40, 20) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                else:
-##                    to_update=(playert.x, playert.y, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                    #playert.x=0
-##                    new_map("right",playert)
-##
-##            elif (event.key == K_UP or event.key == K_w):
-##                if playert.y != 0:
-##                    #playert.y -= cellSize
-##                    movment_ok=collision_detection(playert.x,playert.y)
-##                    #if movment_ok==False:
-##                        #playert.y += cellSize
-##                    print("placeholder for up code")
-##                    print("now at, (" ,playert.x,",", playert.y,")")
-##                    fillGrass(playert.x, playert.y)
-##                    after_movement(playert.x, playert.y, boss_list)
-##                    to_update=(playert.x, playert.y, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                else:
-##                    to_update=(playert.x, playert.y, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                    #playert.y=580
-##                    new_map("up",playert)
-##
-##            elif (event.key == K_DOWN or event.key == K_s):
-##                if playert.y!=(windowHeight-20):
-##                    #playert.y += 20
-##                    movment_ok=collision_detection(playert.x,playert.y)
-##                    #if movment_ok==False:
-##                        #playert.y -= 20
-##                    print("placeholder for down code")
-##                    print("now at, (" ,playert.x,",", playert.y,")")
-##                    fillGrass(playert.x, playert.y)
-##                    after_movement(playert.x, playert.y, boss_list)
-##                    to_update=(playert.x, playert.y-20, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                else:
-##                    to_update=(playert.x, playert.y, 20, 40) #left, top, width, hight
-##                    pygame.display.update(to_update)
-##                    #playert.y=0
-##                    new_map("down",playert)
         elif event.type == KEYDOWN:
             map_name="map"+str(player[15])+".gif"
             background = pygame.image.load(os.path.join("textures",map_name))
@@ -708,7 +633,7 @@ while running:
                         playert.y += cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if ((player[15]-1)/3).is_integer(): #is player at very top
+                        if ((player[15]-1)/hight).is_integer(): #is player at very top
                             print("cannot move off map")
                         else:
                             new_map("down",playert) #load new map
@@ -723,13 +648,13 @@ while running:
                         playert.y -= cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if (player[15]/3).is_integer(): #is player at very top
+                        if (player[15]/hight).is_integer(): #is player at very top
                             print("cannot move off map")
                         else:
                             new_map("up",playert) #load new map
                             playert.y=580 #move player to buttom for new map
 
-            if key[pygame.K_RIGHT]:
+            elif key[pygame.K_RIGHT]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y)
                 if movment_ok==False:
                     print("collision")
@@ -738,7 +663,7 @@ while running:
                         playert.x += cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if player[15]>3**2-3: #is player at very top
+                        if player[15]>hight**2-hight: #is player at very top
                             print("cannot move off map")
                         else:
                             new_map("right",playert) #load new map
@@ -752,7 +677,7 @@ while running:
                         playert.x -= cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if player[15]<=3: #is player at far left
+                        if player[15]<=hight: #is player at far left
                             print("cannot move off map")
                         else:
                             new_map("left",playert) #load new map
