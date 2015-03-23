@@ -698,7 +698,6 @@ while running:
             map_name="map"+str(player[15])+".gif"
             background = pygame.image.load(os.path.join("textures",map_name))
             screen.blit(background, (0,0))
-            pygame.display.update()
             key = pygame.key.get_pressed()
             if key[pygame.K_DOWN]:
                 movment_ok=collision_detection(playert.x,playert.y+cellSize)
@@ -709,12 +708,11 @@ while running:
                         playert.y += cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if player[15]==1: #is player at very top
+                        if ((player[15]-1)/3).is_integer(): #is player at very top
                             print("cannot move off map")
                         else:
                             new_map("down",playert) #load new map
-                            playert.y=0 #move player to buttom for new map
-
+                            playert.y=0 #move player to top for new map
 
             elif key[pygame.K_UP]:
                 movment_ok=collision_detection(playert.x,playert.y-cellSize)
@@ -736,13 +734,29 @@ while running:
                 if movment_ok==False:
                     print("collision")
                 else:
-                    playert.x += cellSize
+                    if playert.x!=780: #if play isnt on the right most map
+                        playert.x += cellSize
+                        after_movement(playert.x,playert.y,boss_list)
+                    else:
+                        if player[15]>3**2-3: #is player at very top
+                            print("cannot move off map")
+                        else:
+                            new_map("right",playert) #load new map
+                            playert.x=0 #move player to left for new map
             elif key[pygame.K_LEFT]:
                 movment_ok=collision_detection(playert.x-cellSize,playert.y)
                 if movment_ok==False:
                     print("collision")
                 else:
-                    playert.x -= cellSize
+                    if playert.x!=0: #if play isnt on the left most map
+                        playert.x -= cellSize
+                        after_movement(playert.x,playert.y,boss_list)
+                    else:
+                        if player[15]<=3: #is player at far left
+                            print("cannot move off map")
+                        else:
+                            new_map("left",playert) #load new map
+                            playert.x=780 #move player to right for new map
             clock.tick(10)
             screen.blit(image, (playert.x, playert.y))
             print(playert.x)
