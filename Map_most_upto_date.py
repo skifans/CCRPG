@@ -5,6 +5,13 @@ import pygame, random, time, os, ctypes
 from pygame.locals import *
 from tkinter import *
 
+#Read options from .ini
+f = open("options.ini","r")
+line1=f.readline() #options header
+line2=f.readline() #cellsize line
+line3=f.readline() #cellsize value
+cellSize=int(line3)
+
 #Colour Grid
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
@@ -21,7 +28,6 @@ KHAKI     = (139, 134,  78)
 windowWidth = 800
 windowHeight = 600
 lineColour = WHITE
-cellSize = 20
 assert windowHeight % cellSize == 0
 assert windowWidth % cellSize == 0
 cellWidth = int(windowWidth / cellSize)
@@ -602,11 +608,10 @@ def new_map(direction, playert):
         screen=pygame.display.set_mode((0,0))
         screen.blit(img,(0,0))
     print("area",str(player[15]))
-    pygame.display.flip()
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
 print("Movement enabled, use arrow keys or WASD keys")
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()
 loadTextures()
 hight=3
