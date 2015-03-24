@@ -417,8 +417,6 @@ def playerturn(player,darkness):
     #thigns before button is pressed
     app.mainloop()
     #things after button is pressed
-    ##pchoice="run"
-    #root.quit()
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
