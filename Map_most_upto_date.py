@@ -418,7 +418,7 @@ def playerturn(player,darkness):
     app.mainloop()
     #things after button is pressed
     ##pchoice="run"
-    root.quit()
+    #root.quit()
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
@@ -530,19 +530,21 @@ class Application(Frame):
         print("Run")
         pchoice="run"
         root.quit()
+        Frame.destroy(self)
 
     def say_hi1(self):
         global pchoice
         print("Spell")
         pchoice="spell"
         root.quit()
+        Frame.destroy(self)
 
     def say_hi2(self):
         global pchoice
         print("Attack")
         pchoice="attack"
         root.quit()
-
+        Frame.destroy(self)
     def createWidgets(self):
         self.run = Button(self)
         self.run["text"] = "Run",
