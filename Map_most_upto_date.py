@@ -11,6 +11,11 @@ line1=f.readline() #options header
 line2=f.readline() #cellsize line
 line3=f.readline() #cellsize value
 cellSize=int(line3)
+line4=f.readline() #internal editor header
+line5=f.readline() #internal editor value
+if int(line5)==1:
+    print("Enternal editor enabled")
+    internal_editor=TRUE
 
 #Colour Grid
 WHITE     = (255, 255, 255)
@@ -223,9 +228,9 @@ def after_movement(playert_x, playert_y, boss_list):
             print("boss square triggered")
             combat()
 
-def collision_detection(playert_x, playert_y):
-    playert_position = (playert_x, playert_y)
-    cannot_go_onto=[(40,40), (40,40)] #needs to be in format [(x position,y position), (x position,y position), ... (you only need it in there once, just an example to show what more would look like)
+def collision_detection(playert_x, playert_y,player):
+    playert_position = (playert_x, playert_y,player[15])
+    cannot_go_onto=[(40,40,1), (40,40,2)] #needs to be in format [(x position,y position,area number), (x position,y position,area number), ... (you only need it in there once, just an example to show what more would look like)
     if playert_position in cannot_go_onto:
         print("collision detection")
         return False
@@ -417,6 +422,7 @@ def playerturn(player,darkness):
     #thigns before button is pressed
     app.mainloop()
     #things after button is pressed
+    ##pchoice="run"
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
@@ -630,7 +636,7 @@ while running:
             screen.blit(background, (0,0))
             key = pygame.key.get_pressed()
             if key[pygame.K_DOWN]:
-                movment_ok=collision_detection(playert.x,playert.y+cellSize)
+                movment_ok=collision_detection(playert.x,playert.y+cellSize,player)
                 if movment_ok==False:
                     print("collision")
                 else:
@@ -645,7 +651,7 @@ while running:
                             playert.y=0 #move player to top for new map
 
             elif key[pygame.K_UP]:
-                movment_ok=collision_detection(playert.x,playert.y-cellSize)
+                movment_ok=collision_detection(playert.x,playert.y-cellSize,player)
                 if movment_ok==False:
                     print("collision")
                 else:
@@ -660,7 +666,7 @@ while running:
                             playert.y=580 #move player to buttom for new map
 
             elif key[pygame.K_RIGHT]:
-                movment_ok=collision_detection(playert.x+cellSize,playert.y)
+                movment_ok=collision_detection(playert.x+cellSize,playert.y,player)
                 if movment_ok==False:
                     print("collision")
                 else:
@@ -674,7 +680,7 @@ while running:
                             new_map("right",playert) #load new map
                             playert.x=0 #move player to left for new map
             elif key[pygame.K_LEFT]:
-                movment_ok=collision_detection(playert.x-cellSize,playert.y)
+                movment_ok=collision_detection(playert.x-cellSize,playert.y,player)
                 if movment_ok==False:
                     print("collision")
                 else:
@@ -692,3 +698,6 @@ while running:
             print(playert.x)
             print(playert.y)
             pygame.display.update()
+            if internal_editor == TRUE:
+                if key[pygame.K_b]:
+                    print("(not) added to blakced square list")
