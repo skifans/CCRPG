@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
+# Name:        shop
 # Purpose:
 #
 # Author:      Alex
@@ -250,6 +250,34 @@ def pinventory(currentHandItem,currentArmour):
         armour = ""
         weapn = ""
 #--------------------------------------------------------------------------------------------------------------------------
+def setup():
+    confirm=input("Confirm, doing this after files have been created may brake things.(y/n)")
+    if confirm=="y":
+        f = open("money_s.txt","w")
+        f.write("60")
+        f.close()
+        f = open("money_m.txt","w")
+        f.write("40")
+        f.close()
+        f = open("money_l.txt","w")
+        f.write("20")
+        f.close()
+        f = open("money_x.txt","w")
+        f.write("10")
+        f.close()
+        f = open("items.txt","w")
+        f.close()
+        print("completed")
+    elif confirm=="n":
+        print("operation aborted")
+    else:
+        print("error, enter either y or n. You have been returned to the main menu.")
+
+def save_item(to_write):
+    file=open("items.txt","w")
+    file.write(to_write)
+    file.write("\n")
+    file.close()
 #strengthm(0),endurancem(1),dexm(2),spellm(3),name(4),class(5),type(6),description(7),range(8),costs(9),costm(10),costl(11),costx(12)
 #possible items to buy
 warrior_basic_armour = [10,15,5,0,"basic warrior armour",1,1,"basic armour for beginners",0,30,0,0,0]
@@ -340,6 +368,15 @@ items=[warrior_basic_armour,warrior_medium_armour,warrior_strong_armour,warrior_
 items_accsesorys=[berserkers_band,priest_band,Fire_gem_circlet,major_ring,ring_of_random_change,blinding_cranium_crab,swiss_army_claymore,arrow_target,blight_sludge,overpowered_stick,boss_shield,sleepy_stick,lol,necrotic_bone,mr_tiddles] #add acsessorys to new array
 items.extend(items_accsesorys) #add accsesorys to end of items array
 
+#load items (not money - do this by using \load)
+f = open("items.txt","r")
+item=f.readline()
+print(item)
+inventry.append(items[int(item)])
+print(items[int(item)])
+print(inventry)
+f.close()
+
 item_no=0
 while item_no < len(items):
     shop.append(str(items[item_no]))
@@ -369,8 +406,6 @@ store.append(place)
 
 #length of shop
 length=len(store[1])
-#inventry - place any starting items in array
-inventry=[]
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
@@ -404,6 +439,7 @@ while 1>0:
                     else:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="M":
                     amount=money[1]-int(price)
@@ -412,6 +448,7 @@ while 1>0:
                     else:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="L":
                     amount=money[2]-int(price)
@@ -420,6 +457,7 @@ while 1>0:
                     else:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="X":
                     amount=money[3]-int(price)
@@ -428,6 +466,7 @@ while 1>0:
                     else:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
             else:
                 print("Error - item not recognised")
@@ -531,5 +570,7 @@ while 1>0:
         print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \save = save current inventory and money \n \load - load previous inventory and money - do not do this without saving a file first \n \clear = delete any save inventory and money")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
+    elif instruction==("\setup"):
+        setup()
     else:
         print("Error - command not recognised - uses \"\help\" for a list of instructions.")
