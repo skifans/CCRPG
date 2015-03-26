@@ -547,7 +547,7 @@ while 1>0:
         else:
             print("In your inventory you have: "+str(inventry))
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \load - load previous inventory and money - do not do this without saving a file first")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
     elif instruction==("\setup"):
