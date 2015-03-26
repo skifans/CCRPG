@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name:        shop
+# Name:        module1
 # Purpose:
 #
 # Author:      Alex
@@ -274,9 +274,16 @@ def setup():
         print("error, enter either y or n. You have been returned to the main menu.")
 
 def save_item(to_write):
-    file=open("items.txt","w")
+    file=open("items.txt","a")
     file.write(to_write)
     file.write("\n")
+    file.close()
+    file=open("amount.txt","r")
+    amount=int(file.readline())
+    file.close()
+    file=open("amount.txt","w")
+    amount=int(amount)+1
+    file.write(str(amount))
     file.close()
 #strengthm(0),endurancem(1),dexm(2),spellm(3),name(4),class(5),type(6),description(7),range(8),costs(9),costm(10),costl(11),costx(12)
 #possible items to buy
@@ -369,12 +376,14 @@ items_accsesorys=[berserkers_band,priest_band,Fire_gem_circlet,major_ring,ring_o
 items.extend(items_accsesorys) #add accsesorys to end of items array
 
 #load items (not money - do this by using \load)
+file=open("amount.txt","r")
+amount1=int(file.readline())
+file.close()
 f = open("items.txt","r")
-item=f.readline()
-print(item)
-inventry.append(items[int(item)])
-print(items[int(item)])
-print(inventry)
+amount1=amount1-1
+for i in range (amount1):
+    item=f.readline()
+    inventry.append(items[int(item)])
 f.close()
 
 item_no=0
@@ -518,9 +527,6 @@ while 1>0:
         else:
             print("In your inventory you have: "+str(inventry))
     elif instruction==("\save"):
-        file=open("inventory.txt","w")
-        file.write(str(inventry))
-        file.close()
         file=open("money_s.txt","w")
         file.write(str(money[0]))
         file.close()
@@ -535,9 +541,6 @@ while 1>0:
         file.close()
         print("completed")
     elif instruction==("\load"):
-        f = open("inventory.txt","r")
-        inventry=[f.read()]
-        f.close()
         money.pop() #not very clever way of deleted previous money
         money.pop()
         money.pop()
