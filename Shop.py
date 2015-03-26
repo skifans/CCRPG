@@ -449,6 +449,9 @@ while 1>0:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
                         save_item(to_buy)
+                        file=open("money_s.txt","w")
+                        file.write(str(money[0]))
+                        file.close()
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="M":
                     amount=money[1]-int(price)
@@ -458,6 +461,9 @@ while 1>0:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
                         save_item(to_buy)
+                        file=open("money_m.txt","w")
+                        file.write(str(money[1]))
+                        file.close()
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="L":
                     amount=money[2]-int(price)
@@ -467,6 +473,9 @@ while 1>0:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
                         save_item(to_buy)
+                        file=open("money_l.txt","w")
+                        file.write(str(money[2]))
+                        file.close()
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="X":
                     amount=money[3]-int(price)
@@ -476,6 +485,9 @@ while 1>0:
                         change(money,type,amount)
                         inventry.append(items[int(to_buy)])
                         save_item(to_buy)
+                        file=open("money_x.txt","w")
+                        file.write(str(money[3]))
+                        file.close()
                         print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
             else:
                 print("Error - item not recognised")
@@ -526,20 +538,6 @@ while 1>0:
             print("You have no items in your inventry")
         else:
             print("In your inventory you have: "+str(inventry))
-    elif instruction==("\save"):
-        file=open("money_s.txt","w")
-        file.write(str(money[0]))
-        file.close()
-        file=open("money_m.txt","w")
-        file.write(str(money[1]))
-        file.close()
-        file=open("money_l.txt","w")
-        file.write(str(money[2]))
-        file.close()
-        file=open("money_x.txt","w")
-        file.write(str(money[3]))
-        file.close()
-        print("completed")
     elif instruction==("\load"):
         money.pop() #not very clever way of deleted previous money
         money.pop()
@@ -562,15 +560,8 @@ while 1>0:
         money.append(int(l_money))
         money.append(int(x_money))
         print("completed")
-    elif instruction==("\clear"):
-        os.remove("inventory.txt")
-        os.remove("money_s.txt")
-        os.remove("money_m.txt")
-        os.remove("money_l.txt")
-        os.remove("money_x.txt")
-        print("completed")
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \save = save current inventory and money \n \load - load previous inventory and money - do not do this without saving a file first \n \clear = delete any save inventory and money")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \load - load previous inventory and money - do not do this without saving a file first")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
     elif instruction==("\setup"):
