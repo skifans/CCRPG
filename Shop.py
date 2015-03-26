@@ -81,16 +81,24 @@ def change(money, type, amount):
         print("Error - money type not recognised. Use capital S,M,L or X only for type veriable")
         return money
 
-#starting money
+#loading money
 money=[]
-x_money=10
-l_money=20
-m_money=40
-s_money=60
-money.append(s_money)
-money.append(m_money)
-money.append(l_money)
-money.append(x_money)
+f = open("money_s.txt","r")
+s_money=f.read()
+f.close()
+f = open("money_m.txt","r")
+m_money=f.read()
+f.close()
+f = open("money_l.txt","r")
+l_money=f.read()
+f.close()
+f = open("money_x.txt","r")
+x_money=f.read()
+f.close()
+money.append(int(s_money))
+money.append(int(m_money))
+money.append(int(l_money))
+money.append(int(x_money))
 
 global inventry
 inventry=[]
@@ -538,30 +546,8 @@ while 1>0:
             print("You have no items in your inventry")
         else:
             print("In your inventory you have: "+str(inventry))
-    elif instruction==("\load"):
-        money.pop() #not very clever way of deleted previous money
-        money.pop()
-        money.pop()
-        money.pop()
-        f = open("money_s.txt","r")
-        s_money=f.read()
-        f.close()
-        f = open("money_m.txt","r")
-        m_money=f.read()
-        f.close()
-        f = open("money_l.txt","r")
-        l_money=f.read()
-        f.close()
-        f = open("money_x.txt","r")
-        x_money=f.read()
-        f.close()
-        money.append(int(s_money))
-        money.append(int(m_money))
-        money.append(int(l_money))
-        money.append(int(x_money))
-        print("completed")
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \load - load previous inventory and money - do not do this without saving a file first")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
     elif instruction==("\setup"):
