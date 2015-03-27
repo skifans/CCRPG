@@ -249,7 +249,7 @@ def pinventory(currentHandItem,currentArmour):
                 length = length + 1
             pequip = input("Enter item number")
             pequip = int(pequip)
-            if pequip<=len(inventry):
+            if pequip<len(inventry):
                 print(inventry)
                 equipItem(inventry[pequip][6],inventry[pequip][4])
             else:
@@ -258,29 +258,6 @@ def pinventory(currentHandItem,currentArmour):
         armour = ""
         weapn = ""
 #--------------------------------------------------------------------------------------------------------------------------
-def setup():
-    confirm=input("Confirm, doing this after files have been created may brake things.(y/n)")
-    if confirm=="y":
-        f = open("money_s.txt","w")
-        f.write("60")
-        f.close()
-        f = open("money_m.txt","w")
-        f.write("40")
-        f.close()
-        f = open("money_l.txt","w")
-        f.write("20")
-        f.close()
-        f = open("money_x.txt","w")
-        f.write("10")
-        f.close()
-        f = open("items.txt","w")
-        f.close()
-        print("completed")
-    elif confirm=="n":
-        print("operation aborted")
-    else:
-        print("error, enter either y or n. You have been returned to the main menu.")
-
 def save_item(to_write):
     file=open("items.txt","a")
     file.write(to_write)
@@ -383,7 +360,7 @@ items=[warrior_basic_armour,warrior_medium_armour,warrior_strong_armour,warrior_
 items_accsesorys=[berserkers_band,priest_band,Fire_gem_circlet,major_ring,ring_of_random_change,blinding_cranium_crab,swiss_army_claymore,arrow_target,blight_sludge,overpowered_stick,boss_shield,sleepy_stick,lol,necrotic_bone,mr_tiddles] #add acsessorys to new array
 items.extend(items_accsesorys) #add accsesorys to end of items array
 
-#load items (not money - do this by using \load)
+#load items
 file=open("amount.txt","r")
 amount1=int(file.readline())
 file.close()
@@ -547,10 +524,8 @@ while 1>0:
         else:
             print("In your inventory you have: "+str(inventry))
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item \n \load - load previous inventory and money - do not do this without saving a file first")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
-    elif instruction==("\setup"):
-        setup()
     else:
         print("Error - command not recognised - uses \"\help\" for a list of instructions.")
