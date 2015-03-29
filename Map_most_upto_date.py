@@ -228,7 +228,7 @@ def after_movement(playert_x, playert_y, boss_list):
             print("boss square triggered")
             combat()
     espawn = random.randint(1,20)
-    if espawn >= 12:
+    if espawn == 1:
         combat()
 
 def collision_detection(playert_x, playert_y,player):
@@ -704,4 +704,9 @@ while running:
             pygame.display.update()
             if internal_editor == TRUE:
                 if key[pygame.K_b]:
-                    print("(not) added to blakced square list")
+                    f=open("blocked.txt","a")
+                    to_write=str((playert.x, playert.y,player[15]))
+                    f.write(str(to_write))
+                    f.write("\n")
+                    f.close()
+                    print("added to blakced square list")
