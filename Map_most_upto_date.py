@@ -1,7 +1,7 @@
 #Map
 
 #Imports
-import pygame, random, time, os, ctypes
+import pygame, random, time, os, ctypes, ast
 from pygame.locals import *
 from tkinter import *
 
@@ -227,10 +227,14 @@ def after_movement(playert_x, playert_y, boss_list):
                 del boss_list[3][location_in_array]
             print("boss square triggered")
             combat()
+    espawn = random.randint(1,20)
+    if espawn >= 12:
+        combat()
 
 def collision_detection(playert_x, playert_y,player):
-    playert_position = (playert_x, playert_y,player[15])
-    cannot_go_onto=[(40,40,1), (40,40,2)] #needs to be in format [(x position,y position,area number), (x position,y position,area number), ... (you only need it in there once, just an example to show what more would look like)
+    playert_position = str((playert_x, playert_y,player[15]))
+    cannot_go_onto = open("Blocked.txt").read().splitlines()
+    print(cannot_go_onto)
     if playert_position in cannot_go_onto:
         print("collision detection")
         return False
@@ -367,7 +371,8 @@ def levelupcheck():
     return
 # the enemy arrays
 enemy1 = [darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus]
-def statsetup (player,darkness,sakaretsu_armour,simple_katanna):
+def statsetup (darkness,sakaretsu_armour,simple_katanna):
+    global player
     if player[15] == 1:
         enemy = enemy1[random.randint(0,5)]
         global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp
@@ -515,17 +520,15 @@ def turn (player,darkness):
             print("You died")
             combatover = True
 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
-statsetup (player,darkness,sakaretsu_armour,simple_katanna)
+
 
 def combat():
     global combatover
     combatover = False
+    statsetup(darkness, sakaretsu_armour,simple_katanna)
     while combatover == False:
         turn (player,darkness)
-    combatover = False
-    statsetup (player,darkness,sakaretsu_armour,simple_katanna)
-    while combatover == False:
-        turn (player,darkness)
+
 
 global pchoice
 class Application(Frame):
@@ -577,6 +580,7 @@ root = Tk()
 #end of combat system
 #-----------------------------------------------------------------------------------
 def new_map(direction, playert):
+    global player
     hight=3 #the amount of vertical maps
     pygame.display.flip() #suppost to update whole map
     if direction=="up":
