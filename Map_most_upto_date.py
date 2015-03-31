@@ -282,23 +282,31 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
     player_class = player_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
     if player_class == "barbarian":
             player = barbarian
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "warrior": #changed the if to an elif to cut down lag
             player = warrior
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "mage":    #changed the if to an elif to cut down lag
             player = mage
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "paladin": #changed the if to an elif to cut down lag
             player = paladin
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "necromancer": #changed the if to an elif to cut down lag
             player = necromancer
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "lancer":  #changed the if to an elif to cut down lag
             player = lancer
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "archer":  #changed the if to an elif to cut down lag
             player = archer
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "samurai":#changed the if to an elif to cut down lag
             player = samurai
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "ninja":   #changed the if to an elif to cut down lag
             player = ninja
-
+            image = pygame.image.load(os.path.join("textures","necromancer.png"))
     else:
             ctypes.windll.user32.MessageBoxW(0, "Error - player class entered incorectly", "error", 0)
             print("Error - player class entered incorectly")
@@ -307,6 +315,7 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
                 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
 
     print ("Are you ready?")
+    return image
 
 """
 This is the level up system
@@ -519,7 +528,7 @@ def turn (player,darkness):
         else:
             print("You died")
             combatover = True
-classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
 
 
 def combat():
@@ -625,7 +634,6 @@ screen = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()
 loadTextures()
 hight=3
-image = pygame.image.load(os.path.join("textures","necromancer.png"))
 running=True
 while running:
     for event in pygame.event.get():
