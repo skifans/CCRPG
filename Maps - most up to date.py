@@ -13,9 +13,19 @@ line3=f.readline() #cellsize value
 cellSize=int(line3)
 line4=f.readline() #internal editor header
 line5=f.readline() #internal editor value
+line6=f.readline()
+line7=f.readline()
 if int(line5)==1:
     print("Enternal editor enabled")
     internal_editor=TRUE
+if int(line7)==1:
+    buttons=TRUE
+elif int(line7)==0:
+    buttons=FALSE
+else:
+    print("There was an error reading the options file - buttons have been enabled.")
+    buttons=FALSE
+f.close()
 
 #Colour Grid
 WHITE     = (255, 255, 255)
@@ -432,11 +442,13 @@ def playerturn(player,darkness):
     global pchoice
     print("Choose your action:")
     print("attack spell run")
-    app = Application(master=root)
-    #thigns before button is pressed
-    app.mainloop()
-    #things after button is pressed
-    ##pchoice="run"
+    if buttons==TRUE:
+        app = Application(master=root)
+        #thigns before button is pressed
+        app.mainloop()
+        #things after button is pressed
+    elif buttons==FALSE:
+        pchoice=input()
     if pchoice == "attack":
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
@@ -467,6 +479,8 @@ def playerturn(player,darkness):
         if run > 3 or run==3:
             print("You manage to run away")
             combatover = True
+    else:
+        print("Error - command not recognised")
 
 # Running the actual turn
 def turn (player,darkness):
