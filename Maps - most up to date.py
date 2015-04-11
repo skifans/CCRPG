@@ -652,7 +652,28 @@ def new_map(direction, playert):
         screen.blit(img,(0,0))
     print("area",str(player[15]))
 #-----------------------------------------------------------------------------------------------------------------------------------------------
+#pause function
+def pause():
+    pause=TRUE
+    screen.fill(WHITE) #fill background
+    font = pygame.font.SysFont("comicsansm", 115) #font (yes thats right :p)
+    text = font.render("Paused", 1, (10, 10, 10)) #text to display
+    textpos = text.get_rect()
+    textpos.centerx = screen.get_rect().centerx #osition text
+    screen.blit(text, textpos)
+    pygame.display.flip() #update display
+    while pause==TRUE:
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                terminate()
+                pygame.display.quit
+                break
+            elif event.type==KEYDOWN:
+                if key[pygame.K_p]:
+                    pause=FALSE
+                    print("unpasued")
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------
 print("Movement enabled, use arrow keys or WASD keys")
 screen = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()
@@ -729,6 +750,12 @@ while running:
                         else:
                             new_map("left",playert) #load new map
                             playert.x=780 #move player to right for new map
+            elif key[pygame.K_p]:
+                print("paused")
+                pause()
+                map_name="map"+str(player[15])+".gif" #add back backgrounf after unpaused
+                background = pygame.image.load(os.path.join("textures",map_name))
+                screen.blit(background, (0,0))
             clock.tick(10)
             screen.blit(image, (playert.x, playert.y))
             print(playert.x)
