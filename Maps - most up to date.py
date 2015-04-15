@@ -440,7 +440,6 @@ def playerturn(player,darkness):
     global combatover
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
     global pchoice
-    not_on=[2,3] #place in this array the map numbers on which combat should be disabled.
     print("Choose your action:")
     print("attack spell run")
     if buttons==TRUE:
