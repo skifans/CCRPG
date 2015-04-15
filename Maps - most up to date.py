@@ -77,11 +77,13 @@ class textures():
         y = 0
 
         def loadTextures(self, x, y):
-            self.texture = pygame.image.load(os.path.join("textures","necromancer.png"))
-            self.texturerect = self.texture.get_rect()
-            self.coords = (x, y)
-            self.texturerect.move_ip(self.coords)
-            window.blit(self.texture, self.texturerect)
+##            self.texture = pygame.image.load(os.path.join("textures","necromancer.png"))
+##            self.texturerect = self.texture.get_rect()
+##            self.coords = (x, y)
+##            self.texturerect.move_ip(self.coords)
+##            window.blit(self.texture, self.texturerect)
+            print("")
+            #this function is no longer needed but I cannot find everywhere it is called so just deleting it gives errors.
 
     #Class for General Grass Texture
     class grassTexture():
@@ -95,7 +97,6 @@ class textures():
             self.coords = (x, y)
             self.texturerect.move_ip(self.coords)
             window.blit(self.texture, self.texturerect)
-            #pygame.display.flip()
 
     class loadigTexture():
         def __init__(self):
@@ -108,7 +109,6 @@ class textures():
             self.coords = (x, y)
             self.texturerect.move_ip(self.coords)
             window.blit(self.texture, self.texturerect)
-            #pygame.display.flip()
 
 playert = textures.playerTexture()
 
@@ -259,7 +259,7 @@ class darkness:
 
 #list of classes and stats
 #lancer is high attack, high dex, low defence, focused on killing the enemy very quickly
-lancer = [40,30,80,10,90,["lance",35],["super_light_armour",2],name,[0,20,1],10,0,0,0]
+lancer = [40,30,80,10,90,["lance",35],["super_light_armour",2],name,[0,20,1],10,0,0,0,0,0,1]
 #archeris a ranged high dex class, it has a wide range of abilities, like befriend and forage
 archer = [30,30,100,40,50,["bow", 15],["furs",10],name,[0,20,1],10,0,0,0,0,0,1]
 #necromancer summons minions to fight
@@ -292,7 +292,7 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
     player_class = player_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
     if player_class == "barbarian":
             player = barbarian
-            image = pygame.image.load(os.path.join("textures","necromancer.png"))
+            image = pygame.image.load(os.path.join("textures","barbarian.gid"))
     elif player_class == "warrior": #changed the if to an elif to cut down lag
             player = warrior
             image = pygame.image.load(os.path.join("textures","necromancer.png"))
@@ -304,13 +304,17 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
             image = pygame.image.load(os.path.join("textures","necromancer.png"))
     elif player_class == "necromancer": #changed the if to an elif to cut down lag
             player = necromancer
-            image = pygame.image.load(os.path.join("textures","necromancer.png"))
+            image = pygame.image.load(os.path.join("textures","necromancer.gif"))
     elif player_class == "lancer":  #changed the if to an elif to cut down lag
             player = lancer
-            image = pygame.image.load(os.path.join("textures","necromancer.png"))
+            image = pygame.image.load(os.path.join("textures","lancer.gif"))
+##            ctypes.windll.user32.MessageBoxW(0, "Lancer is causing some unkown problems with movement at the moment and has been disabled", "error", 0)
+##            player = "error"
+##            while player == "error":
+##                classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
     elif player_class == "archer":  #changed the if to an elif to cut down lag
             player = archer
-            image = pygame.image.load(os.path.join("textures","necromancer.png"))
+            image = pygame.image.load(os.path.join("textures","archer.gif"))
     elif player_class == "samurai":#changed the if to an elif to cut down lag
             player = samurai
             image = pygame.image.load(os.path.join("textures","necromancer.png"))
@@ -555,7 +559,7 @@ def combat():
         screen.blit(background, (0,0)) #place this at 0,0
         you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
         screen.blit(you, (100,200)) #place this at (100,200)
-        enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
+        enemy = pygame.image.load(os.path.join("combat","rockzilla.gif")) #load image for enemy
         screen.blit(enemy, (500,100)) #place this at (500,100)
         pygame.display.flip() #update screen
         statsetup(darkness, sakaretsu_armour,simple_katanna)
