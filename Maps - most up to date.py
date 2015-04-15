@@ -440,6 +440,7 @@ def playerturn(player,darkness):
     global combatover
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
     global pchoice
+    not_on=[2,3] #place in this array the map numbers on which combat should be disabled.
     print("Choose your action:")
     print("attack spell run")
     if buttons==TRUE:
@@ -548,20 +549,22 @@ image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbari
 def combat():
     global combatover
     global player
-    combatover = False
-    background = pygame.image.load(os.path.join("backgrounds","combat_area.gif")) #load image for combat background
-    screen.blit(background, (0,0)) #place this at 0,0
-    you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
-    screen.blit(you, (100,200)) #place this at (100,200)
-    enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
-    screen.blit(enemy, (500,100)) #place this at (500,100)
-    pygame.display.flip() #update screen
-    statsetup(darkness, sakaretsu_armour,simple_katanna)
-    while combatover == False:
-        turn (player,darkness)
-    map_name="map"+str(player[15])+".gif"
-    background = pygame.image.load(os.path.join("textures",map_name)) #when combat is finnished, load previous background
-    screen.blit(background, (0,0))
+    no_combat=[2,3] #maps where combat will not be triggered
+    if player[15] not in no_combat:
+        combatover = False
+        background = pygame.image.load(os.path.join("backgrounds","combat_area.gif")) #load image for combat background
+        screen.blit(background, (0,0)) #place this at 0,0
+        you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
+        screen.blit(you, (100,200)) #place this at (100,200)
+        enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
+        screen.blit(enemy, (500,100)) #place this at (500,100)
+        pygame.display.flip() #update screen
+        statsetup(darkness, sakaretsu_armour,simple_katanna)
+        while combatover == False:
+            turn (player,darkness)
+        map_name="map"+str(player[15])+".gif"
+        background = pygame.image.load(os.path.join("textures",map_name)) #when combat is finnished, load previous background
+        screen.blit(background, (0,0))
 
 global pchoice
 class Application(Frame):
