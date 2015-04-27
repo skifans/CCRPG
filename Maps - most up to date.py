@@ -13,8 +13,10 @@ line3=f.readline() #cellsize value
 cellSize=int(line3)
 line4=f.readline() #internal editor header
 line5=f.readline() #internal editor value
-line6=f.readline()
-line7=f.readline()
+line6=f.readline() #buttons header
+line7=f.readline() #buttons value
+line8=f.readline() #combat header
+line9=f.readable() #combat value'
 if int(line5)==1:
     print("Enternal editor enabled")
     internal_editor=TRUE
@@ -25,6 +27,13 @@ elif int(line7)==0:
 else:
     print("There was an error reading the options file - buttons have been enabled.")
     buttons=FALSE
+if int(line9)==0:
+    combat_on=0 #off
+elif int(line9)==1:
+    combat_on=1 #on
+else:
+    print("There was an error reading the options file - combat has been enabled.")
+    combat_on=1
 f.close()
 
 #Colour Grid
@@ -553,7 +562,7 @@ def combat():
     global combatover
     global player
     no_combat=[2,3] #maps where combat will not be triggered
-    if player[15] not in no_combat:
+    if player[15] not in no_combat and combat_on==1:
         combatover = False
         background = pygame.image.load(os.path.join("backgrounds","combat_area.gif")) #load image for combat background
         screen.blit(background, (0,0)) #place this at 0,0
@@ -658,6 +667,35 @@ def new_map(direction, playert):
         screen.blit(img,(0,0))
     print("area",str(player[15]))
 #-----------------------------------------------------------------------------------------------------------------------------------------------
+#funtion to display text
+def text_objects(text, font, colour):
+    textSurface = font.render(text, True, colour) #extact purpose unkown but seems to be needed
+    return textSurface, textSurface.get_rect()
+
+def message_display(text, x, y, font_size, colour):
+    largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
+    TextSurf, TextRect = text_objects(text, largeText, colour) #render text
+    TextRect.center = ((x),(y)) #place text
+    screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
+
+#function for buttoms
+#example syntax to call button("return",150,450,100,50,DARKGREEN,GREEN,BLACK,action) note the lack of brackets on action.
+def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_function_to_call_when_clicked):
+    click = pygame.mouse.get_pressed() #get mouse state (clicked/not clicked)
+    mouse = pygame.mouse.get_pos() #get mouse coords
+    print("mouse2",mouse)
+    if x+w > mouse[0] > x and y+h > mouse[1] > y: #check if mouse is on button
+        pygame.draw.rect(screen, active_colour,(x,y,w,h)) #change to active colour
+        if click[0] == 1: #check click (above if checks mouse is on button)
+            name_of_function_to_call_when_clicked() #do this when clicked (veriable needs not to have brackets)
+    else:
+        pygame.draw.rect(screen, inactive_colour,(x,y,w,h)) #mouse not on button, switch to inactive colour
+
+    smallText = pygame.font.Font("freesansbold.ttf",20) #load font
+    textSurf, textRect = text_objects(msg, smallText,text_colour) #place text in button through text funtion
+    textRect.center = ( (x+(w/2)), (y+(h/2)) ) #location of text
+    screen.blit(textSurf, textRect) #send to screen (but not update)
+#-----------------------------------------------------------------------------------------------------------------------------------------------
 #pause function
 def pause():
     pause=TRUE
@@ -678,6 +716,23 @@ def pause():
                 if key[pygame.K_p]:
                     pause=FALSE
                     print("unpasued")
+#-----------------------------------------------------------------------------------------------------------------------------------------------
+#menu function
+global menu
+def menu_close():
+    global menu
+    menu=FALSE
+
+def menu():
+    global menu
+    menu=TRUE
+    screen.fill(WHITE) #fill screen white
+    while menu==TRUE:
+        for event in pygame.event.get():
+                if event.type == pygame.MOUSEMOTION:
+                    button("return",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
+                    pygame.display.flip()
+        time.sleep(0.1)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 print("Movement enabled, use arrow keys or WASD keys")
@@ -759,7 +814,12 @@ while running:
             elif key[pygame.K_p]:
                 print("paused")
                 pause()
-                map_name="map"+str(player[15])+".gif" #add back backgrounf after unpaused
+                map_name="map"+str(player[15])+".gif" #add back background after unpaused
+                background = pygame.image.load(os.path.join("textures",map_name))
+                screen.blit(background, (0,0))
+            elif key[pygame.K_m]:
+                menu()
+                map_name="map"+str(player[15])+".gif" #add back background after unpaused
                 background = pygame.image.load(os.path.join("textures",map_name))
                 screen.blit(background, (0,0))
             clock.tick(10)
