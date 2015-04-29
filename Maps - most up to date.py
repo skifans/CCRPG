@@ -696,6 +696,118 @@ def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_functio
     textRect.center = ( (x+(w/2)), (y+(h/2)) ) #location of text
     screen.blit(textSurf, textRect) #send to screen (but not update)
 #-----------------------------------------------------------------------------------------------------------------------------------------------
+#label function
+def labels(label, name_):
+
+        class Dialog(Toplevel):
+            def __init__(self, parent, title):
+                Toplevel.__init__(self, parent)
+                self.transient()
+
+                if title:
+                    self.title(title)
+
+                self.deiconify()
+                self.parent = parent
+                self.result = None
+
+                body = Frame(self)
+                self.initial_focus = self.body(body)
+                body.pack(padx=5, pady=10)
+
+                self.buttonbox()
+
+                self.grab_set()
+
+                if not self.initial_focus:
+                    self.initial_focus = self
+
+                self.protocol("WM_DELETE_WINDOW", self.cancel)
+
+                self.geometry("+%d+%d" % (parent.winfo_rootx()+50, parent.winfo_rooty()+50))
+
+                self.initial_focus.focus_set()
+
+                self.wait_window(self)
+
+            # construction hooks
+
+            def body(self, master):
+                # create dialog body. return widget that should have
+                # initail focus. this method should be overridden
+
+                pass
+
+            def buttonbox(self):
+                # add standard button box. override if you don't want the
+                # standard buttons
+
+                box = Frame(self)
+
+                self.bind("<Return>", self.ok)
+
+                box.pack()
+
+                # standard button sematics
+
+            def ok(self, event = None):
+
+                if not self.validate():
+                    self.initial_focus.focus_set()  # put focus back
+                    return
+
+                self.withdraw()
+                self.update_idletasks()
+
+                self.apply()
+
+                self.cancel()
+
+            def cancel(self, event = None):
+                # put focus back to the parent window
+                self.parent.focus_set()
+                self.destroy()
+
+                #command hooks
+
+            def validate(self):
+
+                return 1 # override
+
+            def apply(self):
+
+                pass # override
+
+    #-------------------------------------------------------------------------------
+
+        class MyDialog(Dialog):
+
+            def body(self, master):
+
+                Label(master, text=label).grid(row=0)
+
+                self.e1 = Entry(master)
+
+                self.e1.grid(row=0, column=1)
+
+                return self.e1  # initial focus
+
+            def apply(self):
+                second = str(self.e1.get())
+                self.result = second
+
+    #-------------------------------------------------------------------------------
+
+        try:
+            root = Tk()
+            root.withdraw()
+            Answers = MyDialog(root, name_)
+
+            Q2 = Answers.result
+            self.destroy()
+        except:
+            print("Closed window")
+#-----------------------------------------------------------------------------------------------------------------------------------------------
 #pause function
 def pause():
     pause=TRUE
@@ -715,27 +827,35 @@ def pause():
             elif event.type==KEYDOWN:
                 if key[pygame.K_p]:
                     pause=FALSE
-                    print("unpasued")
+                    label = "unpasued"
+                    name_ = "Game Master"
+                    labels(label, name_)
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 #menu function
 global menu
 def menu_close():
-    global menu
-    menu=FALSE
+    global menu1
+    menu1=FALSE
 
 def menu():
-    global menu
-    menu=TRUE
+    global menu1
+    menu1=TRUE
     screen.fill(WHITE) #fill screen white
-    while menu==TRUE:
+    while menu1==TRUE:
         for event in pygame.event.get():
-                if event.type == pygame.MOUSEMOTION:
-                    button("return",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
-                    pygame.display.flip()
+                button("return",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
+                button("save",300,200,150,50,GREEN,DARKGREEN,BLACK,save)
+                pygame.display.flip()
         time.sleep(0.1)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
-print("Movement enabled, use arrow keys or WASD keys")
+def save():
+    print("comming soon")
+#------------------------------------------------------------------------------------------------------------------------------------------------
+label = "Movement enabled\nuse arrow keys or WASD keys"
+name_ = "Game Master"
+labels(label, name_)
+##print("Movement enabled, use arrow keys or WASD keys")
 screen = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()
 loadTextures()
@@ -763,7 +883,9 @@ while running:
                         after_movement(playert.x,playert.y,boss_list)
                     else:
                         if ((player[15]-1)/hight).is_integer(): #is player at very top
-                            print("cannot move off map")
+                            label = "cannot move off map"
+                            name_ = "Game Master"
+                            labels(label, name_)
                         else:
                             new_map("down",playert) #load new map
                             playert.y=0 #move player to top for new map
@@ -778,7 +900,9 @@ while running:
                         after_movement(playert.x,playert.y,boss_list)
                     else:
                         if (player[15]/hight).is_integer(): #is player at very top
-                            print("cannot move off map")
+                            label = "cannot move off map"
+                            name_ = "Game Master"
+                            labels(label, name_)
                         else:
                             new_map("up",playert) #load new map
                             playert.y=580 #move player to buttom for new map
@@ -793,7 +917,9 @@ while running:
                         after_movement(playert.x,playert.y,boss_list)
                     else:
                         if player[15]>hight**2-hight: #is player at very top
-                            print("cannot move off map")
+                            label = "cannot move off map"
+                            name_ = "Game Master"
+                            labels(label, name_)
                         else:
                             new_map("right",playert) #load new map
                             playert.x=0 #move player to left for new map
@@ -807,11 +933,16 @@ while running:
                         after_movement(playert.x,playert.y,boss_list)
                     else:
                         if player[15]<=hight: #is player at far left
-                            print("cannot move off map")
+                            label = "cannot move off map"
+                            name_ = "Game Master"
+                            labels(label, name_)
                         else:
                             new_map("left",playert) #load new map
                             playert.x=780 #move player to right for new map
             elif key[pygame.K_p]:
+                label = "paused"
+                name_ = "Game Master"
+                labels(label, name_)
                 print("paused")
                 pause()
                 map_name="map"+str(player[15])+".gif" #add back background after unpaused
@@ -835,3 +966,6 @@ while running:
                     f.write("\n")
                     f.close()
                     print("added to blakced square list")
+                    label = "added to blacked square list"
+                    name_ = "Game Master"
+                    labels(label, name_)
