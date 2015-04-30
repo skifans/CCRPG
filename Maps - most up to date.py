@@ -678,7 +678,7 @@ def message_display(text, x, y, font_size, colour):
     screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
 
 #function for buttoms
-#example syntax to call button("return",150,450,100,50,DARKGREEN,GREEN,BLACK,action) note the lack of brackets on action.
+#example syntax to call button("return",150,450,100,50,DARKGREEN,GREEN,BLACK,action) note the lack of brackets on action function.
 def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_function_to_call_when_clicked):
     click = pygame.mouse.get_pressed() #get mouse state (clicked/not clicked)
     mouse = pygame.mouse.get_pos() #get mouse coords
@@ -843,13 +843,14 @@ def menu():
     screen.fill(WHITE) #fill screen white
     while menu1==TRUE:
         for event in pygame.event.get():
-                button("return",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
-                button("save",300,200,150,50,GREEN,DARKGREEN,BLACK,save)
+                button("return to game",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
+                button("save game",300,200,150,50,GREEN,DARKGREEN,BLACK,save)
+                button("load game",300,300,150,50,GREEN,DARKGREEN,BLACK,load)
                 pygame.display.flip()
         time.sleep(0.1)
 
 def start_menu():
-    global menu1
+    global menu1, player
     menu1=TRUE
     screen.fill(WHITE) #fill screen white
     while menu1==TRUE:
@@ -858,7 +859,7 @@ def start_menu():
                 button("load game",300,200,150,50,GREEN,DARKGREEN,BLACK,load)
                 pygame.display.flip()
         time.sleep(0.1)
-    map_name="map1.gif"
+    map_name="map"+str(player[15])+".gif"
     background = pygame.image.load(os.path.join("textures",map_name))
     screen.blit(background, (0,0))
     pygame.display.flip()
@@ -898,6 +899,7 @@ def load():
         f.close()
         menu_close()
         pygame.display.flip()
+        root.destroy()
 
     def pathSelect():
         d = tix.DirSelectDialog(master=root, command=print_selected)
@@ -924,6 +926,7 @@ while running:
                 break
         elif event.type == KEYDOWN:
             map_name="map"+str(player[15])+".gif"
+            print(map_name)
             background = pygame.image.load(os.path.join("textures",map_name))
             screen.blit(background, (0,0))
             key = pygame.key.get_pressed()
