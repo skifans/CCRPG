@@ -146,11 +146,11 @@ currentArmour = " "
 
 #Messages
 inventMessage = "You currently have " + str(weapons)
-currentHandItemMessage = "You are currenty wielding a" + str(weapons)
+currentHandItemMessage = "You are currenty wielding a: " #+ str(weapons)
 pickUpMessage = "You have picked up a "
 dropItemMessage = "You have dropped a "
 failedToEquipMessage = "Therefore you were unable to equip the item."
-currentArmourMessage = "You are wearing " + str(armour)
+currentArmourMessage = "You are wearing: " #+ str(armour)
 unEquipArmourMessage = "You have unequiped your armour."
 unEquipWeaponMessage = "You have unequiped your weapon."
 
@@ -193,13 +193,13 @@ def dropItem(obj):
 def equipItem(obj, name, pequip):
     global armour, weapons
     if obj == 0:
-        weapon = name
+        weapons = name
         #Enter Addition To Stats (Waiting for finished weapons)
         print(currentHandItemMessage + str(name) + ".")
         file = open("equip0.txt","w")
         file.write(str(pequip))
         file.close()
-        return weapon
+        return weapons
     elif obj == 1:
         armour = name
         ##endurance += int(armour[1])
@@ -229,15 +229,15 @@ def unEquipItem(obj):
         #Enter Reverse Stats of Weapon (Waiting for finished weapons)
         print(unEquipWeaponMessage)
 
-def pinventory(currentHandItem,currentArmour):
+def pinventory():
     global inventry
     global armour, weapons
     length = 0
     while length<len(inventry):
         #print(inventry[length][4])
         length = length + 1
-    print("You are currently holding:",weapons)
-    print("You are currently wearing:",armour)
+    print(currentHandItemMessage + str(weapons))
+    print("You are currently wearing: " + str(armour))
     print("Your options are:")
     print("unequip equip")
     pdecide = input()
@@ -539,6 +539,6 @@ while 1>0:
     elif instruction==("\help"):
         print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
     elif instruction==("\management"):
-        pinventory(currentHandItem,currentArmour)
+        pinventory()
     else:
         print("Error - command not recognised - uses \"\help\" for a list of instructions.")
