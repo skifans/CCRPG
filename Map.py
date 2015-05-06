@@ -35,7 +35,7 @@ else:
     combat_on=1
 f.close()
 
-##Colour Grid
+#Colour Grid
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
