@@ -290,14 +290,10 @@ classes = ["Warrior","Mage","Paladin","Necromancer","Barbarian","Lancer","Archer
 sakaretsu_armour = [50,30,20,0,"Sakaretsu armour",8,1,"Armour that increases offensive capability",0,0,10,0,0]
 simple_katanna = [60,0,0,0,"Katanna",8,0,"In the right hands this weapon is as deadly as any blade",0,60,0,0,0]
 
-def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja):
-    global player, player_class   #moved global from the if statments to the top to cut down on the ammount needed
-    print("What is you're name?")
-    name = str(input("my name is:"))
-    print("Choose you're class " + name)
-    print(classes)
-    player_class = str(input())
-    player_class = player_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
+def type_select(player_class):
+    global player
+    player_class=str(player_class)
+    print(player_class)
     if player_class == "barbarian":
             player = barbarian
             image = pygame.image.load(os.path.join("textures","barbarian.gid"))
@@ -330,12 +326,22 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
             player = ninja
             image = pygame.image.load(os.path.join("textures","necromancer.png"))
     else:
-            ctypes.windll.user32.MessageBoxW(0, "Error - player class entered incorectly", "error", 0)
+            ctypes.windll.user32.MessageBoxW(0, "Error - player class entered or loaded incorectly. You will now be promted to enter your name & player class", "error", 0)
             print("Error - player class entered incorectly")
             player = "error"
             while player == "error":
                 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+    return image
 
+def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja):
+    global player, player_class   #moved global from the if statments to the top to cut down on the ammount needed
+    print("What is you're name?")
+    name = str(input("my name is:"))
+    print("Choose you're class " + name)
+    print(classes)
+    player_class = str(input())
+    player_class = player_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
+    image=type_select(player_class) #loads player array and image
     print ("Are you ready?")
     return image
 
@@ -455,7 +461,7 @@ def playerturn(player,darkness):
     print("Choose your action:")
     print("attack spell run")
     if buttons==TRUE:
-        app = Application(master=root)
+        app = app_()
         #thigns before button is pressed
         app.mainloop()
         #things after button is pressed
@@ -554,7 +560,7 @@ def turn (player,darkness):
         else:
             print("You died")
             combatover = True
-image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+#image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja) #un comment tp start set up (class ect. each time the game starts (before the menu))
 
 
 def combat():
@@ -577,54 +583,54 @@ def combat():
         background = pygame.image.load(os.path.join("textures",map_name)) #when combat is finnished, load previous background
         screen.blit(background, (0,0))
 
-global pchoice
-class Application(Frame):
-    def say_hi(self):
-        global pchoice
-        print("Run")
-        pchoice="run"
-        root.quit()
-        Frame.destroy(self)
+def app_():
+    root = Tk()
+    global pchoice
+    class Application(Frame):
+        def say_hi(self):
+            global pchoice
+            print("Run")
+            pchoice="run"
+            root.destroy()
 
-    def say_hi1(self):
-        global pchoice
-        print("Spell")
-        pchoice="spell"
-        root.quit()
-        Frame.destroy(self)
+        def say_hi1(self):
+            global pchoice
+            print("Spell")
+            pchoice="spell"
+            root.destroy()
 
-    def say_hi2(self):
-        global pchoice
-        print("Attack")
-        pchoice="attack"
-        root.quit()
-        Frame.destroy(self)
-    def createWidgets(self):
-        self.run = Button(self)
-        self.run["text"] = "Run",
-        self.run["command"] = self.say_hi
+        def say_hi2(self):
+            global pchoice
+            print("Attack")
+            pchoice="attack"
+            root.destroy()
+        def createWidgets(self):
+            self.run = Button(self)
+            self.run["text"] = "Run",
+            self.run["command"] = self.say_hi
 
-        self.run.pack({"side": "left"})
+            self.run.pack({"side": "left"})
 
 
-        self.spell = Button(self)
-        self.spell["text"] = "Spell",
-        self.spell["command"] = self.say_hi1
+            self.spell = Button(self)
+            self.spell["text"] = "Spell",
+            self.spell["command"] = self.say_hi1
 
-        self.spell.pack({"side": "left"})
+            self.spell.pack({"side": "left"})
 
-        self.attack = Button(self)
-        self.attack["text"] = "Attack",
-        self.attack["command"] = self.say_hi2
+            self.attack = Button(self)
+            self.attack["text"] = "Attack",
+            self.attack["command"] = self.say_hi2
 
-        self.attack.pack({"side": "left"})
+            self.attack.pack({"side": "left"})
 
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.pack()
-        self.createWidgets()
-root = Tk()
-#end of combat system
+        def __init__(self, master=None):
+            Frame.__init__(self, master)
+            self.pack()
+            self.createWidgets()
+    return Application(master=root)
+    #root = Tk()
+    #end of combat system
 #-----------------------------------------------------------------------------------
 def new_map(direction, playert):
     global player
@@ -837,6 +843,12 @@ def menu_close():
     print("menu removed")
     menu1=FALSE
 
+def new_game():
+    global menu1, image
+    print("menu removed")
+    menu1=FALSE
+    image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+
 def menu():
     global menu1
     menu1=TRUE
@@ -846,6 +858,7 @@ def menu():
                 button("return to game",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
                 button("save game",300,200,150,50,GREEN,DARKGREEN,BLACK,save)
                 button("load game",300,300,150,50,GREEN,DARKGREEN,BLACK,load)
+                button("quit to desktop",300,400,150,50,GREEN,DARKGREEN,BLACK,terminate)
                 pygame.display.flip()
         time.sleep(0.1)
 
@@ -855,8 +868,9 @@ def start_menu():
     screen.fill(WHITE) #fill screen white
     while menu1==TRUE:
         for event in pygame.event.get():
-                button("new game",300,100,150,50,GREEN,DARKGREEN,BLACK,menu_close)
+                button("new game",300,100,150,50,GREEN,DARKGREEN,BLACK,new_game)
                 button("load game",300,200,150,50,GREEN,DARKGREEN,BLACK,load)
+                button("quit to desktop",300,300,150,50,GREEN,DARKGREEN,BLACK,terminate)
                 pygame.display.flip()
         time.sleep(0.1)
     map_name="map"+str(player[15])+".gif"
@@ -887,15 +901,19 @@ def load():
     root = tix.Tk()
 
     def print_selected(args):
-        global playert
-        print('selected dir:', args)
+        global playert, player, image
+        print('selected dir:', args) #printe selected save
         f = open(os.path.join(args,"location.txt"),"r")
+        class_type=f.readline()
+        class_type = class_type[:-1]
+        image=type_select(str(class_type))
         player[15]=int(f.readline())
         map_name="map"+str(player[15])+".gif" #add back background after file is selected
         background = pygame.image.load(os.path.join("textures",map_name))
         screen.blit(background, (0,0))
         playert.x=int(f.readline())
         playert.y=int(f.readline())
+        print("image",class_type)
         f.close()
         menu_close()
         pygame.display.flip()
