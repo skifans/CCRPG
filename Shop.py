@@ -190,23 +190,28 @@ def dropItem(obj):
         return armour
 
 #Function for equipping an item e.g Sword into your hand/Put on armour
-def equipItem(obj, name):
+def equipItem(obj, name, pequip):
     global armour, weapons
-    print("obj =",obj)
     if obj == 0:
         weapon = name
         #Enter Addition To Stats (Waiting for finished weapons)
         print(currentHandItemMessage + str(name) + ".")
+        file = open("equip0.txt","w")
+        file.write(str(pequip))
+        file.close()
         return weapon
     elif obj == 1:
         armour = name
         ##endurance += int(armour[1])
         print(currentArmourMessage + str(name) + ".")
+        file = open("equip1.txt","w")
+        file.write(str(pequip))
+        file.close()
         return armour
     elif obj==2:
         print("clothing is not yet supported")
     else:
-        print("error line 184")
+        print("error line 214")
 
 #Function to unequip yet keep in inventory
 def unEquipItem(obj):
@@ -224,8 +229,6 @@ def unEquipItem(obj):
         #Enter Reverse Stats of Weapon (Waiting for finished weapons)
         print(unEquipWeaponMessage)
 
-
-#Testing... 1,2,3
 def pinventory(currentHandItem,currentArmour):
     global inventry
     global armour, weapons
@@ -251,12 +254,12 @@ def pinventory(currentHandItem,currentArmour):
             pequip = int(pequip)
             if pequip<len(inventry):
                 print(inventry)
-                equipItem(inventry[pequip][6],inventry[pequip][4])
+                equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
             else:
                 print("item not found")
     if pdecide == "unequip":
         armour = ""
-        weapn = ""
+        weapons = ""
 #--------------------------------------------------------------------------------------------------------------------------
 def save_item(to_write):
     file=open("items.txt","a")
@@ -376,6 +379,15 @@ while item_no < len(items):
     shop.append(str(items[item_no]))
     item_no=item_no+1
 
+file=open("equip0.txt","r")
+pequip=int(file.readline())
+equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+file.close()
+file=open("equip1.txt","r")
+pequip=int(file.readline())
+equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+file.close()
+
 prices=[]
 
 item_no=0
@@ -487,6 +499,8 @@ while 1>0:
         check=is_number(to_buy) #check user has entered a number
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
+            ##if int(to_buy)<len(item): #check item exists
+            print("item number not found")
             print("You have requested data on ",store[0][int(to_buy)])
             print("Strength = ",items[int(to_buy)][0])
             print("Endurance = ",items[int(to_buy)][1])
@@ -498,6 +512,10 @@ while 1>0:
             #7 used for description, placed at end
             print("Range = ",items[int(to_buy)][8])
             print("Bellow is a description of the item: \n,",items[int(to_buy)][7])
+            ##else:
+                ##print("item number not found")
+        else:
+            print("please enter numeric numbers only")
     elif instruction==("\convert"):
         convert_f=input("Convert from (S,M or L)")
         if convert_f=="S":
@@ -518,13 +536,8 @@ while 1>0:
                 print("You don't have that many")
         else:
             print("Error - use capital S, M and L only")
-    elif instruction==("\inventory"):
-        if len(inventry)==0:
-            print("You have no items in your inventry")
-        else:
-            print("In your inventory you have: "+str(inventry))
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory (to be removed). \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
     elif instruction==("\management"):
         pinventory(currentHandItem,currentArmour)
     else:
