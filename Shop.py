@@ -330,16 +330,24 @@ def pinventory():
             button("unequip",300,200,150,50,GREEN,DARKGREEN,BLACK,unequip)
             pygame.display.flip()
             time.sleep(0.1)
-    #pdecide = input()
     if pdecide == "equip":
         if len(inventry)==0:
-            print("You havnt boughnt anything to equip")
+            screen.fill(BLACK)
+            message_display("You havnt boughnt anything to equip",400,40,16,WHITE)
+            pygame.display.flip()
         else:
-            print("Choose what you want to equip")
+            screen.fill(BLACK)
+            message_display("Choose what you want to equip",400,40,16,WHITE)
+            pygame.display.flip()
             length=0
+            y=60
+            screen.fill(BLACK)
             while length<len(inventry):
-                print("item number",length,"is",inventry[length][4])
+                #print("item number",length,"is",inventry[length][4])
+                message_display("item number "+str(length)+" is "+inventry[length][4],400,y,16,WHITE)
+                pygame.display.flip()
                 length = length + 1
+                y=y+50
             pequip = input("Enter item number")
             pequip = int(pequip)
             if pequip<len(inventry):
