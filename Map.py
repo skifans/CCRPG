@@ -626,6 +626,18 @@ def app_():
     return Application(master=root)
     #root = Tk()
     #end of combat system
+
+#-----------------------------------------------------------------------------------
+#debug function
+def debug(message,player):
+    debug=open("log.txt","a")
+    debug.write(str(time.strftime('%X %x %Z')))
+    debug.write(" ")
+    debug.write(str(player))
+    debug.write(" ")
+    debug.write(str(message))
+    debug.write("\n")
+    debug.close()
 #-----------------------------------------------------------------------------------
 def new_map(direction, playert):
     global player
@@ -815,6 +827,7 @@ clock = pygame.time.Clock()
 hight=3
 running=True
 start_menu()
+debug("game started",player)
 print(player)
 while running:
     for event in pygame.event.get():
@@ -822,6 +835,7 @@ while running:
                 terminate()
                 pygame.display.quit()
                 running=False
+                debug("game closed",player)
                 break
         elif event.type == KEYDOWN:
             map_name="map"+str(player[15])+".gif"
@@ -912,3 +926,4 @@ while running:
                     f.write("\n")
                     f.close()
                     print("added to blakced square list")
+                    
