@@ -24,6 +24,73 @@
 
 import os #used for file deleting
 
+import pygame, time
+
+#Colour Grid
+WHITE     = (255, 255, 255)
+BLACK     = (  0,   0,   0)
+RED       = (255,   0,   0)
+DARKPINK  = (255,  20, 147)
+GREEN     = (  0, 255,   0)
+DARKGREEN = (  0, 155,   0)
+ORANGE    = (255, 153,  18)
+DARKGRAY  = ( 40,  40,  40)
+YELLOW    = (255, 255,   0)
+BLUE      = (  0,   0, 255)
+KHAKI     = (139, 134,  78)
+
+cellSize=20
+
+windowWidth = 800
+windowHeight = 600
+lineColour = WHITE
+assert windowHeight % cellSize == 0
+assert windowWidth % cellSize == 0
+cellWidth = int(windowWidth / cellSize)
+cellHeight = int(windowHeight / cellSize)
+
+pygame.init()
+screen=pygame.display.set_mode((0,0))
+def drawGrid():
+    global window
+    window = pygame.display.set_mode((windowWidth, windowHeight))
+    for x in range(0, windowWidth, cellSize): # draw vertical lines
+        pygame.draw.line(window, lineColour, (x, 0), (x, windowHeight))
+    for y in range(0, windowHeight, cellSize): # draw horizontal lines
+        pygame.draw.line(window, lineColour, (0, y), (windowWidth, y))
+    pygame.display.update()
+
+def message_display(text, x, y, font_size, colour):
+    largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
+    TextSurf, TextRect = text_objects(text, largeText, colour) #render text
+    TextRect.center = ((x),(y)) #place text
+    #screen=pygame.display.set_mode((0,0))
+    screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
+
+def text_objects(text, font, colour):
+    textSurface = font.render(text, True, colour) #extact purpose unkown but seems to be needed
+    return textSurface, textSurface.get_rect()
+
+def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_function_to_call_when_clicked):
+    #screen=pygame.display.set_mode((0,0))
+    click = pygame.mouse.get_pressed() #get mouse state (clicked/not clicked)
+    mouse = pygame.mouse.get_pos() #get mouse coords
+    if x+w > mouse[0] > x and y+h > mouse[1] > y: #check if mouse is on button
+        pygame.draw.rect(screen, active_colour,(x,y,w,h)) #change to active colour
+        if click[0] == 1: #check click (above if checks mouse is on button)
+            name_of_function_to_call_when_clicked() #do this when clicked (veriable needs not to have brackets)
+    else:
+        pygame.draw.rect(screen, inactive_colour,(x,y,w,h)) #mouse not on button, switch to inactive colour
+
+    smallText = pygame.font.Font("freesansbold.ttf",20) #load font
+    textSurf, textRect = text_objects(msg, smallText,text_colour) #place text in button through text funtion
+    textRect.center = ( (x+(w/2)), (y+(h/2)) ) #location of text
+    screen.blit(textSurf, textRect) #send to screen (but not update)
+
+drawGrid()
+screen.fill(BLACK)
+pygame.display.update()
+
 #error checking
 def is_number(to_check):
     if to_check.isdigit():
@@ -229,18 +296,41 @@ def unEquipItem(obj):
         #Enter Reverse Stats of Weapon (Waiting for finished weapons)
         print(unEquipWeaponMessage)
 
+def equip():
+    global decide, pdecide
+    print("equip")
+    pdecide = "equip"
+    decide=1
+    return decide, pdecide
+
+def unequip():
+    global decide, pdecide
+    print("unequip")
+    pdecide = "unequip"
+    decide=1
+    return decide, pdecide
+
 def pinventory():
-    global inventry
+    global inventry, decide, pdecide
     global armour, weapons
     length = 0
     while length<len(inventry):
         #print(inventry[length][4])
         length = length + 1
     print(currentHandItemMessage + str(weapons))
-    print("You are currently wearing: " + str(armour))
-    print("Your options are:")
-    print("unequip equip")
-    pdecide = input()
+    ##print("You are currently wearing: " + str(armour))
+    ##print("Your options are:")
+    ##print("unequip equip")
+    message_display("You are currently wearing: " + str(armour) + ". Your options are: unequip or equip",400,40,16,WHITE)
+    pygame.display.flip()
+    decide = 0
+    while decide == 0:
+        for event in pygame.event.get():
+            button("equip",300,100,150,50,GREEN,DARKGREEN,BLACK,equip)
+            button("unequip",300,200,150,50,GREEN,DARKGREEN,BLACK,unequip)
+            pygame.display.flip()
+            time.sleep(0.1)
+    #pdecide = input()
     if pdecide == "equip":
         if len(inventry)==0:
             print("You havnt boughnt anything to equip")
