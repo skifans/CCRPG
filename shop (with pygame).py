@@ -607,8 +607,11 @@ while 1>0:
             print("Error - please enter a number, you have been returned to the main menu")
     elif instruction==("\data"):
         loop=0
+        option=input(print("Weapons (1), armour (2) or cloths (3)"))
+        option=int(option)-1
         while loop<length:
-            print("Item "+str(loop)+" - "+store[0][loop])
+            if items[int(loop)][6]==int(option):
+                print("Item "+str(loop)+" - "+store[0][loop])
             loop=loop+1
         to_buy=input("Input item number to get data on")
         check=is_number(to_buy) #check user has entered a number
