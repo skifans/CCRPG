@@ -492,28 +492,30 @@ while 1>0:
             print("Error - please enter a number, you have been returned to the main menu")
     elif instruction==("\data"):
         loop=0
+        option=input(print("Weapons (1), armour (2) or clothes (3)"))
+        option=int(option)-1
         while loop<length:
-            print("Item "+str(loop)+" - "+store[0][loop])
+            if items[int(loop)][6]==int(option):
+                print("Item "+str(loop)+" - "+store[0][loop])
             loop=loop+1
         to_buy=input("Input item number to get data on")
         check=is_number(to_buy) #check user has entered a number
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
-            ##if int(to_buy)<len(item): #check item exists
-            print("item number not found")
-            print("You have requested data on ",store[0][int(to_buy)])
-            print("Strength = ",items[int(to_buy)][0])
-            print("Endurance = ",items[int(to_buy)][1])
-            print("Dexterity = ",items[int(to_buy)][2])
-            print("Spell = ",items[int(to_buy)][3])
-            #4 is used for name
-            print("Class = ",items[int(to_buy)][5])
-            print("Type = ",items[int(to_buy)][6])
-            #7 used for description, placed at end
-            print("Range = ",items[int(to_buy)][8])
-            print("Bellow is a description of the item: \n,",items[int(to_buy)][7])
-            ##else:
-                ##print("item number not found")
+            if int(to_buy)<len(item): #check item exists
+                print("item number not found")
+            else:
+                print("You have requested data on ",items[int(to_buy)][4])
+                print("Strength = ",items[int(to_buy)][0])
+                print("Endurance = ",items[int(to_buy)][1])
+                print("Dexterity = ",items[int(to_buy)][2])
+                print("Spell = ",items[int(to_buy)][3])
+                #4 is used for name
+                print("Class = ",items[int(to_buy)][5])
+                print("Type = ",items[int(to_buy)][6])
+                #7 used for description, placed at end
+                print("Range = ",items[int(to_buy)][8])
+                print("Bellow is a description of the item: \n,",items[int(to_buy)][7])
         else:
             print("please enter numeric numbers only")
     elif instruction==("\convert"):
