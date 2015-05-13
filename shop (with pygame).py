@@ -313,7 +313,11 @@ def unequip(t):
     return decide, pdecide
 
 def item_to_eqip(length):
+    global decide
     print(length)
+    equipItem(inventry[length][6],inventry[length][4],length)
+    decide=1
+    return decide
 
 def pinventory():
     global inventry, decide, pdecide
@@ -357,13 +361,13 @@ def pinventory():
                     length1=0
                     y=0
                 time.sleep(0.1)
-            pequip = input("Enter item number")
-            pequip = int(pequip)
-            if pequip<len(inventry):
-                print(inventry)
-                equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
-            else:
-                print("item not found")
+            ##pequip = input("Enter item number")
+            ##pequip = int(pequip)
+##            if pequip<len(inventry):
+##                print(inventry)
+##                equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+##            else:
+##                print("item not found")
     if pdecide == "unequip":
         armour = ""
         weapons = ""
@@ -522,7 +526,10 @@ length=len(store[1])
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
+        screen.fill(BLACK)
         print("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]))
+        message_display("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]),300,30,16,WHITE)
+        pygame.display.flip()
 
     elif instruction==("\+money"):
         type=input("Small, Medium, Large or Special")
