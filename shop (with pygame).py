@@ -527,7 +527,7 @@ while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
         screen.fill(BLACK)
-        print("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]))
+        ##print("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]))
         message_display("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]),300,30,16,WHITE)
         pygame.display.flip()
 
