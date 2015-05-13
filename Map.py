@@ -89,7 +89,7 @@ class textures():
 ##            self.coords = (x, y)
 ##            self.texturerect.move_ip(self.coords)
 ##            window.blit(self.texture, self.texturerect)
-            print("")
+            pass
             #this function is no longer needed but I cannot find everywhere it is called so just deleting it gives errors.
 
     #Class for General Grass Texture
@@ -135,76 +135,6 @@ def loadWhiteVertLine(x, y, a, b):
         #textures.loadCoords.append((x,y))
         y += 20
 
-#Not very clever way of loading all the water textures for the main map...
-
-def loadWhiteMap():
-    #arial font used
-    #l
-    loadWhiteVertLine(40, 220, 60, 360)
-    #o
-    loadWhiteVertLine(80, 260, 80, 340)
-    loadWhiteVertLine(100, 240, 100, 260)
-    loadWhiteVertLine(100, 340, 100, 360)
-    loadWhiteVertLine(120, 240, 120, 260)
-    loadWhiteVertLine(120, 340, 120, 360)
-    loadWhiteVertLine(140, 240, 140, 260)
-    loadWhiteVertLine(140, 340, 140, 360)
-    loadWhiteVertLine(160, 260, 160, 340)
-    #a
-    loadWhiteVertLine(200, 260, 200, 280)
-    loadWhiteVertLine(200, 300, 200, 340)
-    loadWhiteVertLine(220, 240, 220, 260)
-    loadWhiteVertLine(220, 280, 220, 300)
-    loadWhiteVertLine(220, 340, 220, 360)
-    loadWhiteVertLine(240, 240, 240, 260)
-    loadWhiteVertLine(240, 280, 240, 300)
-    loadWhiteVertLine(240, 340, 240, 360)
-    loadWhiteVertLine(260, 240, 260, 260)
-    loadWhiteVertLine(260, 280, 260, 300)
-    loadWhiteVertLine(260, 320, 260, 340)
-    loadWhiteVertLine(280, 260, 280, 360)
-    #d
-    loadWhiteVertLine(320, 260, 320, 340)
-    loadWhiteVertLine(340, 240, 340, 260)
-    loadWhiteVertLine(340, 340, 340, 360)
-    loadWhiteVertLine(360, 240, 360, 260)
-    loadWhiteVertLine(360, 340, 360, 360)
-    loadWhiteVertLine(380, 260, 380, 280)
-    loadWhiteVertLine(380, 320, 380, 340)
-    loadWhiteVertLine(400, 200, 400, 360)
-    #i
-    loadWhiteVertLine(440, 200, 440, 220)
-    loadWhiteVertLine(440, 240, 440, 360)
-    #n
-    loadWhiteVertLine(480, 240, 480, 360)
-    loadWhiteVertLine(500, 240, 500, 260)
-    loadWhiteVertLine(520, 240, 520, 260)
-    loadWhiteVertLine(540, 240, 540, 260)
-    loadWhiteVertLine(560, 260, 560, 360)
-    #g
-    loadWhiteVertLine(600, 260, 600, 340)
-    loadWhiteVertLine(600, 380, 600, 400)
-    loadWhiteVertLine(620, 240, 620, 260)
-    loadWhiteVertLine(620, 340, 620, 360)
-    loadWhiteVertLine(620, 380, 620, 400)
-    loadWhiteVertLine(640, 240, 640, 260)
-    loadWhiteVertLine(640, 340, 640, 360)
-    loadWhiteVertLine(640, 380, 640, 400)
-    loadWhiteVertLine(660, 260, 660, 280)
-    loadWhiteVertLine(660, 320, 660, 340)
-    loadWhiteVertLine(660, 380, 660, 400)
-    loadWhiteVertLine(680, 240, 660, 380)
-
-
-#Fills Background With Grass
-def fillGrass(playert_x, playert_y):
-    x=0
-    #while x < windowWidth:
-    loadGrassVertLine(playert_x-20,playert_y-20,playert_x-20,playert_y+20) #refresh 1 collum to the left, from playert y -20 to playert y +20
-    loadGrassVertLine(playert_x,playert_y-20,playert_x,playert_y+40) #not sure way this needs to be 40, but dosnt work otherwise, refreshes collum you are in
-    loadGrassVertLine(playert_x+20,playert_y-20,playert_x+20,playert_y+20) #refresh 1 collum to the right, same range as top
-        #x += 20
-
 #Refresh Textures Will Take Current Logged Appropriate Coords For Each Texture & Re-Render It (Pre-".flip")
 def refreshTextures(texture, coords):
     img = texture()
@@ -217,7 +147,6 @@ def refreshAllTextures():
 #General "Main-loop" equivalent for testing.
 def loadTextures():
     drawGrid()
-    loadWhiteMap()
     pygame.display.flip()
     #time.sleep(3) #this will keep the loading screen on for an extra 3 seconds
     background=pygame.image.load("map1.gif")
@@ -557,7 +486,6 @@ def turn (player,darkness):
             combatover = True
 #image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja) #un comment tp start set up (class ect. each time the game starts (before the menu))
 
-
 def combat():
     global combatover
     global player
@@ -580,6 +508,8 @@ def combat():
 
 def app_():
     root = Tk()
+    root.attributes("-topmost", True)
+    root.focus_set()
     global pchoice
     class Application(Frame):
         def say_hi(self):
@@ -606,7 +536,6 @@ def app_():
 
             self.run.pack({"side": "left"})
 
-
             self.spell = Button(self)
             self.spell["text"] = "Spell",
             self.spell["command"] = self.say_hi1
@@ -623,7 +552,9 @@ def app_():
             Frame.__init__(self, master)
             self.pack()
             self.createWidgets()
+    root.attributes("-topmost", False)
     return Application(master=root)
+
     #root = Tk()
     #end of combat system
 
@@ -715,7 +646,7 @@ def pause():
     font = pygame.font.SysFont("comicsansm", 115) #font (yes thats right :p)
     text = font.render("Paused", 1, (10, 10, 10)) #text to display
     textpos = text.get_rect()
-    textpos.centerx = screen.get_rect().centerx #osition text
+    textpos.centerx = screen.get_rect().centerx #position text
     screen.blit(text, textpos)
     pygame.display.flip() #update display
     while pause==TRUE:
@@ -795,7 +726,7 @@ def load():
 
     def print_selected(args):
         global playert, player, image
-        print('selected dir:', args) #printe selected save
+        print('selected dir:', args) #print selected save
         f = open(os.path.join(args,"location.txt"),"r")
         class_type=f.readline()
         class_type = class_type[:-1]
@@ -926,4 +857,3 @@ while running:
                     f.write("\n")
                     f.close()
                     print("added to blakced square list")
-                    
