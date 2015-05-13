@@ -24,6 +24,73 @@
 
 import os #used for file deleting
 
+import pygame, time
+
+#Colour Grid
+WHITE     = (255, 255, 255)
+BLACK     = (  0,   0,   0)
+RED       = (255,   0,   0)
+DARKPINK  = (255,  20, 147)
+GREEN     = (  0, 255,   0)
+DARKGREEN = (  0, 155,   0)
+ORANGE    = (255, 153,  18)
+DARKGRAY  = ( 40,  40,  40)
+YELLOW    = (255, 255,   0)
+BLUE      = (  0,   0, 255)
+KHAKI     = (139, 134,  78)
+
+cellSize=20
+
+windowWidth = 800
+windowHeight = 600
+lineColour = WHITE
+assert windowHeight % cellSize == 0
+assert windowWidth % cellSize == 0
+cellWidth = int(windowWidth / cellSize)
+cellHeight = int(windowHeight / cellSize)
+
+pygame.init()
+screen=pygame.display.set_mode((0,0))
+def drawGrid():
+    global window
+    window = pygame.display.set_mode((windowWidth, windowHeight))
+    for x in range(0, windowWidth, cellSize): # draw vertical lines
+        pygame.draw.line(window, lineColour, (x, 0), (x, windowHeight))
+    for y in range(0, windowHeight, cellSize): # draw horizontal lines
+        pygame.draw.line(window, lineColour, (0, y), (windowWidth, y))
+    pygame.display.update()
+
+def message_display(text, x, y, font_size, colour):
+    largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
+    TextSurf, TextRect = text_objects(text, largeText, colour) #render text
+    TextRect.center = ((x),(y)) #place text
+    #screen=pygame.display.set_mode((0,0))
+    screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
+
+def text_objects(text, font, colour):
+    textSurface = font.render(text, True, colour) #extact purpose unkown but seems to be needed
+    return textSurface, textSurface.get_rect()
+
+def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_function_to_call_when_clicked,veriable_in_function):
+    #screen=pygame.display.set_mode((0,0))
+    click = pygame.mouse.get_pressed() #get mouse state (clicked/not clicked)
+    mouse = pygame.mouse.get_pos() #get mouse coords
+    if x+w > mouse[0] > x and y+h > mouse[1] > y: #check if mouse is on button
+        pygame.draw.rect(screen, active_colour,(x,y,w,h)) #change to active colour
+        if click[0] == 1: #check click (above if checks mouse is on button)
+            name_of_function_to_call_when_clicked(veriable_in_function) #do this when clicked (veriable needs not to have brackets)
+    else:
+        pygame.draw.rect(screen, inactive_colour,(x,y,w,h)) #mouse not on button, switch to inactive colour
+
+    smallText = pygame.font.Font("freesansbold.ttf",20) #load font
+    textSurf, textRect = text_objects(msg, smallText,text_colour) #place text in button through text funtion
+    textRect.center = ( (x+(w/2)), (y+(h/2)) ) #location of text
+    screen.blit(textSurf, textRect) #send to screen (but not update)
+
+drawGrid()
+screen.fill(BLACK)
+pygame.display.update()
+
 #error checking
 def is_number(to_check):
     if to_check.isdigit():
@@ -81,17 +148,26 @@ def change(money, type, amount):
         print("Error - money type not recognised. Use capital S,M,L or X only for type veriable")
         return money
 
-#starting money
+#loading money
 money=[]
-x_money=10
-l_money=20
-m_money=40
-s_money=60
-money.append(s_money)
-money.append(m_money)
-money.append(l_money)
-money.append(x_money)
+f = open("money_s.txt","r")
+s_money=f.read()
+f.close()
+f = open("money_m.txt","r")
+m_money=f.read()
+f.close()
+f = open("money_l.txt","r")
+l_money=f.read()
+f.close()
+f = open("money_x.txt","r")
+x_money=f.read()
+f.close()
+money.append(int(s_money))
+money.append(int(m_money))
+money.append(int(l_money))
+money.append(int(x_money))
 
+global inventry
 inventry=[]
 
 def amount(items, item_no):
@@ -119,7 +195,191 @@ def places(items, item_no):
     else:
         place="error"
     return place
+#---------------------------------------------------------------------------------------------------
+#Arrays
+global armour, weapons
 
+clothing = []
+armour = []
+weapons = []
+
+#Defalts
+#Code Specific
+currentHandItem = " "
+currentArmour = " "
+
+#Items - Examples for testing purposes. To be replaced with finished items.
+
+
+#Messages
+inventMessage = "You currently have " + str(weapons)
+currentHandItemMessage = "You are currenty wielding a: " #+ str(weapons)
+pickUpMessage = "You have picked up a "
+dropItemMessage = "You have dropped a "
+failedToEquipMessage = "Therefore you were unable to equip the item."
+currentArmourMessage = "You are wearing: " #+ str(armour)
+unEquipArmourMessage = "You have unequiped your armour."
+unEquipWeaponMessage = "You have unequiped your weapon."
+
+"""
+Functions below for actions:
+All functions start by finding the category of the item so that it is able to
+deal with the appropriate part of the inventory (may be streamlined using a
+second function at a later date.) <-- Not applicable to pickUpItem()
+"""
+
+#Function for putting an item into the inventory.
+def pickUpItem(obj):
+    global armour, weapons
+    if obj[5] == "clothing":
+        clothing.insert(obj[4])
+        print(pickUpMessage+obj[4] + ".")
+        return invent
+    elif obj[5] == 1:
+        armour.append(obj)
+        print(pickUpMessage+obj[4] + ".")
+        return armour
+    elif obj[5] == 0:
+        weapons.append(obj[4])
+        print(pickUpMessage + obj[4] + ".")
+        return weapons
+
+#Function for removing an item from the inventory (& at the moment, removing said item from game)
+def dropItem(obj):
+    global armour, weapons
+    if obj[5] == 0:
+        weapons.remove(obj[4])
+        print(dropItemMessage + obj[4] + ".")
+        return weapons
+    elif obj[5] == 1:
+        armour.remove(obj[4])
+        print(dropItemMessage + obj[4] + ".")
+        return armour
+
+#Function for equipping an item e.g Sword into your hand/Put on armour
+def equipItem(obj, name, pequip):
+    global armour, weapons
+    if obj == 0:
+        weapons = name
+        #Enter Addition To Stats (Waiting for finished weapons)
+        print(currentHandItemMessage + str(name) + ".")
+        file = open("equip0.txt","w")
+        file.write(str(pequip))
+        file.close()
+        return weapons
+    elif obj == 1:
+        armour = name
+        ##endurance += int(armour[1])
+        print(currentArmourMessage + str(name) + ".")
+        file = open("equip1.txt","w")
+        file.write(str(pequip))
+        file.close()
+        return armour
+    elif obj==2:
+        print("clothing is not yet supported")
+    else:
+        print("error line 214")
+
+#Function to unequip yet keep in inventory
+def unEquipItem(obj):
+    #not used
+    global armour, weapons
+    if obj == 1:
+        #Resets name of current armour & resets the appropriate stats.
+        armour = " "
+        ##endurance -= obj[1]
+        ##dexterity -= obj[2]
+        print(unEquipArmourMessage)
+
+    elif obj == 0:
+        weapon = " "
+        #Enter Reverse Stats of Weapon (Waiting for finished weapons)
+        print(unEquipWeaponMessage)
+
+def equip(t):
+    #t is needed as all functions when called by buttons are bassed a veriable. So it needs to have 1 when defined, even if unused.
+    global decide, pdecide
+    print("equip")
+    pdecide = "equip"
+    decide=1
+    return decide, pdecide
+
+def unequip(t):
+    #t is needed as all functions when called by buttons are bassed a veriable. So it needs to have 1 when defined, even if unused.
+    global decide, pdecide
+    print("unequip")
+    pdecide = "unequip"
+    decide=1
+    return decide, pdecide
+
+def item_to_eqip(length):
+    print(length)
+
+def pinventory():
+    global inventry, decide, pdecide
+    global armour, weapons
+    print(currentHandItemMessage + str(weapons))
+    ##print("You are currently wearing: " + str(armour))
+    ##print("Your options are:")
+    screen.fill(BLACK)
+    ##print("unequip equip")
+    message_display("You are currently wearing: " + str(armour) + ". Your options are: unequip or equip",400,40,16,WHITE)
+    pygame.display.flip()
+    decide = 0
+    while decide == 0:
+        for event in pygame.event.get():
+            button("equip",300,100,150,50,GREEN,DARKGREEN,BLACK,equip,"")
+            button("unequip",300,200,150,50,GREEN,DARKGREEN,BLACK,unequip,"")
+            pygame.display.flip()
+            time.sleep(0.1)
+    if pdecide == "equip":
+        if len(inventry)==0:
+            screen.fill(BLACK)
+            message_display("You havnt boughnt anything to equip",400,40,16,WHITE)
+            pygame.display.flip()
+        else:
+            screen.fill(BLACK)
+            message_display("Choose what you want to equip",400,40,16,WHITE)
+            pygame.display.flip()
+            length1=0
+            y=0
+            screen.fill(BLACK)
+            decide=0
+            while decide==0:
+                for event in pygame.event.get():
+                    while length1<len(inventry):
+                        #print("item number",length,"is",inventry[length][4])
+                        #message_display("item number "+str(length)+" is "+inventry[length][4],400,y,16,WHITE)
+                        button("Item number "+str(length1)+" is "+inventry[length1][4],150,y,500,50,GREEN,DARKGREEN,BLACK,item_to_eqip,length1)
+                        pygame.display.flip()
+                        length1 = length1 + 1
+                        y=y+50
+                    length1=0
+                    y=0
+                time.sleep(0.1)
+            pequip = input("Enter item number")
+            pequip = int(pequip)
+            if pequip<len(inventry):
+                print(inventry)
+                equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+            else:
+                print("item not found")
+    if pdecide == "unequip":
+        armour = ""
+        weapons = ""
+#--------------------------------------------------------------------------------------------------------------------------
+def save_item(to_write):
+    file=open("items.txt","a")
+    file.write(to_write)
+    file.write("\n")
+    file.close()
+    file=open("amount.txt","r")
+    amount=int(file.readline())
+    file.close()
+    file=open("amount.txt","w")
+    amount=int(amount)+1
+    file.write(str(amount))
+    file.close()
 #strengthm(0),endurancem(1),dexm(2),spellm(3),name(4),class(5),type(6),description(7),range(8),costs(9),costm(10),costl(11),costx(12)
 #possible items to buy
 warrior_basic_armour = [10,15,5,0,"basic warrior armour",1,1,"basic armour for beginners",0,30,0,0,0]
@@ -210,10 +470,30 @@ items=[warrior_basic_armour,warrior_medium_armour,warrior_strong_armour,warrior_
 items_accsesorys=[berserkers_band,priest_band,Fire_gem_circlet,major_ring,ring_of_random_change,blinding_cranium_crab,swiss_army_claymore,arrow_target,blight_sludge,overpowered_stick,boss_shield,sleepy_stick,lol,necrotic_bone,mr_tiddles] #add acsessorys to new array
 items.extend(items_accsesorys) #add accsesorys to end of items array
 
+#load items
+file=open("amount.txt","r")
+amount1=int(file.readline())
+file.close()
+f = open("items.txt","r")
+amount1=amount1-1
+for i in range (amount1):
+    item=f.readline()
+    inventry.append(items[int(item)])
+f.close()
+
 item_no=0
 while item_no < len(items):
-    shop.append(items[item_no][4])
+    shop.append(str(items[item_no]))
     item_no=item_no+1
+
+file=open("equip0.txt","r")
+pequip=int(file.readline())
+equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+file.close()
+file=open("equip1.txt","r")
+pequip=int(file.readline())
+equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+file.close()
 
 prices=[]
 
@@ -239,12 +519,11 @@ store.append(place)
 
 #length of shop
 length=len(store[1])
-#inventry - place any starting items in array
-inventry=[]
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
         print("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]))
+
     elif instruction==("\+money"):
         type=input("Small, Medium, Large or Special")
         amount=int(input("How much?"))
@@ -256,7 +535,7 @@ while 1>0:
         loop=0
         while loop<length:
             #print("Item "+str(loop)+" - "+store[0][loop]+" costs "+store[1][loop]+" from obrb type "+store[2][loop])
-            print("Item "+str(loop)+" - "+store[0][loop]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]))
+            print("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]))
             loop=loop+1
         print("Type \"leave\" to leave shop")
         to_buy=input("Input item number to buy")
@@ -264,7 +543,7 @@ while 1>0:
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
             if int(to_buy)<=int(length): #check number isnt too big
-                print("You have attempted to buy "+store[0][int(to_buy)])
+                print("You have attempted to buy "+str(items[int(to_buy)][4]))
                 price=(store[1][int(to_buy)])
                 type=store[2][int(to_buy)]
                 if store[2][int(to_buy)]=="S":
@@ -273,32 +552,48 @@ while 1>0:
                         print("You cannot afford that")
                     else:
                         change(money,type,amount)
-                        inventry.append(str(store[0][int(to_buy)]))
-                        print("You have sucssesfully bought "+store[0][int(to_buy)])
+                        inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
+                        file=open("money_s.txt","w")
+                        file.write(str(money[0]))
+                        file.close()
+                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="M":
                     amount=money[1]-int(price)
                     if amount<0:
                         print("You cannot afford that")
                     else:
                         change(money,type,amount)
-                        inventry.append(str(store[0][int(to_buy)]))
-                        print("You have sucssesfully bought "+store[0][int(to_buy)])
+                        inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
+                        file=open("money_m.txt","w")
+                        file.write(str(money[1]))
+                        file.close()
+                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="L":
                     amount=money[2]-int(price)
                     if amount<0:
                         print("You cannot afford that")
                     else:
                         change(money,type,amount)
-                        inventry.append(str(store[0][int(to_buy)]))
-                        print("You have sucssesfully bought "+store[0][int(to_buy)])
+                        inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
+                        file=open("money_l.txt","w")
+                        file.write(str(money[2]))
+                        file.close()
+                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
                 elif store[2][int(to_buy)]=="X":
                     amount=money[3]-int(price)
                     if amount<0:
                         print("You cannot afford that")
                     else:
                         change(money,type,amount)
-                        inventry.append(str(store[0][int(to_buy)]))
-                        print("You have sucssesfully bought "+store[0][int(to_buy)])
+                        inventry.append(items[int(to_buy)])
+                        save_item(to_buy)
+                        file=open("money_x.txt","w")
+                        file.write(str(money[3]))
+                        file.close()
+                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
             else:
                 print("Error - item not recognised")
         else:
@@ -312,6 +607,8 @@ while 1>0:
         check=is_number(to_buy) #check user has entered a number
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
+            ##if int(to_buy)<len(item): #check item exists
+            print("item number not found")
             print("You have requested data on ",store[0][int(to_buy)])
             print("Strength = ",items[int(to_buy)][0])
             print("Endurance = ",items[int(to_buy)][1])
@@ -323,6 +620,10 @@ while 1>0:
             #7 used for description, placed at end
             print("Range = ",items[int(to_buy)][8])
             print("Bellow is a description of the item: \n,",items[int(to_buy)][7])
+            ##else:
+                ##print("item number not found")
+        else:
+            print("please enter numeric numbers only")
     elif instruction==("\convert"):
         convert_f=input("Convert from (S,M or L)")
         if convert_f=="S":
@@ -343,61 +644,9 @@ while 1>0:
                 print("You don't have that many")
         else:
             print("Error - use capital S, M and L only")
-    elif instruction==("\inventory"):
-        if len(inventry)==0:
-            print("You have no items in your inventry")
-        else:
-            print("In your inventory you have: "+str(inventry))
-    elif instruction==("\save"):
-        file=open("inventory.txt","w")
-        file.write(str(inventry))
-        file.close()
-        file=open("money_s.txt","w")
-        file.write(str(money[0]))
-        file.close()
-        file=open("money_m.txt","w")
-        file.write(str(money[1]))
-        file.close()
-        file=open("money_l.txt","w")
-        file.write(str(money[2]))
-        file.close()
-        file=open("money_x.txt","w")
-        file.write(str(money[3]))
-        file.close()
-        print("completed")
-    elif instruction==("\load"):
-        f = open("inventory.txt","r")
-        inventry=[f.read()]
-        f.close()
-        money.pop() #not very clever way of deleted previous money
-        money.pop()
-        money.pop()
-        money.pop()
-        f = open("money_s.txt","r")
-        s_money=f.read()
-        f.close()
-        f = open("money_m.txt","r")
-        m_money=f.read()
-        f.close()
-        f = open("money_l.txt","r")
-        l_money=f.read()
-        f.close()
-        f = open("money_x.txt","r")
-        x_money=f.read()
-        f.close()
-        money.append(int(s_money))
-        money.append(int(m_money))
-        money.append(int(l_money))
-        money.append(int(x_money))
-        print("completed")
-    elif instruction==("\clear"):
-        os.remove("inventory.txt")
-        os.remove("money_s.txt")
-        os.remove("money_m.txt")
-        os.remove("money_l.txt")
-        os.remove("money_x.txt")
-        print("completed")
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \inventory = see items in inventory. \n \data = find out the statistics of an item \n \save = save current inventory and money \n \load - load previous inventory and money - do not do this without saving a file first \n \clear = delete any save inventory and money")
+        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
+    elif instruction==("\management"):
+        pinventory()
     else:
         print("Error - command not recognised - uses \"\help\" for a list of instructions.")
