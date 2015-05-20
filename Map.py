@@ -640,18 +640,28 @@ def save():
         f.write(str(player[7]))
         f.close()
     else:
-        ctypes.windll.user32.MessageBoxW(0, "Save not completed - a save already exists with this name", "error", 0)
+        f = open(os.path.join("Saves",filename,"location.txt"),"w")
+        f.write(str(player_class))
+        f.write('\n')
+        f.write(str(player[15]))
+        f.write("\n")
+        f.write(str(playert.x))
+        f.write("\n")
+        f.write(str(playert.y))
+        f.write("\n")
+        f.write(str(player[7]))
+        f.close()
 
 def load():
     root = tix.Tk()
 
     def print_selected(args):
-        global playert, player, image
+        global playert, player, image, player_class
         print('selected dir:', args) #print selected save
         f = open(os.path.join(args,"location.txt"),"r")
-        class_type=f.readline()
-        class_type = class_type[:-1]
-        image=type_select(str(class_type))
+        player_class=f.readline()
+        player_class = player_class[:-1]
+        image=type_select(str(player_class))
         player[15]=int(f.readline())
         map_name="map"+str(player[15])+".gif" #add back background after file is selected
         background = pygame.image.load(os.path.join("textures",map_name))
@@ -659,7 +669,7 @@ def load():
         playert.x=int(f.readline())
         playert.y=int(f.readline())
         player[7]=str(f.readline())
-        print("image",class_type)
+        print("image",player_class)
         f.close()
         menu_close()
         pygame.display.flip()
