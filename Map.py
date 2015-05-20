@@ -189,6 +189,7 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
     player_class = str(input())
     player_class = player_class.lower() #added .lower() to make sure that the input was lowercase so it wasn't case sensitvie
     image=type_select(player_class) #loads player array and image
+    player[7]=name
     print ("Are you ready?")
     return image
 
@@ -304,7 +305,7 @@ def playerturn(player,darkness):
     print("attack spell run")
     if buttons==TRUE:
         app = app_()
-        #thigns before button is pressed
+        #things before button is pressed
         app.mainloop()
         #things after button is pressed
     elif buttons==FALSE:
@@ -414,7 +415,7 @@ def combat():
         screen.blit(background, (0,0)) #place this at 0,0
         you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
         screen.blit(you, (100,200)) #place this at (100,200)
-        enemy = pygame.image.load(os.path.join("Combat","enemy.gif")) #load image for enemy
+        enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
         screen.blit(enemy, (500,100)) #place this at (500,100)
         pygame.display.flip() #update screen
         statsetup(darkness, sakaretsu_armour,simple_katanna)
@@ -628,13 +629,15 @@ def save():
     if not os.path.exists(os.path.join("Saves",filename)):
         os.makedirs(os.path.join("Saves",filename))
         f = open(os.path.join("Saves",filename,"location.txt"),"w")
+        f.write(str(player_class))
+        f.write('\n')
         f.write(str(player[15]))
         f.write("\n")
         f.write(str(playert.x))
         f.write("\n")
         f.write(str(playert.y))
         f.write("\n")
-        f.write(str(player_class))
+        f.write(str(player[7]))
         f.close()
     else:
         ctypes.windll.user32.MessageBoxW(0, "Save not completed - a save already exists with this name", "error", 0)
@@ -655,6 +658,7 @@ def load():
         screen.blit(background, (0,0))
         playert.x=int(f.readline())
         playert.y=int(f.readline())
+        player[7]=str(f.readline())
         print("image",class_type)
         f.close()
         menu_close()
