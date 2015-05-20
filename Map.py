@@ -58,52 +58,11 @@ cellHeight = int(windowHeight / cellSize)
 
 pygame.init()
 
-#Initiate the window and the basic grid background when called.
-def drawGrid():
-    global window
-    window = pygame.display.set_mode((windowWidth, windowHeight))
-    for x in range(0, windowWidth, cellSize): # draw vertical lines
-        pygame.draw.line(window, lineColour, (x, 0), (x, windowHeight))
-    for y in range(0, windowHeight, cellSize): # draw horizontal lines
-        pygame.draw.line(window, lineColour, (0, y), (windowWidth, y))
-    pygame.display.update() #removing this will make grid and loading appear at the same time
-
 class textures():
 
-    waterCoords = []
-    lavaCoords = []
-    roadCoords = []
-
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-
     class playerTexture():
-
         x = 0
         y = 0
-
-        def loadTextures(self, x, y):
-##            self.texture = pygame.image.load(os.path.join("textures","necromancer.png"))
-##            self.texturerect = self.texture.get_rect()
-##            self.coords = (x, y)
-##            self.texturerect.move_ip(self.coords)
-##            window.blit(self.texture, self.texturerect)
-            pass
-            #this function is no longer needed but I cannot find everywhere it is called so just deleting it gives errors.
-
-    #Class for General Grass Texture
-    class grassTexture():
-        def __init__(self):
-            self.x = 0
-            self.y = 0
-
-        def loadTexture(self, x, y):
-            self.texture = pygame.image.load(os.path.join("textures","map1.gif")) #this image (or the top left 20x20 pixels if bigger) will be your "tail" and will be what covers your tracks.
-            self.texturerect = self.texture.get_rect()
-            self.coords = (x, y)
-            self.texturerect.move_ip(self.coords)
-            window.blit(self.texture, self.texturerect)
 
     class loadigTexture():
         def __init__(self):
@@ -119,41 +78,6 @@ class textures():
 
 playert = textures.playerTexture()
 
-#Loads vertical line of texture - currently only way of rendering textures for most textures.
-#Takes four arguments: 2 coords to print textures between MUST BE VERTICAL STRAIGHT LINE
-def loadGrassVertLine(x, y, a, b):
-    img = textures.grassTexture()
-    while y < b:
-        img.loadTexture(x, y)
-        textures.waterCoords.append((x, y))
-        y += 20
-
-def loadWhiteVertLine(x, y, a, b):
-    img = textures.loadigTexture()
-    while y < b:
-        img.loadTexture(x, y)
-        #textures.loadCoords.append((x,y))
-        y += 20
-
-#Refresh Textures Will Take Current Logged Appropriate Coords For Each Texture & Re-Render It (Pre-".flip")
-def refreshTextures(texture, coords):
-    img = texture()
-    for i in coords:
-        img.loadTexture(i[0], i[1])
-
-def refreshAllTextures():
-    playert.loadTextures(playert.x, playert.y)
-
-#General "Main-loop" equivalent for testing.
-def loadTextures():
-    drawGrid()
-    pygame.display.flip()
-    #time.sleep(3) #this will keep the loading screen on for an extra 3 seconds
-    background=pygame.image.load("map1.gif")
-    screen=pygame.display.set_mode((0,0))
-    screen.blit(background,(0,0))
-    pygame.display.flip()
-
 #Closes The Window & Game
 def terminate():
     pygame.quit()
@@ -162,7 +86,6 @@ def terminate():
 boss_list=[[20,40,60],[20,40,60],[0,1,1],[0,1,2]]
 def after_movement(playert_x, playert_y, boss_list):
     #x of boss, y of boss, 0 = one time only (the first time playert lands of square) or 1 = repeate (repeate regarless of how many times playert lands on square), boss ID
-    refreshAllTextures()
     if playert_x in boss_list[0]: #check if x of playert is contaiend in x section of array
         location_in_array=boss_list[0].index(int(playert_x)) #if so then take the possition of that x value and save it
         if playert_y==boss_list[1][location_in_array]: #check the y value of the playert against the 2nd diminsion of the array to see if they match
@@ -268,11 +191,6 @@ def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian
     image=type_select(player_class) #loads player array and image
     print ("Are you ready?")
     return image
-
-"""
-This is the level up system
-It is ready to go into the game (I think)
-"""
 
 def levelupcheck():
     global player
@@ -496,7 +414,7 @@ def combat():
         screen.blit(background, (0,0)) #place this at 0,0
         you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
         screen.blit(you, (100,200)) #place this at (100,200)
-        enemy = pygame.image.load(os.path.join("combat","rockzilla.gif")) #load image for enemy
+        enemy = pygame.image.load(os.path.join("Combat","enemy.gif")) #load image for enemy
         screen.blit(enemy, (500,100)) #place this at (500,100)
         pygame.display.flip() #update screen
         statsetup(darkness, sakaretsu_armour,simple_katanna)
@@ -752,7 +670,6 @@ def load():
 
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------------------------------
-##print("Movement enabled, use arrow keys or WASD keys")
 screen = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()
 hight=3
