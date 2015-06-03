@@ -295,12 +295,38 @@ def enemyturn ():
     else:
         print("The enemy tries to cast a spell!")
         print("It fails!")
+#-------------------------------------------------------------------------------
+def spell_image():
+    count = 1
+    for i in range(10):
+        battle_ground = pygame.image.load(os.path.join("Combat","spells","blue_puff","blue_puff_"+str(count)+".gif"))
+        count += 1
+        screen.blit(battle_ground, (300,150))
+        pygame.display.flip()
+        time.sleep(.1)
+    battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
+    screen.blit(battle_ground, (300,150))
+    pygame.display.flip()
+
+def attackgif(weapons):
+    if weapons == "Green fire":
+        spell_image()
+    elif weapons == "Blue fire":
+        spell_image()
+    elif weapons[1] == 1:
+        spell_image()
+        spell_image()
+#-------------------------------------------------------------------------------
 
 #defining the players turn
 def playerturn(player,darkness):
     global combatover
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
     global pchoice
+#-------------------------------------------------------------------------------
+    spell = ["Blue fire", 1, 40]
+    weapons = "Blue fire"
+#-------------------------------------------------------------------------------
     print("Choose your action:")
     print("attack spell run")
     if buttons==TRUE:
@@ -331,6 +357,9 @@ def playerturn(player,darkness):
         else:
             print("You miss")
     elif pchoice == "spell":
+#-------------------------------------------------------------------------------
+        attackgif(weapons)
+#-------------------------------------------------------------------------------
         print("You don't have any spells")
     elif pchoice == "run":
         print("You try to run")
@@ -415,6 +444,10 @@ def combat():
         screen.blit(background, (0,0)) #place this at 0,0
         you = pygame.image.load(os.path.join("combat","you.gif")) #load image for you
         screen.blit(you, (100,200)) #place this at (100,200)
+#------------------------------------------------------------------------------------------------------------------------------
+#        battle_ground = pygame.image.load(os.path.join("combat","whiteTexture.gif")) #blank image for normal load
+#        screen.blit(battle_ground, (300,150))
+#------------------------------------------------------------------------------------------------------------------------------
         enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
         screen.blit(enemy, (500,100)) #place this at (500,100)
         pygame.display.flip() #update screen
