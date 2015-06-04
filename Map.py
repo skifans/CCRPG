@@ -81,6 +81,7 @@ playert = textures.playerTexture()
 #Closes The Window & Game
 def terminate():
     pygame.quit()
+    sys.exit()
 
 #anything in this function will be done each time the playert moves - regardless if direction
 boss_list=[[20,40,60],[20,40,60],[0,1,1],[0,1,2]]
@@ -296,7 +297,7 @@ def enemyturn ():
         print("The enemy tries to cast a spell!")
         print("It fails!")
 #-------------------------------------------------------------------------------
-def spell_image():
+def spell_image_blue_puff():
     count = 1
     for i in range(10):
         battle_ground = pygame.image.load(os.path.join("Combat","spells","blue_puff","blue_puff_"+str(count)+".gif"))
@@ -308,14 +309,25 @@ def spell_image():
     screen.blit(battle_ground, (300,150))
     pygame.display.flip()
 
+def attack_image_sword():
+    count = 1
+    for i in range(20):
+        battle_ground = pygame.image.load(os.path.join("Combat","attacks","sword","sword_"+str(count)+".png"))
+        count += 1
+        screen.blit(battle_ground, (300,150))
+        pygame.display.flip()
+        time.sleep(.02)
+    battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
+    screen.blit(battle_ground, (300,150))
+    pygame.display.flip()
+
 def attackgif(weapons):
-    if weapons == "Green fire":
-        spell_image()
-    elif weapons == "Blue fire":
-        spell_image()
-    elif weapons[1] == 1:
-        spell_image()
-        spell_image()
+    if weapons == "sword":
+        attack_image_sword()
+
+def spellgif(spell):
+    if spell[1] == 1:
+        spell_image_blue_puff()
 #-------------------------------------------------------------------------------
 
 #defining the players turn
@@ -325,7 +337,7 @@ def playerturn(player,darkness):
     global pchoice
 #-------------------------------------------------------------------------------
     spell = ["Blue fire", 1, 40]
-    weapons = "Blue fire"
+    weapons = "sword"
 #-------------------------------------------------------------------------------
     print("Choose your action:")
     print("attack spell run")
@@ -337,6 +349,7 @@ def playerturn(player,darkness):
     elif buttons==FALSE:
         pchoice=input()
     if pchoice == "attack":
+        attackgif(weapons)
         phit = pdex*random.randint(1,4) - edex
         if phit > 0:
             if player == lancer:
@@ -358,7 +371,7 @@ def playerturn(player,darkness):
             print("You miss")
     elif pchoice == "spell":
 #-------------------------------------------------------------------------------
-        attackgif(weapons)
+        spellgif(spell)
 #-------------------------------------------------------------------------------
         print("You don't have any spells")
     elif pchoice == "run":
@@ -586,7 +599,7 @@ def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_functio
     else:
         pygame.draw.rect(screen, inactive_colour,(x,y,w,h)) #mouse not on button, switch to inactive colour
 
-    smallText = pygame.font.Font("freesansbold.ttf",20) #load font
+    smallText = pygame.font.SysFont("freesansbold.ttf", 30) #load font
     textSurf, textRect = text_objects(msg, smallText,text_colour) #place text in button through text funtion
     textRect.center = ( (x+(w/2)), (y+(h/2)) ) #location of text
     screen.blit(textSurf, textRect) #send to screen (but not update)
