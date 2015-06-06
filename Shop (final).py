@@ -117,7 +117,8 @@ def money_reset(s_money, m_money, l_money, x_money, money):
         money.append(m_money)
         money.append(l_money)
         money.append(x_money)
-        print("Succsesful money change")
+        message_display("Your account has been sucsesfuly updated",400,40,16,WHITE)
+        pygame.display.flip()
         return money
 
 def change(money, type, amount):
@@ -505,8 +506,7 @@ while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
         screen.fill(BLACK)
-        ##print("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]))
-        message_display("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]),300,30,16,WHITE)
+        message_display("small orbs " + str(money[0]) + ", medium orbs " + str(money[1]) + ", large orbs " + str(money[2]) + ", special orbs " +str(money[3]),400,30,16,WHITE)
         pygame.display.flip()
 
     elif instruction==("\+money"):
@@ -518,71 +518,100 @@ while 1>0:
             print("Enter capital: S,M,L or X only")
     elif instruction==("\shop"):
         loop=0
+        y=20
+        screen.fill(BLACK)
+        message_display("Please wait, loading",400,20,16,WHITE)
+        pygame.display.flip()
+        screen.fill(BLACK)
+        player_class=input("enter player class number (1-7)")
+        y=20
         while loop<length:
-            #print("Item "+str(loop)+" - "+store[0][loop]+" costs "+store[1][loop]+" from obrb type "+store[2][loop])
-            print("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]))
+            #print("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]))
+            if items[loop][5]==0 or items[loop][5]==int(player_class):
+                message_display("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]),400,y,16,WHITE)
+                y=y+20
             loop=loop+1
-        print("Type \"leave\" to leave shop")
+        message_display("Type \"leave\" to leave shop",400,y,16,WHITE)
+        pygame.display.flip()
         to_buy=input("Input item number to buy")
         check=is_number(to_buy) #check user has entered a number
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
             if int(to_buy)<=int(length): #check number isnt too big
-                print("You have attempted to buy "+str(items[int(to_buy)][4]))
-                price=(store[1][int(to_buy)])
-                type=store[2][int(to_buy)]
-                if store[2][int(to_buy)]=="S":
-                    amount=money[0]-int(price)
-                    if amount<0:
-                        print("You cannot afford that")
-                    else:
-                        change(money,type,amount)
-                        inventry.append(items[int(to_buy)])
-                        save_item(to_buy)
-                        file=open("money_s.txt","w")
-                        file.write(str(money[0]))
-                        file.close()
-                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
-                elif store[2][int(to_buy)]=="M":
-                    amount=money[1]-int(price)
-                    if amount<0:
-                        print("You cannot afford that")
-                    else:
-                        change(money,type,amount)
-                        inventry.append(items[int(to_buy)])
-                        save_item(to_buy)
-                        file=open("money_m.txt","w")
-                        file.write(str(money[1]))
-                        file.close()
-                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
-                elif store[2][int(to_buy)]=="L":
-                    amount=money[2]-int(price)
-                    if amount<0:
-                        print("You cannot afford that")
-                    else:
-                        change(money,type,amount)
-                        inventry.append(items[int(to_buy)])
-                        save_item(to_buy)
-                        file=open("money_l.txt","w")
-                        file.write(str(money[2]))
-                        file.close()
-                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
-                elif store[2][int(to_buy)]=="X":
-                    amount=money[3]-int(price)
-                    if amount<0:
-                        print("You cannot afford that")
-                    else:
-                        change(money,type,amount)
-                        inventry.append(items[int(to_buy)])
-                        save_item(to_buy)
-                        file=open("money_x.txt","w")
-                        file.write(str(money[3]))
-                        file.close()
-                        print("You have sucssesfully bought "+str(items[int(to_buy)][4]))
+                if items[int(to_buy)][5]==0 or items[int(to_buy)][5]==int(player_class):
+                    screen.fill(BLACK)
+                    message_display("You have attempted to buy "+str(items[int(to_buy)][4]),400,20,16,WHITE)
+                    pygame.display.flip()
+                    price=(store[1][int(to_buy)])
+                    type=store[2][int(to_buy)]
+                    if store[2][int(to_buy)]=="S":
+                        amount=money[0]-int(price)
+                        if amount<0:
+                            message_display("You cannot afford that",400,60,16,WHITE)
+                            pygame.display.flip()
+                        else:
+                            change(money,type,amount)
+                            inventry.append(items[int(to_buy)])
+                            save_item(to_buy)
+                            file=open("money_s.txt","w")
+                            file.write(str(money[0]))
+                            file.close()
+                            message_display("You have sucssesfully bought "+str(items[int(to_buy)][4]),400,60,16,WHITE)
+                            pygame.display.flip()
+                    elif store[2][int(to_buy)]=="M":
+                        amount=money[1]-int(price)
+                        if amount<0:
+                            message_display("You cannot afford that",400,60,16,WHITE)
+                            pygame.display.flip()
+                        else:
+                            change(money,type,amount)
+                            inventry.append(items[int(to_buy)])
+                            save_item(to_buy)
+                            file=open("money_m.txt","w")
+                            file.write(str(money[1]))
+                            file.close()
+                            message_display("You have sucssesfully bought "+str(items[int(to_buy)][4]),400,60,16,WHITE)
+                            pygame.display.flip()
+                    elif store[2][int(to_buy)]=="L":
+                        amount=money[2]-int(price)
+                        if amount<0:
+                            message_display("You cannot afford that",400,60,16,WHITE)
+                            pygame.display.flip()
+                        else:
+                            change(money,type,amount)
+                            inventry.append(items[int(to_buy)])
+                            save_item(to_buy)
+                            file=open("money_l.txt","w")
+                            file.write(str(money[2]))
+                            file.close()
+                            message_display("You have sucssesfully bought "+str(items[int(to_buy)][4]),400,60,16,WHITE)
+                            pygame.display.flip()
+                    elif store[2][int(to_buy)]=="X":
+                        amount=money[3]-int(price)
+                        if amount<0:
+                            message_display("You cannot afford that",400,60,16,WHITE)
+                            pygame.display.flip()
+                        else:
+                            change(money,type,amount)
+                            inventry.append(items[int(to_buy)])
+                            save_item(to_buy)
+                            file=open("money_x.txt","w")
+                            file.write(str(money[3]))
+                            file.close()
+                            message_display("You have sucssesfully bought "+str(items[int(to_buy)][4]),400,60,16,WHITE)
+                            pygame.display.flip()
+                else:
+                    screen.fill(BLACK)
+                    message_display("Your class cannot buy that item",400,20,16,WHITE)
+                    pygame.display.flip()
             else:
-                print("Error - item not recognised")
+                screen.fill(BLACK)
+                message_display("Error - item not recongised",400,20,16,WHITE)
+                pygame.display.flip()
         else:
-            print("Error - please enter a number, you have been returned to the main menu")
+            screen.fill(BLACK)
+            message_display("Please enter a number",400,20,16,WHITE)
+            pygame.display.flip()
     elif instruction==("\data"):
         loop=0
         option=input(print("Weapons (1), armour (2) or cloths (3)"))
@@ -633,8 +662,17 @@ while 1>0:
         else:
             print("Error - use capital S, M and L only")
     elif instruction==("\help"):
-        print("Availbe commands: \n \shop = shop \n \money = see availbe orbs \n \+money = change current money \n \management = manage your inventory & equip items. New way to see what you own. \n \data = find out the statistics of an item")
+        screen.fill(BLACK)
+        message_display("Availbe commands:",400,40,16,WHITE)
+        message_display("\shop = shop",400,60,16,WHITE)
+        message_display("\money = see availbe orbs",400,80,16,WHITE)
+        message_display("\+money = change current money",400,100,16,WHITE)
+        message_display("\management = manage your inventory & equip items",400,120,16,WHITE)
+        message_display("\data = find out the statistics of an item",400,140,16,WHITE)
+        pygame.display.flip()
     elif instruction==("\management"):
         pinventory()
     else:
-        print("Error - command not recognised - uses \"\help\" for a list of instructions.")
+        screen.fill(BLACK)
+        message_display("Error - command not recognised - uses \"\help\" for a list of instructions",400,40,16,WHITE)
+        pygame.display.flip()
