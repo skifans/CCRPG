@@ -231,32 +231,32 @@ second function at a later date.) <-- Not applicable to pickUpItem()
 """
 
 #Function for putting an item into the inventory.
-def pickUpItem(obj):
-    global armour, weapons
-    if obj[5] == "clothing":
-        clothing.insert(obj[4])
-        print(pickUpMessage+obj[4] + ".")
-        return invent
-    elif obj[5] == 1:
-        armour.append(obj)
-        print(pickUpMessage+obj[4] + ".")
-        return armour
-    elif obj[5] == 0:
-        weapons.append(obj[4])
-        print(pickUpMessage + obj[4] + ".")
-        return weapons
+##def pickUpItem(obj):
+##    global armour, weapons
+##    if obj[5] == "clothing":
+##        clothing.insert(obj[4])
+##        print(pickUpMessage+obj[4] + ".")
+##        return invent
+##    elif obj[5] == 1:
+##        armour.append(obj)
+##        print(pickUpMessage+obj[4] + ".")
+##        return armour
+##    elif obj[5] == 0:
+##        weapons.append(obj[4])
+##        print(pickUpMessage + obj[4] + ".")
+##        return weapons
 
 #Function for removing an item from the inventory (& at the moment, removing said item from game)
-def dropItem(obj):
-    global armour, weapons
-    if obj[5] == 0:
-        weapons.remove(obj[4])
-        print(dropItemMessage + obj[4] + ".")
-        return weapons
-    elif obj[5] == 1:
-        armour.remove(obj[4])
-        print(dropItemMessage + obj[4] + ".")
-        return armour
+##def dropItem(obj):
+##    global armour, weapons
+##    if obj[5] == 0:
+##        weapons.remove(obj[4])
+##        print(dropItemMessage + obj[4] + ".")
+##        return weapons
+##    elif obj[5] == 1:
+##        armour.remove(obj[4])
+##        print(dropItemMessage + obj[4] + ".")
+##        return armour
 
 #Function for equipping an item e.g Sword into your hand/Put on armour
 def equipItem(obj, name, pequip):
@@ -264,7 +264,9 @@ def equipItem(obj, name, pequip):
     if obj == 0:
         weapons = name
         #Enter Addition To Stats (Waiting for finished weapons)
-        print(currentHandItemMessage + str(name) + ".")
+        screen.fill(BLACK)
+        message_display(currentHandItemMessage + str(name) + ".",400,20,16,WHITE)
+        pygame.display.flip()
         file = open(os.path.join("Saves",save_game_to_use),"equip0.txt","w")
         file.write(str(pequip))
         file.close()
@@ -272,31 +274,32 @@ def equipItem(obj, name, pequip):
     elif obj == 1:
         armour = name
         ##endurance += int(armour[1])
-        print(currentArmourMessage + str(name) + ".")
+        screen.fill(BLACK)
+        message_display(currentArmourMessage + str(name) + ".",400,20,16,WHITE)
+        pygame.display.flip()
         file=open(os.path.join("Saves",save_game_to_use,"equip1.txt"),"w")
         file.write(str(pequip))
         file.close()
         return armour
     elif obj==2:
-        print("clothing is not yet supported")
-    else:
-        print("error line 282")
+        screen.fill(BLACK)
+        message_display("clothing is not yet supported",400,20,16,WHITE)
+        pygame.display.flip()
 
 #Function to unequip yet keep in inventory
-def unEquipItem(obj):
-    #not used
-    global armour, weapons
-    if obj == 1:
-        #Resets name of current armour & resets the appropriate stats.
-        armour = " "
-        ##endurance -= obj[1]
-        ##dexterity -= obj[2]
-        print(unEquipArmourMessage)
-
-    elif obj == 0:
-        weapon = " "
-        #Enter Reverse Stats of Weapon (Waiting for finished weapons)
-        print(unEquipWeaponMessage)
+##def unEquipItem(obj):
+##    #not used
+##    global armour, weapons
+##    if obj == 1:
+##        #Resets name of current armour & resets the appropriate stats.
+##        armour = " "
+##        ##endurance -= obj[1]
+##        ##dexterity -= obj[2]
+##        print(unEquipArmourMessage)
+##    elif obj == 0:
+##        weapon = " "
+##        #Enter Reverse Stats of Weapon (Waiting for finished weapons)
+##        print(unEquipWeaponMessage)
 
 def pinventory():
     global inventry, decide, pdecide
@@ -328,7 +331,6 @@ def pinventory():
             except:
                 pequip=len(inventry)+1 #if not make a number which will be found to trigger Item not found alert bellow
             if pequip<len(inventry):
-                print(inventry)
                 equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
             else:
                 screen.fill(BLACK)
@@ -457,10 +459,8 @@ f=open(os.path.join("Saves",save_game_to_use,"items.txt"),"r")
 amount1=amount1-1
 for i in range (amount1):
     item=f.readline()
-    print("item",item)
     inventry.append(items[int(item)])
 f.close()
-print(inventry[0][4])
 
 item_no=0
 while item_no < len(items):
@@ -469,8 +469,6 @@ while item_no < len(items):
 
 file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
 pequip=int(file.readline())
-print(pequip)
-print(inventry)
 equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
 file.close()
 file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
@@ -498,10 +496,12 @@ store=[]
 store.append(shop)
 store.append(prices)
 store.append(place)
-#print(store)
 
 #length of shop
 length=len(store[1])
+screen.fill(BLACK)
+message_display("Welcome to the shop",400,20,16,WHITE)
+pygame.display.flip()
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
@@ -526,7 +526,6 @@ while 1>0:
         player_class=input("enter player class number (1-7)")
         y=20
         while loop<length:
-            #print("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]))
             if items[loop][5]==0 or items[loop][5]==int(player_class):
                 message_display("Item "+str(loop)+" - "+items[loop][4]+" costs "+str(store[1][loop])+" from obrb type "+str(store[2][loop]),400,y,16,WHITE)
                 y=y+20
@@ -614,53 +613,44 @@ while 1>0:
             pygame.display.flip()
     elif instruction==("\data"):
         loop=0
-        option=input(print("Weapons (1), armour (2) or cloths (3)"))
+        option=input("Weapons (1), armour (2) or cloths (3)")
         option=int(option)-1
+        screen.fill(BLACK)
+        message_display("Please wait, loading",400,16,16,WHITE)
+        pygame.display.flip()
+        screen.fill(BLACK)
+        y=16
         while loop<length:
             if items[int(loop)][6]==int(option):
-                print("Item "+str(loop)+" - "+store[0][loop])
+                message_display("Item "+str(loop)+" - "+items[loop][4],400,y,16,WHITE)
+                y=y+16
             loop=loop+1
+        pygame.display.flip()
         to_buy=input("Input item number to get data on")
         check=is_number(to_buy) #check user has entered a number
         #check="TRUE" #uncomment to accept letters
         if check=="TRUE":
-            ##if int(to_buy)<len(item): #check item exists
-            print("item number not found")
-            print("You have requested data on ",store[0][int(to_buy)])
-            print("Strength = ",items[int(to_buy)][0])
-            print("Endurance = ",items[int(to_buy)][1])
-            print("Dexterity = ",items[int(to_buy)][2])
-            print("Spell = ",items[int(to_buy)][3])
+##            if int(to_buy)>len(item): #check item exists
+##                print("Item number not found")
+##            else:
+            screen.fill(BLACK)
+            message_display("You have requested data on: "+items[int(to_buy)][4],400,20,16,WHITE)
+            message_display("Strength = "+str(items[int(to_buy)][0]),400,40,16,WHITE)
+            message_display("Endurance = "+str(items[int(to_buy)][1]),400,60,16,WHITE)
+            message_display("Dexterity = "+str(items[int(to_buy)][2]),400,80,16,WHITE)
+            message_display("Spell = "+str(items[int(to_buy)][3]),400,100,16,WHITE)
             #4 is used for name
-            print("Class = ",items[int(to_buy)][5])
-            print("Type = ",items[int(to_buy)][6])
+            message_display("Class = "+str(items[int(to_buy)][5]),400,120,16,WHITE)
+            message_display("Type = "+str(items[int(to_buy)][6]),400,140,16,WHITE)
             #7 used for description, placed at end
-            print("Range = ",items[int(to_buy)][8])
-            print("Bellow is a description of the item: \n,",items[int(to_buy)][7])
-            ##else:
-                ##print("item number not found")
+            message_display("Range = "+str(items[int(to_buy)][8]),400,160,16,WHITE)
+            message_display("Bellow is a description of the item:",400,180,16,WHITE)
+            message_display(str(items[int(to_buy)][7]),400,200,16,WHITE)
+            pygame.display.flip()
         else:
-            print("please enter numeric numbers only")
-    elif instruction==("\convert"):
-        convert_f=input("Convert from (S,M or L)")
-        if convert_f=="S":
-            print("You can only convert downwards.")
-        elif convert_f=="M":
-            amount=int(input("How many medium orbs would you like to convert?"))
-            if money[1]>=amount:
-                print("Ok")
-                #Convert code to go here
-            else:
-                print("You don't have that many")
-        elif convert_f=="L":
-            amount=int(input("How many large orbs would you like to convert?"))
-            if money[2]>=amount:
-                print("Ok")
-                #Convert code to go here
-            else:
-                print("You don't have that many")
-        else:
-            print("Error - use capital S, M and L only")
+            screen.fill(BLACK)
+            message_display("Please enter numeric numbers only",400,20,16,WHITE)
+            pygame.display.flip()
     elif instruction==("\help"):
         screen.fill(BLACK)
         message_display("Availbe commands:",400,40,16,WHITE)
