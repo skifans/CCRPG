@@ -499,9 +499,6 @@ store.append(place)
 
 #length of shop
 length=len(store[1])
-screen.fill(BLACK)
-message_display("Welcome to the shop",400,20,16,WHITE)
-pygame.display.flip()
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
