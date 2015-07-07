@@ -499,6 +499,7 @@ store.append(place)
 
 #length of shop
 length=len(store[1])
+
 while 1>0:
     instruction=input("What would you like to do?")
     if instruction==("\money"):
