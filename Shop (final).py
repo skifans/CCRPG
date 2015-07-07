@@ -152,16 +152,16 @@ def change(money, type, amount):
 
 #loading money
 money=[]
-f = open("money_s.txt","r")
+f = open(os.path.join("Saves",save_game_to_use,"money_s.txt"),"r")
 s_money=f.read()
 f.close()
-f = open("money_m.txt","r")
+f = open(os.path.join("Saves",save_game_to_use,"money_m.txt"),"r")
 m_money=f.read()
 f.close()
-f = open("money_l.txt","r")
+f = open(os.path.join("Saves",save_game_to_use,"money_l.txt"),"r")
 l_money=f.read()
 f.close()
-f = open("money_x.txt","r")
+f = open(os.path.join("Saves",save_game_to_use,"money_x.txt"),"r")
 x_money=f.read()
 f.close()
 money.append(int(s_money))
