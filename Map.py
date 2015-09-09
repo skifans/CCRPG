@@ -585,11 +585,13 @@ def message_display(text, x, y, font_size, colour):
     largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
     TextSurf, TextRect = text_objects(text, largeText, colour) #render text
     TextRect.center = ((x),(y)) #place text
+    #screen=pygame.display.set_mode((0,0)) #uncomenting this lets fixes the screen not defined bug - but also causes problems displaying text if let uncommented.
     try :
         screen.blit(TextSurf, TextRect)
+        print("yay, this works properly for some reason, please say if if you see this. (Line 591)")
     except:
-        print("Error - screen not loaded correctly, attempting to re-launch. See line 593.")
-        screen=pygame.display.set_mode((0,0)) #uncomenting this lets fixes the screen not defined bug - but also causes problems displaying text if let uncommented.
+        print("Error - screen not loaded correctly, attempting to re-launch. See line 532.")
+        screen=pygame.display.set_mode((0,0))
         screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
 
 #function for buttoms
