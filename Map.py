@@ -585,6 +585,7 @@ def message_display(text, x, y, font_size, colour):
     largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
     TextSurf, TextRect = text_objects(text, largeText, colour) #render text
     TextRect.center = ((x),(y)) #place text
+    #screen=pygame.display.set_mode((0,0)) uncomenting this lets fixes the screen not defined bug - but also causes problems displaying text if let uncommented.
     screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
 
 #function for buttoms
