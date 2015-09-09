@@ -323,7 +323,8 @@ def attack_image_sword():
 
 def attackgif(weapons):
     if weapons == "sword":
-        attack_image_sword()
+        #attack_image_sword() uncomented as I dont have the sword.png file
+        print("sword")
 
 def spellgif(spell):
     if spell[1] == 1:
@@ -637,6 +638,7 @@ def new_game():
     print("menu removed")
     menu1=FALSE
     image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+    save() #save a base copy of the game so that the deafult money and locations to load the save is created
 
 def menu():
     global menu1
@@ -673,30 +675,34 @@ def save():
     save_name=input("enter save name")
     filename = str(save_name)
     if not os.path.exists(os.path.join("Saves",filename)):
-        os.makedirs(os.path.join("Saves",filename))
-        f = open(os.path.join("Saves",filename,"location.txt"),"w")
-        f.write(str(player_class))
-        f.write('\n')
-        f.write(str(player[15]))
-        f.write("\n")
-        f.write(str(playert.x))
-        f.write("\n")
-        f.write(str(playert.y))
-        f.write("\n")
-        f.write(str(player[7]))
-        f.close()
-    else:
-        f = open(os.path.join("Saves",filename,"location.txt"),"w")
-        f.write(str(player_class))
-        f.write('\n')
-        f.write(str(player[15]))
-        f.write("\n")
-        f.write(str(playert.x))
-        f.write("\n")
-        f.write(str(playert.y))
-        f.write("\n")
-        f.write(str(player[7]))
-        f.close()
+        os.makedirs(os.path.join("Saves",filename)) #create folder
+    f = open(os.path.join("Saves",filename,"location.txt"),"w")
+    f.write(str(player_class))
+    f.write('\n')
+    f.write(str(player[15]))
+    f.write("\n")
+    f.write(str(playert.x))
+    f.write("\n")
+    f.write(str(playert.y))
+    f.write("\n")
+    f.write(str(player[7]))
+    f.close()
+    if not os.path.exists(os.path.join("Saves",filename,"money_s.txt")):
+        f = open(os.path.join("Saves",filename,"money_s.txt"),"w")
+        f.write("60")
+        f.close
+    if not os.path.exists(os.path.join("Saves",filename,"money_m.txt")):
+        f = open(os.path.join("Saves",filename,"money_m.txt"),"w")
+        f.write("40")
+        f.close
+    if not os.path.exists(os.path.join("Saves",filename,"money_l.txt")):
+        f = open(os.path.join("Saves",filename,"money_l.txt"),"w")
+        f.write("20")
+        f.close
+    if not os.path.exists(os.path.join("Saves",filename,"money_x.txt")):
+        f = open(os.path.join("Saves",filename,"money_x.txt"),"w")
+        f.write("10")
+        f.close
 
 def load():
     root = tix.Tk()
