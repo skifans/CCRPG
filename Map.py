@@ -57,6 +57,7 @@ cellWidth = int(windowWidth / cellSize)
 cellHeight = int(windowHeight / cellSize)
 
 pygame.init()
+screen=pygame.display.set_mode((0,0))
 
 class textures():
 
@@ -568,11 +569,11 @@ def new_map(direction, playert):
     image_path="map"+str(player[15])+".gif"
     if os.path.isfile(image_path)==FALSE: #check that a map file exisits, if not then display an error message. Changing this to TRUE and moving to a new map will show the error message if you want to see it.
         img=pygame.image.load("map_error.gif")
-        screen=pygame.display.set_mode((0,0))
+        #screen=pygame.display.set_mode((0,0))
         screen.blit(img,(0,0))
     else:
         img=pygame.image.load(image_path)
-        screen=pygame.display.set_mode((0,0))
+        #screen=pygame.display.set_mode((0,0))
         screen.blit(img,(0,0))
     print("area",str(player[15]))
 #-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -764,7 +765,7 @@ currentArmourMessage = "You are wearing: " #+ str(armour)
 unEquipArmourMessage = "You have unequiped your armour."
 unEquipWeaponMessage = "You have unequiped your weapon."
 
-save_game_to_use="name test2"
+save_game_to_use="name-test2"
 money=[]
 f = open(os.path.join("Saves",save_game_to_use,"money_s.txt"),"r")
 s_money=f.read()
@@ -885,7 +886,7 @@ def equipItem(obj, name, pequip):
     elif obj == 1:
         armour = name
         ##endurance += int(armour[1])
-        screen.fill(BLACK)
+        #screen.fill(BLACK)
         message_display(currentArmourMessage + str(name) + ".",400,20,16,WHITE)
         pygame.display.flip()
         file=open(os.path.join("Saves",save_game_to_use,"equip1.txt"),"w")
