@@ -585,8 +585,12 @@ def message_display(text, x, y, font_size, colour):
     largeText = pygame.font.Font('freesansbold.ttf',font_size) #load font
     TextSurf, TextRect = text_objects(text, largeText, colour) #render text
     TextRect.center = ((x),(y)) #place text
-    #screen=pygame.display.set_mode((0,0)) uncomenting this lets fixes the screen not defined bug - but also causes problems displaying text if let uncommented.
-    screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
+    try :
+        screen.blit(TextSurf, TextRect)
+    except:
+        print("Error - screen not loaded correctly, attempting to re-launch. See line 593.")
+        screen=pygame.display.set_mode((0,0)) #uncomenting this lets fixes the screen not defined bug - but also causes problems displaying text if let uncommented.
+        screen.blit(TextSurf, TextRect) #send to screen, needs to be updated/fliped to be worked
 
 #function for buttoms
 #example syntax to call button("return",150,450,100,50,DARKGREEN,GREEN,BLACK,action) note the lack of brackets on action function.
@@ -875,6 +879,7 @@ def equipItem(obj, name, pequip):
     if obj == 0:
         weapons = name
         #Enter Addition To Stats (Waiting for finished weapons)
+        screen=pygame.display.set_mode((0,0))
         screen.fill(BLACK)
         message_display(currentHandItemMessage + str(name) + ".",400,20,16,WHITE)
         pygame.display.flip()
