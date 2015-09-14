@@ -180,6 +180,8 @@ def type_select(player_class):
             player = "error"
             while player == "error":
                 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
+    global map_number
+    map_number=player[15]
     return image
 
 def classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja):
@@ -538,34 +540,41 @@ def debug(message,player):
     debug.close()
 #-----------------------------------------------------------------------------------
 def new_map(direction, playert):
-    global player
+    global player, map_number
     hight=3 #the amount of vertical maps
     pygame.display.flip() #suppost to update whole map
     if direction=="up":
         move=player[15]/hight
-        if move.is_integer():
-            print("off edge of map")
+        player[15]=player[15]+1
+        map_number += 1
+        if str(map_number) == "1":
+            player[15] = map_number
         else:
-             player[15]=player[15]+1
+            player[15] = random.randint(2,9)
     elif direction=="down":
         move=(player[15]-1)/hight
-        if move.is_integer():
-            print("off edge of map")
+        player[15]=player[15]-1
+        map_number -= 1
+        if str(map_number) == "1":
+            player[15] = map_number
         else:
-            player[15]=player[15]-1
+            player[15] = random.randint(2,9)
     elif direction=="right":
         player[15]=player[15]+hight
+        map_number += hight
         move=hight**2-player[15]
-        if move<hight**2:
-            print("on map")
+        player[15]=player[15]-hight
+        if str(map_number) == "1":
+            player[15] = 1
         else:
-            print("off edge of map")
-            player[15]=player[15]-hight
+            player[15] = random.randint(2,9)
     elif direction=="left":
-        if player[15]<=hight:
-            print("off edge of map")
+        player[15]=player[15]-hight
+        map_number -= hight
+        if str(map_number) == "1":
+            player[15] = 1
         else:
-            player[15]=player[15]-hight
+            player[15] = random.randint(2,9)
     image_path="map"+str(player[15])+".gif"
     if os.path.isfile(image_path)==FALSE: #check that a map file exisits, if not then display an error message. Changing this to TRUE and moving to a new map will show the error message if you want to see it.
         img=pygame.image.load("map_error.gif")
@@ -1127,12 +1136,8 @@ while running:
                         playert.y += cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if ((player[15]-1)/hight).is_integer(): #is player at very top
-                            print("cannot move off map")
-                        else:
-                            new_map("down",playert) #load new map
-                            playert.y=0 #move player to top for new map
-
+                        new_map("down",playert) #load new map
+                        playert.y=0 #move player to top for new map
             elif key[pygame.K_UP]:
                 movment_ok=collision_detection(playert.x,playert.y-cellSize,player)
                 if movment_ok==False:
@@ -1142,11 +1147,8 @@ while running:
                         playert.y -= cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if (player[15]/hight).is_integer(): #is player at very top
-                            print("cannot move off map")
-                        else:
-                            new_map("up",playert) #load new map
-                            playert.y=580 #move player to buttom for new map
+                        new_map("up",playert) #load new map
+                        playert.y=580 #move player to buttom for new map
 
             elif key[pygame.K_RIGHT]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y,player)
@@ -1157,11 +1159,8 @@ while running:
                         playert.x += cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if player[15]>hight**2-hight: #is player at very top
-                            print( "cannot move off map")
-                        else:
-                            new_map("right",playert) #load new map
-                            playert.x=0 #move player to left for new map
+                        new_map("right",playert) #load new map
+                        playert.x=0 #move player to left for new map
 
             elif key[pygame.K_LEFT]:
                 movment_ok=collision_detection(playert.x-cellSize,playert.y,player)
@@ -1172,11 +1171,8 @@ while running:
                         playert.x -= cellSize
                         after_movement(playert.x,playert.y,boss_list)
                     else:
-                        if player[15]<=hight: #is player at far left
-                            print( "cannot move off map")
-                        else:
-                            new_map("left",playert) #load new map
-                            playert.x=780 #move player to right for new map
+                        new_map("left",playert) #load new map
+                        playert.x=780 #move player to right for new map
             elif key[pygame.K_p]:
                 print("paused")
                 pause()
