@@ -672,7 +672,9 @@ def start_menu():
         for event in pygame.event.get():
                 button("new game",300,100,150,50,GREEN,DARKGREEN,BLACK,new_game)
                 button("load game",300,200,150,50,GREEN,DARKGREEN,BLACK,load)
-                button("quit to desktop",300,300,150,50,GREEN,DARKGREEN,BLACK,terminate)
+                button("options",300,300,150,50,GREEN,DARKGREEN,BLACK,options)
+                button("credits",300,400,150,50,GREEN,DARKGREEN,BLACK,credit)
+                button("quit to desktop",300,500,150,50,GREEN,DARKGREEN,BLACK,terminate)
                 pygame.display.flip()
         time.sleep(0.1)
     map_name="map"+str(player[15])+".gif"
@@ -681,6 +683,27 @@ def start_menu():
     pygame.display.flip()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
+def credit():
+    while menu1==TRUE:
+        for event in pygame.event.get():
+            screen.fill(WHITE)
+            message_display("me-stuff",400,40,16,BLACK)
+            message_display("you-things",400,60,16,BLACK)
+            button("back to menu",300,400,150,50,GREEN,DARKGREEN,BLACK,start_menu)
+            pygame.display.flip()
+        time.sleep(0.1)
+
+def options():
+    while menu1==TRUE:
+        for event in pygame.event.get():
+            screen.fill(WHITE)
+            message_display("You want to change things?",400,40,16,BLACK)
+            message_display("why on earth?",400,60,16,BLACK)
+            button("Dont save changes",150,400,200,50,GREEN,DARKGREEN,BLACK,start_menu)
+            button("Dont save changes",450,400,200,50,GREEN,DARKGREEN,BLACK,start_menu)
+            pygame.display.flip()
+        time.sleep(0.1)
+
 def save():
     global player_class
     save_name=input("enter save name")
