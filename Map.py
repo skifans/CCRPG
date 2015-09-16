@@ -1073,14 +1073,14 @@ while item_no < len(items):
     shop.append(str(items[item_no]))
     item_no=item_no+1
 
-file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
-pequip=int(file.readline())
-equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
-file.close()
-file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
-pequip=int(file.readline())
-equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
-file.close()
+#file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
+#pequip=int(file.readline())
+#equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+#file.close()
+#file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
+#pequip=int(file.readline())
+#equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+#file.close()
 
 prices=[]
 
