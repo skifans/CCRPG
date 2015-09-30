@@ -733,18 +733,22 @@ def save():
     if not os.path.exists(os.path.join("Saves",filename,"money_s.txt")):
         f = open(os.path.join("Saves",filename,"money_s.txt"),"w")
         f.write("60")
+        money.append(60)
         f.close
     if not os.path.exists(os.path.join("Saves",filename,"money_m.txt")):
         f = open(os.path.join("Saves",filename,"money_m.txt"),"w")
         f.write("40")
+        money.append(40)
         f.close
     if not os.path.exists(os.path.join("Saves",filename,"money_l.txt")):
         f = open(os.path.join("Saves",filename,"money_l.txt"),"w")
         f.write("20")
+        money.append(20)
         f.close
     if not os.path.exists(os.path.join("Saves",filename,"money_x.txt")):
         f = open(os.path.join("Saves",filename,"money_x.txt"),"w")
         f.write("10")
+        money.append(10)
         f.close
     f = open(os.path.join("Saves",filename,"stats.txt"),"w")
     f.write(str(player[0]))
@@ -1242,7 +1246,7 @@ while running:
             background = pygame.image.load(os.path.join("textures",map_name))
             screen.blit(background, (0,0))
             key = pygame.key.get_pressed()
-            if key[pygame.K_DOWN]:
+            if key[pygame.K_DOWN] or key[pygame.K_s]:
                 movment_ok=collision_detection(playert.x,playert.y+cellSize,player)
                 if movment_ok==False:
                     print("collision")
@@ -1253,7 +1257,8 @@ while running:
                     else:
                         new_map("down",playert) #load new map
                         playert.y=0 #move player to top for new map
-            elif key[pygame.K_UP]:
+
+            elif key[pygame.K_UP] or key[pygame.K_w]:
                 movment_ok=collision_detection(playert.x,playert.y-cellSize,player)
                 if movment_ok==False:
                     print("collision")
@@ -1265,7 +1270,7 @@ while running:
                         new_map("up",playert) #load new map
                         playert.y=580 #move player to buttom for new map
 
-            elif key[pygame.K_RIGHT]:
+            elif key[pygame.K_RIGHT] or key[pygame.K_d]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y,player)
                 if movment_ok==False:
                     print("collision")
@@ -1277,7 +1282,7 @@ while running:
                         new_map("right",playert) #load new map
                         playert.x=0 #move player to left for new map
 
-            elif key[pygame.K_LEFT]:
+            elif key[pygame.K_LEFT] or key[pygame.K_a]:
                 movment_ok=collision_detection(playert.x-cellSize,playert.y,player)
                 if movment_ok==False:
                     print("collision")
@@ -1294,12 +1299,12 @@ while running:
                 map_name="map"+str(player[15])+".gif" #add back background after unpaused
                 background = pygame.image.load(os.path.join("textures",map_name))
                 screen.blit(background, (0,0))
-            elif key[pygame.K_m]:
+            elif key[pygame.K_m] or key[pygame.K_ESCAPE]:
                 menu()
                 map_name="map"+str(player[15])+".gif" #add back background after menu
                 background = pygame.image.load(os.path.join("textures",map_name))
                 screen.blit(background, (0,0))
-            elif key[pygame.K_s]:
+            elif key[pygame.K_b]:
                 shop = 1
                 while shop==1:
                     instruction=input("What would you like to do?")
@@ -1496,7 +1501,7 @@ while running:
             print(playert.y)
             pygame.display.update()
             if internal_editor == TRUE:
-                if key[pygame.K_b]:
+                if key[pygame.K_n]:
                     f=open("blocked.txt","a")
                     to_write=str((playert.x, playert.y,player[15]))
                     f.write(str(to_write))
