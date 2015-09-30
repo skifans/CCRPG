@@ -714,7 +714,7 @@ def options():
         time.sleep(0.1)
 
 def save():
-    global player_class
+    global player_class,mana,mana_use
     save_name=input("enter save name")
     filename = str(save_name)
     if not os.path.exists(os.path.join("Saves",filename)):
@@ -746,6 +746,26 @@ def save():
         f = open(os.path.join("Saves",filename,"money_x.txt"),"w")
         f.write("10")
         f.close
+    f = open(os.path.join("Saves",filename,"stats.txt"),"w")
+    f.write(str(player[0]))
+    f.write("\n")
+    f.write(str(player[1]))
+    f.write("\n")
+    f.write(str(player[2]))
+    f.write("\n")
+    f.write(str(player[3]))
+    f.write("\n")
+    f.write(str(player[4]))
+    f.write("\n")
+    f.write(str(player[8][0]))
+    f.write("\n")
+    f.write(str(player[8][1]))
+    f.write("\n")
+    f.write(str(player[8][2]))
+    f.write("\n")
+    f.write(str(mana))
+    f.write("\n")
+    f.write(str(mana_use))
 
 def load():
     root = tix.Tk()
@@ -810,6 +830,18 @@ def load():
         f=open(os.path.join(args,"money_x.txt"),"r")
         money.append(int(f.readline()))
         f.close()
+
+        f=open(os.path.join(args,"stats.txt"),"r")
+        player[0]=int(f.readline())
+        player[1]=int(f.readline())
+        player[2]=int(f.readline())
+        player[3]=int(f.readline())
+        player[4]=int(f.readline())
+        player[8][0]=int(f.readline())
+        player[8][1]=int(f.readline())
+        player[8][2]=int(f.readline())
+        mana=int(f.readline())
+        mana_use=int(f.readline())
 
         screen.fill(WHITE)
         map_name="map"+str(player[15])+".gif" #add back background after file is selected
