@@ -9,7 +9,8 @@ f = open("options.ini","r")
 line1=f.readline() #options header
 line2=f.readline() #cellsize line
 line3=f.readline() #cellsize value
-cellSize=int(line3)
+#cellSize=int(line3)
+cellSize=20
 line4=f.readline() #internal editor header
 line5=f.readline() #internal editor value
 line6=f.readline() #buttons header
@@ -19,6 +20,9 @@ line9=f.readable() #combat value'
 if int(line5)==1:
     print("Enternal editor enabled")
     internal_editor=TRUE
+else:
+    internal_editor=FALSE
+internal_editor=TRUE
 if int(line7)==1:
     buttons=TRUE
 elif int(line7)==0:
@@ -677,7 +681,9 @@ def start_menu():
         for event in pygame.event.get():
                 button("new game",300,100,150,50,GREEN,DARKGREEN,BLACK,new_game)
                 button("load game",300,200,150,50,GREEN,DARKGREEN,BLACK,load)
-                button("quit to desktop",300,300,150,50,GREEN,DARKGREEN,BLACK,terminate)
+                button("options",300,300,150,50,GREEN,DARKGREEN,BLACK,options)
+                button("credits",300,400,150,50,GREEN,DARKGREEN,BLACK,credit)
+                button("quit to desktop",300,500,150,50,GREEN,DARKGREEN,BLACK,terminate)
                 pygame.display.flip()
         time.sleep(0.1)
     map_name="map"+str(player[15])+".gif"
@@ -686,6 +692,27 @@ def start_menu():
     pygame.display.flip()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
+def credit():
+    while menu1==TRUE:
+        for event in pygame.event.get():
+            screen.fill(WHITE)
+            message_display("me-stuff",400,40,16,BLACK)
+            message_display("you-things",400,60,16,BLACK)
+            button("back to menu",300,400,150,50,GREEN,DARKGREEN,BLACK,start_menu)
+            pygame.display.flip()
+        time.sleep(0.1)
+
+def options():
+    while menu1==TRUE:
+        for event in pygame.event.get():
+            screen.fill(WHITE)
+            message_display("You want to change things?",400,40,16,BLACK)
+            message_display("why on earth?",400,60,16,BLACK)
+            button("Dont save changes",150,400,200,50,GREEN,DARKGREEN,BLACK,start_menu)
+            button("Dont save changes",450,400,200,50,GREEN,DARKGREEN,BLACK,start_menu)
+            pygame.display.flip()
+        time.sleep(0.1)
+
 def save():
     global player_class
     save_name=input("enter save name")
@@ -724,21 +751,72 @@ def load():
     root = tix.Tk()
 
     def print_selected(args):
-        global playert, player, image, player_class
+        global playert, player, image, player_class, money
+        money=[]
         print('selected dir:', args) #print selected save
+        folder=args.split("/")
+        print("folder: ",folder[-1])
+
         f = open(os.path.join(args,"location.txt"),"r")
-        player_class=f.readline()
-        player_class = player_class[:-1]
-        image=type_select(str(player_class))
-        player[15]=int(f.readline())
+        location=f.readlines() #becomes an array, item 0 corosponds to line 1. Note that each item includes \n
+        if len(location)==9: #.readlines seems to sometimes result in two different things, either ["x\n","\n","x\n","\n... or ["x\n","x\n",x\n"... by detecting the length we can work out which one, make sure to change this if you add new things to location.txt
+            player_class=location[0]
+            player_class = player_class[:-1] #clear the last charector (\n)
+            image=type_select(str(player_class))
+            location1=location[2]
+            location1=location1[:-1]
+            location1=int(location1)
+            player[15]=location1
+
+            playert.x=location[4] #get x cordinates dom
+            playert.x=playert.x[:-1] #remove \n
+            playert.x=int(playert.x)
+            playert.y=location[6]
+            playert.y=playert.y[:-1]
+            playert.y=int(playert.y)
+            player[7]=location[8] #name?
+            player[7]=player[7][:-1]
+        elif len(location)==5:
+            player_class=location[0]
+            player_class = player_class[:-1]
+            image=type_select(str(player_class))
+            location1=location[1]
+            location1=location1[:-1]
+            location1=int(location1)
+            player[15]=location1
+
+            playert.x=location[2] #get x cordinates dom
+            playert.x=playert.x[:-1] #remove \n
+            playert.x=int(playert.x)
+            playert.y=location[3]
+            playert.y=playert.y[:-1]
+            playert.y=int(playert.y)
+            player[7]=location[4] #name?
+            player[7]=player[7][:-1]
+        else:
+            debug("data in array assitened from location.txt array is not 5 or 9 long")
+            print("data in array assitened from location.txt array is not 5 or 9 long")
+
+        f.close()
+        f=open(os.path.join(args,"money_s.txt"),"r")
+        money.append(int(f.readline()))
+        f.close()
+        f=open(os.path.join(args,"money_m.txt"),"r")
+        money.append(int(f.readline()))
+        f.close()
+        f=open(os.path.join(args,"money_l.txt"),"r")
+        money.append(int(f.readline()))
+        f.close()
+        f=open(os.path.join(args,"money_x.txt"),"r")
+        money.append(int(f.readline()))
+        f.close()
+
+        screen.fill(WHITE)
         map_name="map"+str(player[15])+".gif" #add back background after file is selected
         background = pygame.image.load(os.path.join("textures",map_name))
         screen.blit(background, (0,0))
-        playert.x=int(f.readline())
-        playert.y=int(f.readline())
-        player[7]=str(f.readline())
+        print(location)
         print("image",player_class)
-        f.close()
         menu_close()
         pygame.display.flip()
         root.destroy()
@@ -780,23 +858,23 @@ unEquipArmourMessage = "You have unequiped your armour."
 unEquipWeaponMessage = "You have unequiped your weapon."
 
 save_game_to_use="name-test2"
-money=[]
-f = open(os.path.join("Saves",save_game_to_use,"money_s.txt"),"r")
-s_money=f.read()
-f.close()
-f = open(os.path.join("Saves",save_game_to_use,"money_m.txt"),"r")
-m_money=f.read()
-f.close()
-f = open(os.path.join("Saves",save_game_to_use,"money_l.txt"),"r")
-l_money=f.read()
-f.close()
-f = open(os.path.join("Saves",save_game_to_use,"money_x.txt"),"r")
-x_money=f.read()
-f.close()
-money.append(int(s_money))
-money.append(int(m_money))
-money.append(int(l_money))
-money.append(int(x_money))
+##money=[]
+##f = open(os.path.join("Saves",save_game_to_use,"money_s.txt"),"r")
+##s_money=f.read()
+##f.close()
+##f = open(os.path.join("Saves",save_game_to_use,"money_m.txt"),"r")
+##m_money=f.read()
+##f.close()
+##f = open(os.path.join("Saves",save_game_to_use,"money_l.txt"),"r")
+##l_money=f.read()
+##f.close()
+##f = open(os.path.join("Saves",save_game_to_use,"money_x.txt"),"r")
+##x_money=f.read()
+##f.close()
+##money.append(int(s_money))
+##money.append(int(m_money))
+##money.append(int(l_money))
+##money.append(int(x_money))
 
 global inventry
 inventry=[]
@@ -1078,14 +1156,14 @@ while item_no < len(items):
     shop.append(str(items[item_no]))
     item_no=item_no+1
 
-file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
-pequip=int(file.readline())
-equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
-file.close()
-file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
-pequip=int(file.readline())
-equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
-file.close()
+##file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
+##pequip=int(file.readline())
+##equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+##file.close()
+##file=open(os.path.join("Saves",save_game_to_use,"equip0.txt"),"r")
+##pequip=int(file.readline())
+##equipItem(inventry[pequip][6],inventry[pequip][4],pequip)
+##file.close()
 
 prices=[]
 
