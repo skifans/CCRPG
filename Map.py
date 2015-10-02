@@ -16,7 +16,7 @@ line5=f.readline() #internal editor value
 line6=f.readline() #buttons header
 line7=f.readline() #buttons value
 line8=f.readline() #combat header
-line9=f.readable() #combat value'
+line9=f.readline() #combat value'
 if int(line5)==1:
     print("Enternal editor enabled")
     internal_editor=TRUE
