@@ -974,30 +974,36 @@ def change(money, type, amount):
         return money
 
 def amount(items, item_no):
-    if  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][11]==0:
-        ret=items[item_no][12]
-    elif  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][12]==0:
-        ret=items[item_no][11]
-    elif  items[item_no][9]==0 and items[item_no][11]==0 and items[item_no][12]==0:
-        ret=items[item_no][10]
-    elif  items[item_no][10]==0 and items[item_no][11]==0 and items[item_no][12]==0:
-        ret=items[item_no][9]
-    else:
-        place="error"
-    return ret
+    try:
+        if  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][11]==0:
+            ret=items[item_no][12]
+        elif  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][12]==0:
+            ret=items[item_no][11]
+        elif  items[item_no][9]==0 and items[item_no][11]==0 and items[item_no][12]==0:
+            ret=items[item_no][10]
+        elif  items[item_no][10]==0 and items[item_no][11]==0 and items[item_no][12]==0:
+            ret=items[item_no][9]
+        else:
+            ret="error"
+        return ret
+    except:
+        print("Tried to load too many items")
 
 def places(items, item_no):
-    if  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][11]==0:
-        place="X"
-    elif  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][12]==0:
-        place="L"
-    elif  items[item_no][9]==0 and items[item_no][11]==0 and items[item_no][12]==0:
-        place="M"
-    elif  items[item_no][10]==0 and items[item_no][11]==0 and items[item_no][12]==0:
-        place="S"
-    else:
-        place="error"
-    return place
+    try:
+        if  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][11]==0:
+            place="X"
+        elif  items[item_no][9]==0 and items[item_no][10]==0 and items[item_no][12]==0:
+            place="L"
+        elif  items[item_no][9]==0 and items[item_no][11]==0 and items[item_no][12]==0:
+            place="M"
+        elif  items[item_no][10]==0 and items[item_no][11]==0 and items[item_no][12]==0:
+            place="S"
+        else:
+            place="error"
+        return place
+    except:
+        print("Tried to load too many items")
 
 def equipItem(obj, name, pequip):
     global armour, weapons
@@ -1378,7 +1384,7 @@ shop = []
 items=[warrior_basic_armour,warrior_medium_armour,warrior_strong_armour,warrior_elite_armour,warrior_ultimate_armour,mage_basic_armour,mage_medium_armour,mage_strong_armour,mage_ultimate_armour,paladin_basic_armour,paladin_medium_armour,paladin_strong_armour,paladin_elite_armour,paladin_ultimate_armour,necromancer_basic_armour,necromancer_medium_armour,necromancer_strong_armour,necromancer_elite_armour,necromancer_ultimate_armour,barbarian_basic_armour,barbarian_medium_armour,barbarian_strong_armour,barbarian_elite_armour,barbarian_ultimate_armour,lancer_basic_armour,lancer_medium_armour,lancer_strong_armour,lancer_elite_armour,lancer_ultimate_armour,archer_basic_armour,archer_medium_armour,archer_strong_armour,archer_elite_armour,archer_ultimate_armour,warrior_basic_weapon,warrior_medium_weapon,warrior_strong_weapon,warrior_elite_weapon,warrior_ultimate_weapon,mage_basic_weapon,mage_medium_weapon,mage_strong_weapon,mage_elite_weapon,mage_ultimate_weapon] #maximum defininf length
 items2=[warrior_spiked_armour,warrior_enchanted_armour,warrior_stone_armour,warrior_simple_armour,warrior_old_iron_armour,mage_magic_armour,mage_power_armour,mage_dex_armour,mage_oneshotarmour,mage_chaos_armour,paladin_grace_armour,paladin_blessed_armour,paladin_the_wall,paladin_steel_armour,paladin_shield_armour,necromancer_dark_cloak,necromancer_wraith_armour,necromancer_black_armour,necromancer_black_steel_armour,necromancer_ghost_armour,barbarian_endurance_armour,barbarian_flame_armour,barbarian_hard_leather_armour,barbarian_white_steel_armour,barbarian_brass_armour,lancer_speed_armour,lancer_protection_armour,lancer_woven_armour,lancer_ice_armour,lancer_white_iron_armour,archer_frost_armour,archer_agility_armour,archer_ash_armour,archer_frost_armour,archer_black_leather_armour,samurai_daredevil_armour,samurai_sakaretsu_armour,samurai_emperor_armour,samurai_ronin_armour,samurai_ebon_armour,samurai_blue_armour,samurai_orange_armour,samurai_green_armour]
 items3=[samurai_yellow_armour,samurai_red_armour,samurai_battle_worn_armour,ninja_light_kyu_gi,ninja_heavy_kyu_gi,ninja_light_dan_gi,ninja_heavy_dan_gi,ninja_darkness_armour,ninja_cloth_armour,warrior_cleaver,warrior_voltsword,warrior_balanced_sword,warrior_goddess_sword,warrior_sword_of_winds,warrior_sword_of_ages,warrior_silver_sword,mage_weaving_wand,mage_dragon_wand,mage_serpent_wand,mage_one_shot_wand,mage_blue_wand,mage_corrupted_wand,mage_apocalypse_wand,paladin_light_hammer,paladin_lightbringer,paladin_hammer_of_dawn,paladin_holy_axe,paladin_life_hammer,paladin_heavy_hammer,paladin_hammer_of_judgement,necromancer_dark_shield,necromancer_shadow_blade,necromancer_crystal_ball,necromancer_black_staff,necromancer_dimension_blade,necromancer_bone_staff,necromancer_night_staff,barbarian_dragon_sword,barbarian_bloodaxe,barbarian_battle_axe,barbarian_twin_axe,barbarian_hammer,barbarian_dragon_blade,barbarian_hatchets,lancer_trident,lancer_glaive]
-items4=[lancer_spear,lancer_sting,lancer_conquest_lance,lancer_war_lance,lancer_famine_lance,lancer_death_lance,lancer_oni_lance,archer_crossbow,archer_strong_bow,archer_hunters_bow,archer_hermes_bow,archer_explosive_bow,archer_black_bow,archer_greatbow,archer_shotgun,samurai_dark_katana,samurai_light_katanai,samurai_gold_katana,samurai_yari,samurai_wakizashi,samurai_naginata,samurai_aluminium_katana,ninja_jo_staff,ninja_bo_staff,ninja_extended_bo_staff,ninja_surikens,ninja_kunai,ninja_dagger,ninja_tashi]
+items4=[lancer_spear,lancer_sting,lancer_conquest_lance,lancer_war_lance,lancer_famine_lance,lancer_death_lance,lancer_oni_lance,archer_crossbow,archer_strong_bow,archer_hunters_bow,archer_hermes_bow,archer_explosive_bow,archer_black_bow,archer_greatbow,archer_shotgun,samurai_dark_katana,samurai_light_katana,samurai_gold_katana,samurai_yari,samurai_wakizashi,samurai_naginata,samurai_aluminium_katana,ninja_jo_staff,ninja_bo_staff,ninja_extended_bo_staff,ninja_surikens,ninja_kunai,ninja_dagger,ninja_tashi]
 items.extend(items2)
 items.extend(items3)
 items.extend(items4)
