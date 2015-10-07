@@ -16,9 +16,9 @@ line5=f.readline() #internal editor value
 line6=f.readline() #buttons header
 line7=f.readline() #buttons value
 line8=f.readline() #combat header
-line9=f.readline() #combat value'
+line9=f.readline() #combat value
 if int(line5)==1:
-    print("Enternal editor enabled")
+    print("Internal editor enabled")
     internal_editor=TRUE
 else:
     internal_editor=FALSE
@@ -69,7 +69,7 @@ class textures():
         x = 0
         y = 0
 
-    class loadigTexture():
+    class loadingTexture():
         def __init__(self):
             self.x = 0
             self.y = 0
@@ -120,7 +120,7 @@ def collision_detection(playert_x, playert_y,player):
 name = "x"
 global combatover
 class darkness:
-    magnus = [100,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",60,1,0,0,0]
+    magnus = [100,25,15,30,20,["The Sword of Darkness",20],["The Armour of Despair",30],"Magnus, Captain of Despair",60,1,0,0,0]
 
 #list of classes and stats
 #vitality, endurance dexterity, intelligence, strength, weapon, auramor, name, exp, small orb, medium orb, large orb, mega orb, x cor, y cor, area
@@ -146,7 +146,7 @@ ninja = [30,20,150,20,30,["Short sword",15],["Kimono",5],name,[0,20,1],10,0,0,0,
 classes = ["Warrior","Mage","Paladin","Necromancer","Barbarian","Lancer","Archer","Samurai","Ninja"]
 #Tester weapons
 sakaretsu_armour = [50,30,20,0,"Sakaretsu armour",8,1,"Armour that increases offensive capability",0,0,10,0,0]
-simple_katanna = [60,0,0,0,"Katanna",8,0,"In the right hands this weapon is as deadly as any blade",0,60,0,0,0]
+simple_katana = [60,0,0,0,"Katana",8,0,"In the right hands this weapon is as deadly as any blade",0,60,0,0,0]
 
 def type_select(player_class):
     global player
@@ -180,8 +180,8 @@ def type_select(player_class):
             player = ninja
             image = pygame.image.load(os.path.join("textures","necromancer.png"))
     else:
-            ctypes.windll.user32.MessageBoxW(0, "Error - player class entered or loaded incorectly. You will now be promted to enter your name & player class", "error", 0)
-            print("Error - player class entered incorectly")
+            ctypes.windll.user32.MessageBoxW(0, "Error - player class entered or loaded incorrectly. You will now be promted to enter your name & player class", "error", 0)
+            print("Error - Player class entered incorectly.")
             player = "error"
             while player == "error":
                 classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
@@ -280,7 +280,7 @@ def statsetup (darkness,sakaretsu_armour,simple_katanna):
         pdex = player[2]
         pint = player[3]
         pstr = player[4]
-        pw = simple_katanna
+        pw = simple_katana
         pa = sakaretsu_armour
         return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
 
@@ -290,7 +290,7 @@ def enemyturn ():
     global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
     echoice = random.randint(1,2)
     if echoice == 1:
-        print("The enemy attacks you")
+        print("The enemy attacks you.")
         enemyhit = estr - (pend+pa[1])
         ehit = edex*random.randint(1,4) - pdex
         if ehit < 0:
@@ -301,7 +301,7 @@ def enemyturn ():
                     print("You died")
                     combatover = True
             if enemyhit <= 0:
-                print("The enemy does no damage")
+                print("The enemy does no damage.")
         else:
             print("the enemy misses")
     else:
@@ -352,7 +352,7 @@ def playerturn(player,darkness):
     weapons = "sword"
 #-------------------------------------------------------------------------------
     print("Choose your action:")
-    print("attack spell run")
+    print("attack, spell or run")
     if buttons==TRUE:
         app = app_()
         #things before button is pressed
@@ -426,7 +426,7 @@ def turn (player,darkness):
                     if ehp > 0:
                         enemyturn()
                     else:
-                        print("The enemy is slain")
+                        print("The enemy has been slain")
                         player[8][1] = player[8][1] + exp
                         levelupcheck()
                         combatover = True
