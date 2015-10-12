@@ -18,7 +18,7 @@
 11.3.mega_orbs
 """
 class darkness:
-	magnus = [10,25,15,30,20["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",20,1,0,0,0]
+	magnus = [10,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",20,1,0,0,0]
 class water:
 	sea_horse = [15,10,60,9001,0,["splash",0],["sea_weed",10],"Sea Horse",10,0,1,0,0]
 	dolphin = [20,50,30,80,40,["tail",30],["fish bone exoskeleton",20],"Dolphin",40,0,1,0,0]
