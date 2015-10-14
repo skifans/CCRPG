@@ -30,14 +30,18 @@ elif int(line7)==0:
 else:
     print("There was an error reading the options file - buttons have been enabled.")
     buttons=FALSE
-if int(line9)==0:
-    combat_on=0 #off
-elif int(line9)==1:
-    combat_on=1 #on
-else:
+try:
+    if int(line9)==0:
+        combat_on=0 #off
+    elif int(line9)==1:
+        combat_on=1 #on
+    else:
+        print("There was an error reading the options file - combat has been enabled.")
+        combat_on=1
+    f.close()
+except:
     print("There was an error reading the options file - combat has been enabled.")
     combat_on=1
-f.close()
 
 #Colour Grid
 WHITE     = (255, 255, 255)
