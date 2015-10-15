@@ -1140,7 +1140,7 @@ mage_ultimate_armour = [0,300,0,200,"ethereal cloak",2,1,"cloak of a magical eth
 
 paladin_basic_armour = [0,50,0,0,"basic paladin armour",3,1,"basic armour for beginners",0,30,0,0,0]
 paladin_medium_armour = [0,65,0,0,"medium paladin armour",3,1,"better armour for the more experienced",0,45,0,0,0]
-paladin_strong_armour = [0,100,0,"strong paladin armour",3,1,"very good quality armour",0,70,0,0,0]
+paladin_strong_armour = [0,100,0,0,"strong paladin armour",3,1,"very good quality armour",0,70,0,0,0]
 paladin_elite_armour = [0,150,0,0,"elite paladin armour",3,1,"elite armour of a great quality",0,0,10,0,0]
 paladin_ultimate_armour = [0,600,0,0,"golden armour",3,1,"not really made of gold, that would be expensive an impractical",0,0,0,5,0]
 
