@@ -1306,14 +1306,14 @@ warrior_voltsword = [240,0,160,0,"the voltblade",1,0,"a sword imbued with electr
 warrior_balanced_sword = [30,30,30,30,"balanced blade",1,0,"this blade is made with perfect balance in all things",0,120,0,0,0]
 warrior_goddess_sword = [35,15,0,0,"goddess blade",1,0,"a sword of a goddess who sacrificed her powers to become human",0,50,0,0,0]
 warrior_sword_of_winds = [15,35,0,0,"sword of winds",1,0,"an ancient sword with a faint airy power",0,50,0,0,0]
-warrior_sword_of_ages = [15,0,0,35,"sword of ages",1,0,"a sword from a land warped by time",0,50,0,0,0,]
+warrior_sword_of_ages = [15,0,0,35,"sword of ages",1,0,"a sword from a land warped by time",0,50,0,0,0]
 warrior_silver_sword = [1000,0,1000,0,"silver sword",1,0,"a sword that once belonged to a knight who could defend his city against anyone",0,0,0,20,0]
 
 mage_weaving_wand = [70,0,30,100,"weaving wand",2,0,"for the mage who wishes to weave in attacks between spells",0,0,20,0,0]
 mage_dragon_wand = [0,0,100,300,"dragon wand",2,0,"a wand made from dragon bones",0,0,40,0,0]
 mage_serpent_wand = [0,0,200,500,"serpent wand",2,0,"a wand the fires spells as fast as a viper, and has the deadliness to match",1,0,70,0,0]
 mage_one_shot_wand = [0,0,0,750,"one shot wand",2,0,"a wand that is designed to kill an enemy quickly",0,0,75,0,0]
-mage_blue_wand = [200,150,150,0,"blue wand",2,0,"a wand taken from a blue eyed monster",0,0,0,5,0,]
+mage_blue_wand = [200,150,150,0,"blue wand",2,0,"a wand taken from a blue eyed monster",0,0,0,5,0]
 mage_corrupted_wand = [0,0,50,100,"corrupted wand",2,0,"a wand touched by a strange power",0,150,0,0,0]
 mage_apocalypse_wand = [0,0,500,1500,"apocalypse wand",2,0,"a wand with insane power",0,0,0,20,0]
 
