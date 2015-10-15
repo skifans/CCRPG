@@ -30,14 +30,20 @@ elif int(line7)==0:
 else:
     print("There was an error reading the options file - buttons have been enabled.")
     buttons=FALSE
-if int(line9)==0:
-    combat_on=0 #off
-elif int(line9)==1:
-    combat_on=1 #on
-else:
+try:
+   if int(line9)==0:
+        combat_on=0 #off
+    elif int(line9)==1:
+        combat_on=1 #on
+    else:
+        print("There was an error reading the options file - combat has been enabled.")
+       combat_on=1
+    f.close()
+except:
     print("There was an error reading the options file - combat has been enabled.")
     combat_on=1
-f.close()
+
+ename = None
 
 #Colour Grid
 WHITE     = (255, 255, 255)
@@ -262,18 +268,36 @@ def levelupcheck():
     print("Strength " + str(player[4]))
     return
 # the enemy arrays
-enemy1 = [darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus,darkness.magnus]
+enemy1 = [
+    [10,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",20,1,0,0,0]
+    [15,10,60,9001,0,["splash",0],["sea_weed",10],"Sea Horse",10,0,1,0,0]
+    [20,50,30,80,40,["tail",30],["fish bone exoskeleton",20],"Dolphin",40,0,1,0,0]
+    [10,25,15,30,20,["flipper",15],["scales",10],"Fish",20,1,0,0,0]
+    [40,60,30,10,80,["Teeth",50],["Dolphin bone exoskeleton",40],"Shark",80,0,2,0,0]
+    [80,70,30,40,90,["shark", 80],["Shark bone exoskeleton",60],"Whale",120,0,0,1,0]
+    [30,30,40,60,10,["Staff of water", 20],["shark bone exoskeleton",30],"Water wizard",100,0,3,0,0]
+    [80,80,20,10,50,["Branch",20],["Bark",40],"Tree",70,0,3,0,0]
+    [60,60,80,120,20,["Staff of earth", 40],["Rocks",30],"Earth wizard",200,0,6,0,0]
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
+    [90,90,120,180,30,["Staff of fire", 20],["magma",50],"Fire wizard",300,0,9,0,0]
+    [120,120,160,240,40,["Staff of winds", 20],["Air currents",30],"Air wizard",400,0,12,0,0]
+    [150,150,200,300,40,["Staff of light", 20],["Holy light",30],"Priest",500,0,15,0,0]
+        ]
+
 def statsetup (darkness,sakaretsu_armour,simple_katanna):
     global player
     if player[15] == 1:
-        enemy = enemy1[random.randint(0,5)]
-        global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp
+        enemy = enemy1[random.randint(0,12)]
+        global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp,ename
         print("A new enemy approches \n")
         ehp = enemy[0]
         eend = enemy[1]
         edex = enemy[2]
         eint = enemy[3]
         estr = enemy[4]
+        ename = enemy[7]
         exp = enemy[8]
         php = player[0]
         pend = player[1]
@@ -282,30 +306,31 @@ def statsetup (darkness,sakaretsu_armour,simple_katanna):
         pstr = player[4]
         pw = simple_katana
         pa = sakaretsu_armour
-        return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+        return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,ename
 
 # defining the function for the enemy turn
 def enemyturn ():
     global combatover
-    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa
+    global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,ename
     echoice = random.randint(1,2)
+    e = ename
     if echoice == 1:
-        print("The enemy attacks you.")
+        print(e " attacks you.")
         enemyhit = estr - (pend+pa[1])
         ehit = edex*random.randint(1,4) - pdex
         if ehit < 0:
             if enemyhit > 0:
                 php = php - enemyhit
-                print("the enemy hits you for "+ str(enemyhit))
+                print(e "hits you for "+ str(enemyhit))
                 if php <= 0:
                     print("You died")
                     combatover = True
             if enemyhit <= 0:
-                print("The enemy does no damage.")
+                print(e " does no damage.")
         else:
-            print("the enemy misses")
+            print(e " misses")
     else:
-        print("The enemy tries to cast a spell!")
+        print(e " tries to cast a spell!")
         print("It fails!")
 #-------------------------------------------------------------------------------
 def spell_image_blue_puff():
