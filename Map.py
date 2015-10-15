@@ -1365,7 +1365,7 @@ samurai_light_katana = [200,100,100,0,"light katana",8,0,"a katana that emits a 
 samurai_gold_katana = [30,10,30,0,"golden katana",8,0,"a katana made of gold",0,70,0,0,0]
 samurai_yari = [90,0,60,0,"yari",8,0,"a spear with a larger balde, for samurais",0,150,0,0,0]
 samurai_wakizashi = [250,0,250,0,"wakizashi",8,0,"a shortened katana for quicker strikes",0,0,50,0,0]
-samurai_naginata = [200,0,200,"naginata",8,0,"a curved blade on a polearm, for samurais",0,0,40,0,0]
+samurai_naginata = [200,0,200,0,"naginata",8,0,"a curved blade on a polearm, for samurais",0,0,40,0,0]
 samurai_aluminium_katana = [1000,500,1500,0,"aluminium katana",8,0,"a katana made from magically enhanced aluminium, in respect to a famed samurai",0,0,0,30,0]
 
 ninja_jo_staff = [50,50,100,0,"jo staff",9,0,"a short staff for ninjas",0,0,20,0,0]
