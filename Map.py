@@ -6,6 +6,7 @@ import tkinter.tix as tix
 
 #Read options from .ini
 f = open("options.ini","r")
+f.seek(0)
 line1=f.readline() #options header
 line2=f.readline() #cellsize line
 line3=f.readline() #cellsize value
@@ -17,6 +18,8 @@ line6=f.readline() #buttons header
 line7=f.readline() #buttons value
 line8=f.readline() #combat header
 line9=f.readline() #combat value
+#line10=int(f.readline()) #print header
+#line11=int(f.readline()) #print value
 if int(line5)==1:
     print("Internal editor enabled")
     internal_editor=TRUE
@@ -31,17 +34,22 @@ else:
     print("There was an error reading the options file - buttons have been enabled.")
     buttons=FALSE
 try:
-   if int(line9)==0:
+    if int(line9)==0:
         combat_on=0 #off
     elif int(line9)==1:
         combat_on=1 #on
     else:
         print("There was an error reading the options file - combat has been enabled.")
-       combat_on=1
+        combat_on=1
     f.close()
 except:
     print("There was an error reading the options file - combat has been enabled.")
     combat_on=1
+
+#if line11 == 0:
+pr1nt = True
+#else:
+    #pr1nt = False
 
 ename = None
 
@@ -65,6 +73,13 @@ assert windowHeight % cellSize == 0
 assert windowWidth % cellSize == 0
 cellWidth = int(windowWidth / cellSize)
 cellHeight = int(windowHeight / cellSize)
+def p(message):
+    global player
+    """Printing function"""
+    if pr1nt == True:
+        print(str(message))
+    else:
+        debug(message,player)
 
 pygame.init()
 screen=pygame.display.set_mode((0,0))
@@ -97,6 +112,7 @@ def terminate():
 #anything in this function will be done each time the playert moves - regardless if direction
 boss_list=[[20,40,60],[20,40,60],[0,1,1],[0,1,2]]
 def after_movement(playert_x, playert_y, boss_list):
+    global php
     #x of boss, y of boss, 0 = one time only (the first time playert lands of square) or 1 = repeate (repeate regarless of how many times playert lands on square), boss ID
     if playert_x in boss_list[0]: #check if x of playert is contaiend in x section of array
         location_in_array=boss_list[0].index(int(playert_x)) #if so then take the possition of that x value and save it
@@ -106,18 +122,21 @@ def after_movement(playert_x, playert_y, boss_list):
                 del boss_list[1][location_in_array]
                 del boss_list[2][location_in_array]
                 del boss_list[3][location_in_array]
-            print("boss square triggered")
+            p("boss square triggered")
             combat()
     espawn = random.randint(1,20)
     if espawn == 1:
         combat()
+    if playert_x==40 and playert_y==40: #healing square
+        p(message="php:"+str(php))
+        php=player[0]
 
 def collision_detection(playert_x, playert_y,player):
     playert_position = str((playert_x, playert_y,player[15]))
     cannot_go_onto = open("Blocked.txt").read().splitlines()
-    print(cannot_go_onto)
+    p(cannot_go_onto)
     if playert_position in cannot_go_onto:
-        print("collision detection")
+        p("collision detection")
         return False
     return True
 
@@ -127,6 +146,7 @@ name = "x"
 global combatover
 class darkness:
     magnus = [100,25,15,30,20,["The Sword of Darkness",20],["The Armour of Despair",30],"Magnus, Captain of Despair",60,1,0,0,0]
+    boss = [1000000,25000,1500,300,2000,["The Trident of Destruction",10000],["The Dark Ore Armor",20000],"Galvador. The dark flame",200,1,0,0,5]
 
 #list of classes and stats
 #vitality, endurance dexterity, intelligence, strength, weapon, auramor, name, exp, small orb, medium orb, large orb, mega orb, x cor, y cor, area
@@ -219,8 +239,8 @@ def levelupcheck():
         multi = player[8][2] + 1
         player[8][1] = player[8][1] + (40 * multi)
 
-        print("You leveled up!")
-        print("You are now level ",player[8][2] )
+        p("You leveled up!")
+        p(message="You are now level "+str(player[8][2]))
         if player == warrior:
             player[0] += statmulti+5
             player[4] += statmulti+5
@@ -269,29 +289,29 @@ def levelupcheck():
     return
 # the enemy arrays
 enemy1 = [
-    [10,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",20,1,0,0,0]
-    [15,10,60,9001,0,["splash",0],["sea_weed",10],"Sea Horse",10,0,1,0,0]
-    [20,50,30,80,40,["tail",30],["fish bone exoskeleton",20],"Dolphin",40,0,1,0,0]
-    [10,25,15,30,20,["flipper",15],["scales",10],"Fish",20,1,0,0,0]
-    [40,60,30,10,80,["Teeth",50],["Dolphin bone exoskeleton",40],"Shark",80,0,2,0,0]
-    [80,70,30,40,90,["shark", 80],["Shark bone exoskeleton",60],"Whale",120,0,0,1,0]
-    [30,30,40,60,10,["Staff of water", 20],["shark bone exoskeleton",30],"Water wizard",100,0,3,0,0]
-    [80,80,20,10,50,["Branch",20],["Bark",40],"Tree",70,0,3,0,0]
-    [60,60,80,120,20,["Staff of earth", 40],["Rocks",30],"Earth wizard",200,0,6,0,0]
-    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
-    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
-    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0]
-    [90,90,120,180,30,["Staff of fire", 20],["magma",50],"Fire wizard",300,0,9,0,0]
-    [120,120,160,240,40,["Staff of winds", 20],["Air currents",30],"Air wizard",400,0,12,0,0]
-    [150,150,200,300,40,["Staff of light", 20],["Holy light",30],"Priest",500,0,15,0,0]
+    [10,25,15,30,20,["The sword of darkness",20],["The armour of despair",30],"Magnus, captain of despair",20,1,0,0,0],
+    [15,10,60,9001,0,["splash",0],["sea_weed",10],"Sea Horse",10,0,1,0,0],
+    [20,50,30,80,40,["tail",30],["fish bone exoskeleton",20],"Dolphin",40,0,1,0,0],
+    [10,25,15,30,20,["flipper",15],["scales",10],"Fish",20,1,0,0,0],
+    [40,60,30,10,80,["Teeth",50],["Dolphin bone exoskeleton",40],"Shark",80,0,2,0,0],
+    [80,70,30,40,90,["shark", 80],["Shark bone exoskeleton",60],"Whale",120,0,0,1,0],
+    [30,30,40,60,10,["Staff of water", 20],["shark bone exoskeleton",30],"Water wizard",100,0,3,0,0],
+    [80,80,20,10,50,["Branch",20],["Bark",40],"Tree",70,0,3,0,0],
+    [60,60,80,120,20,["Staff of earth", 40],["Rocks",30],"Earth wizard",200,0,6,0,0],
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0],
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0],
+    [30,20,60,10,40,["fire wings",30],["Fire!!!",20],"Fire bat",40,0,5,0,0],
+    [90,90,120,180,30,["Staff of fire", 20],["magma",50],"Fire wizard",300,0,9,0,0],
+    [120,120,160,240,40,["Staff of winds", 20],["Air currents",30],"Air wizard",400,0,12,0,0],
+    [150,150,200,300,40,["Staff of light", 20],["Holy light",30],"Priest",500,0,15,0,0],
         ]
 
-def statsetup (darkness,sakaretsu_armour,simple_katanna):
+def statsetup (darkness,sakaretsu_armour,simple_katana):
     global player
     if player[15] == 1:
         enemy = enemy1[random.randint(0,12)]
         global ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,exp,ename
-        print("A new enemy approches \n")
+        p("A new enemy approches \n")
         ehp = enemy[0]
         eend = enemy[1]
         edex = enemy[2]
@@ -315,23 +335,23 @@ def enemyturn ():
     echoice = random.randint(1,2)
     e = ename
     if echoice == 1:
-        print(e " attacks you.")
+        p(message=str(e)+" attacks you.")
         enemyhit = estr - (pend+pa[1])
         ehit = edex*random.randint(1,4) - pdex
         if ehit < 0:
             if enemyhit > 0:
                 php = php - enemyhit
-                print(e "hits you for "+ str(enemyhit))
+                p(e,"hits you for "+ str(enemyhit))
                 if php <= 0:
-                    print("You died")
+                    p("You died")
                     combatover = True
             if enemyhit <= 0:
-                print(e " does no damage.")
+                p(message=str(e)+" does no damage.")
         else:
-            print(e " misses")
+            p(message=str(e)+" misses")
     else:
-        print(e " tries to cast a spell!")
-        print("It fails!")
+        p(message=str(e)+" tries to cast a spell!")
+        p("It fails!")
 #-------------------------------------------------------------------------------
 def spell_image_blue_puff():
     count = 1
@@ -376,8 +396,8 @@ def playerturn(player,darkness):
     spell = ["Blue fire", 1, 40]
     weapons = "sword"
 #-------------------------------------------------------------------------------
-    print("Choose your action:")
-    print("attack, spell or run")
+    p("Choose your action:")
+    p("attack, spell or run")
     if buttons==TRUE:
         app = app_()
         #things before button is pressed
@@ -400,24 +420,24 @@ def playerturn(player,darkness):
             else:
                 playerhit = pw[0]+pstr - eend
             if playerhit > 0:
-                print("You hit the enemy for " + str(playerhit) + " damage")
+                p("You hit the enemy for " + str(playerhit) + " damage")
                 ehp = ehp-playerhit
             else:
-                print("You do no damage")
+                p("You do no damage")
         else:
-            print("You miss")
+            p("You miss")
     elif pchoice == "spell":
 #-------------------------------------------------------------------------------
         spellgif(spell)
 #-------------------------------------------------------------------------------
-        print("You don't have any spells")
+        p("You don't have any spells")
     elif pchoice == "run":
-        print("You try to run")
+        p("You try to run")
         run = random.randint(1,10)
         if run < 3:
-            print("You fail to run away")
+            p("You fail to run away")
         if run > 3 or run==3:
-            print("You manage to run away")
+            p("You manage to run away")
             combatover = True
     else:
         print("Error - command not recognised")
@@ -430,7 +450,7 @@ def turn (player,darkness):
         print("You have " + str(php) + " health")
         print("The enemy has " + str(ehp) + "health")
         print("Choose your action:")
-        print("attack spell run")
+        p("attack spell run")
         pchoice = str(input())
         if pchoice == "attack":
             phit = pdex*random.randint(1,4) - edex
@@ -461,9 +481,9 @@ def turn (player,darkness):
                 print("You miss")
                 enemyturn()
         elif pchoice == "spell":
-            print("You don't have any spells")
+            p("You don't have any spells")
         elif pchoice == "run":
-            print("You try to run")
+            p("You try to run")
             run = random.randint(1,10)
             if run < 3:
                 print("You fail to run away")
@@ -475,19 +495,19 @@ def turn (player,darkness):
         if php > 0:
             playerturn(player,darkness)
             if ehp <= 0:
-                print("The enemy is slain")
+                p("The enemy is slain")
                 player[8][0] = player[8][0] + exp
                 levelupcheck()
                 combatover = True
         else:
-            print("You died")
+            p("You died")
             combatover = True
 #image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja) #un comment tp start set up (class ect. each time the game starts (before the menu))
 
 def combat():
     global combatover
     global player
-    statsetup (darkness,sakaretsu_armour,simple_katanna)
+    statsetup (darkness,sakaretsu_armour,simple_katana)
     no_combat=[2,3] #maps where combat will not be triggered
     if player[15] not in no_combat and combat_on==1:
         combatover = False
@@ -502,7 +522,7 @@ def combat():
         enemy = pygame.image.load(os.path.join("combat","enemy.gif")) #load image for enemy
         screen.blit(enemy, (500,100)) #place this at (500,100)
         pygame.display.flip() #update screen
-        statsetup(darkness, sakaretsu_armour,simple_katanna)
+        statsetup(darkness, sakaretsu_armour,simple_katana)
         while combatover == False:
             turn (player,darkness)
         map_name="map"+str(player[15])+".gif"
@@ -618,7 +638,7 @@ def new_map(direction, playert):
         img=pygame.image.load(image_path)
         #screen=pygame.display.set_mode((0,0))
         screen.blit(img,(0,0))
-    print("area",str(player[15]))
+    p("area",str(player[15]))
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 #funtion to display text
 def text_objects(text, font, colour):
@@ -637,7 +657,7 @@ def message_display(text, x, y, font_size, colour):
 def button(msg,x,y,w,h,inactive_colour,active_colour,text_colour,name_of_function_to_call_when_clicked):
     click = pygame.mouse.get_pressed() #get mouse state (clicked/not clicked)
     mouse = pygame.mouse.get_pos() #get mouse coords
-    print("mouse2",mouse)
+    p(message="mouse2"+str(mouse))
     if x+w > mouse[0] > x and y+h > mouse[1] > y: #check if mouse is on button
         pygame.draw.rect(screen, active_colour,(x,y,w,h)) #change to active colour
         if click[0] == 1: #check click (above if checks mouse is on button)
@@ -669,7 +689,7 @@ def pause():
             elif event.type==KEYDOWN:
                 if key[pygame.K_p]:
                     pause=FALSE
-                    print("unpasued")
+                    p("unpasued")
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 #menu function
 global menu
@@ -802,9 +822,9 @@ def load():
     def print_selected(args):
         global playert, player, image, player_class, money
         money=[]
-        print('selected dir:', args) #print selected save
+        p(message='selected dir:'+str(args)) #print selected save
         folder=args.split("/")
-        print("folder: ",folder[-1])
+        p(message="folder: "+str(folder[-1]))
 
         f = open(os.path.join(args,"location.txt"),"r")
         location=f.readlines() #becomes an array, item 0 corosponds to line 1. Note that each item includes \n
@@ -876,8 +896,8 @@ def load():
         map_name="map"+str(player[15])+".gif" #add back background after file is selected
         background = pygame.image.load(os.path.join("textures",map_name))
         screen.blit(background, (0,0))
-        print(location)
-        print("image",player_class)
+        p(location)
+        p(message="image"+player_class)
         menu_close()
         pygame.display.flip()
         root.destroy()
@@ -1012,7 +1032,7 @@ def amount(items, item_no):
             ret="error"
         return ret
     except:
-        print("Tried to load too many items")
+        p("Tried to load too many items")
 
 def places(items, item_no):
     try:
@@ -1490,7 +1510,7 @@ while running:
             if key[pygame.K_DOWN] or key[pygame.K_s]:
                 movment_ok=collision_detection(playert.x,playert.y+cellSize,player)
                 if movment_ok==False:
-                    print("collision")
+                    p("collision")
                 else:
                     if playert.y!=580: #if play isnt at top of level
                         playert.y += cellSize
@@ -1502,7 +1522,7 @@ while running:
             elif key[pygame.K_UP] or key[pygame.K_w]:
                 movment_ok=collision_detection(playert.x,playert.y-cellSize,player)
                 if movment_ok==False:
-                    print("collision")
+                    p("collision")
                 else:
                     if playert.y!=0: #if play isnt at top of level
                         playert.y -= cellSize
@@ -1514,7 +1534,7 @@ while running:
             elif key[pygame.K_RIGHT] or key[pygame.K_d]:
                 movment_ok=collision_detection(playert.x+cellSize,playert.y,player)
                 if movment_ok==False:
-                    print("collision")
+                    p("collision")
                 else:
                     if playert.x!=780: #if play isnt on the right most map
                         playert.x += cellSize
@@ -1526,7 +1546,7 @@ while running:
             elif key[pygame.K_LEFT] or key[pygame.K_a]:
                 movment_ok=collision_detection(playert.x-cellSize,playert.y,player)
                 if movment_ok==False:
-                    print("collision")
+                    p("collision")
                 else:
                     if playert.x!=0: #if play isnt on the left most map
                         playert.x -= cellSize
@@ -1535,7 +1555,7 @@ while running:
                         new_map("left",playert) #load new map
                         playert.x=780 #move player to right for new map
             elif key[pygame.K_p]:
-                print("paused")
+                p("paused")
                 pause()
                 map_name="map"+str(player[15])+".gif" #add back background after unpaused
                 background = pygame.image.load(os.path.join("textures",map_name))
@@ -1748,4 +1768,4 @@ while running:
                     f.write(str(to_write))
                     f.write("\n")
                     f.close()
-                    print("added to blakced square list")
+                    p("added to blocked square list")
