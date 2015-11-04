@@ -431,6 +431,63 @@ def playerturn(player,darkness):
         spellgif(spell)
 #-------------------------------------------------------------------------------
         p("You don't have any spells")
+    elif pchoice ==  "item":
+            inuput=('what item do you want')
+            if input=='berserkers_band' and berserkers_band in items:
+                pstr=pstr+250
+                pa=pa-50
+            if input=='priest_band' and priest_band in items:
+                randomthingy=random.randint(-20,80)
+                php=php+randomthingy
+            if input=='fire_gem_ciclet' and fire_gem_circlet in items:
+                pdex=pdex+50
+                pint=pint+150
+            if input=='major_ring' and major_ring in items:
+                pstr=pstr+50
+                pa=pa+50
+                pdex=pdex+50
+                pint=pint+50
+                print('its over 9000')
+            if input=='binding_cranium_crab' and binding_cranium_crab in items:
+                edex=edex-27
+            if input=='swiss_army_claymore' and swiss_army_claymore in items:
+                pstr=pstr+200
+            if input=='arrow_target' and arrow_target:
+                pa=pa+57
+            if input=='overpowered_stick' and overpowered_stick in items:
+                pstr=pstr+1000
+                pa=pa+1000
+                pdex=pdex+1000
+                pint=pint+1000
+                items.remove(overpowered_stick)
+            if input=='boss_sheild' and boss_sheild in items:
+                estr=estr-50
+            if input=='sleepy_stick' and sleepy_stick in items:
+                vairable1=random.randint(1,10)
+                if vairable1==1:
+                    estr=0
+                    print('your enemy is sleeping')
+                else:
+                    print('it does not work')
+            if input=='lol' and lol items:
+                print('lol')
+            if input=='necrotic_bone' and necrotic_bone in items:
+                ehp=ehp+50
+            if input=='ring_of_random_change' and ring_of_random_change in items:
+                vairable1=randint(0,4)
+                if vairable1==0:
+                    ehp=0
+                    print('congratulations, it killed your enemy!!!!!!!!!!')
+                if vairable1==1:
+                    php=php-50
+                    print('it did not work, you lost health')
+                if vairable1==2:
+                    pint=pint+50
+                    print('this was almost an itelligence pill')
+                else:
+                    print('congratulations, it did nothing at all')
+            if input=='mr_tiddles' and mr_tiddles in items:
+                pa=pa+50
     elif pchoice == "run":
         p("You try to run")
         run = random.randint(1,10)
