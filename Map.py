@@ -3,6 +3,8 @@ import pygame, random, time, os, ctypes, ast
 from pygame.locals import *
 from tkinter import *
 import tkinter.tix as tix
+import winsound
+winsound.PlaySound("first song.wav", winsound.SND_ALIAS |winsound.SND_ASYNC)
 
 #Read options from .ini
 f = open("options.ini","r")
@@ -328,6 +330,22 @@ def statsetup (darkness,sakaretsu_armour,simple_katana):
         pa = sakaretsu_armour
         return ehp,eend,edex,eint,estr,php,pend,pdex,pint,pstr,pw,pa,ename
 
+def spellcheck(player):
+    global ehp
+    if player_class == "lancer":
+                spell_power = random.randint(50,pdex+pstr)
+    elif player_class == "archer":
+                spell_power = randomm.randint(40,pdex+pstr/2)
+    elif player_class == "mage":
+                spell_power = random.randint(70,pint)
+    elif player_class == "ninja":
+        spell_power = pw[0]+pdex
+    elif player_class == "paladin":
+        spell_power = random.randint(0,pend)
+    else:
+        spell_power = randomm.randint(30,pint)
+    ehp = ehp - spell_power
+
 # defining the function for the enemy turn
 def enemyturn ():
     global combatover
@@ -341,7 +359,7 @@ def enemyturn ():
         if ehit < 0:
             if enemyhit > 0:
                 php = php - enemyhit
-                p(e,"hits you for "+ str(enemyhit))
+                p(message=str(e)+" hits you for "+ str(enemyhit))
                 if php <= 0:
                     p("You died")
                     combatover = True
@@ -356,30 +374,30 @@ def enemyturn ():
 def spell_image_blue_puff():
     count = 1
     for i in range(10):
-        battle_ground = pygame.image.load(os.path.join("Combat","spells","blue_puff","blue_puff_"+str(count)+".gif"))
+        #battle_ground = pygame.image.load(os.path.join("Combat","spells","blue_puff","blue_puff_"+str(count)+".gif"))
         count += 1
-        screen.blit(battle_ground, (300,150))
+        #screen.blit(battle_ground, (300,150))
         pygame.display.flip()
         time.sleep(.1)
-    battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
-    screen.blit(battle_ground, (300,150))
+    #battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
+    #screen.blit(battle_ground, (300,150))
     pygame.display.flip()
 
 def attack_image_sword():
     count = 1
     for i in range(20):
-        battle_ground = pygame.image.load(os.path.join("Combat","attacks","sword","sword_"+str(count)+".png"))
+        #battle_ground = pygame.image.load(os.path.join("Combat","attacks","sword","sword_"+str(count)+".png"))
         count += 1
-        screen.blit(battle_ground, (300,150))
+        #screen.blit(battle_ground, (300,150))
         pygame.display.flip()
         time.sleep(.02)
-    battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
-    screen.blit(battle_ground, (300,150))
+    #battle_ground = pygame.image.load(os.path.join("combat","LargewhiteTexture.gif")) #blank image for normal load
+    #screen.blit(battle_ground, (300,150))
     pygame.display.flip()
 
 def attackgif(weapons):
     if weapons == "sword":
-        #attack_image_sword() uncomented as I dont have the sword.png file
+        #attack_image_sword() comented as I dont have the sword.png file
         print("sword")
 
 def spellgif(spell):
@@ -427,67 +445,74 @@ def playerturn(player,darkness):
         else:
             p("You miss")
     elif pchoice == "spell":
+        spellcheck(player)
 #-------------------------------------------------------------------------------
         spellgif(spell)
 #-------------------------------------------------------------------------------
-        p("You don't have any spells")
+
+#p("You don't have any spells")
     elif pchoice ==  "item":
-            inuput=('what item do you want')
-            if input=='berserkers_band' and berserkers_band in items:
-                pstr=pstr+250
-                pa=pa-50
-            if input=='priest_band' and priest_band in items:
-                randomthingy=random.randint(-20,80)
-                php=php+randomthingy
-            if input=='fire_gem_ciclet' and fire_gem_circlet in items:
-                pdex=pdex+50
-                pint=pint+150
-            if input=='major_ring' and major_ring in items:
-                pstr=pstr+50
-                pa=pa+50
-                pdex=pdex+50
+        print(items)
+        itemchoice=input('what item do you want?')
+        if itemchoice=='berserkers_band' and berserkers_band in items:
+            pstr=pstr+250
+            pa=pa-50
+        elif itemchoice=='priest_band' and priest_band in items:
+            randomthingy=random.randint(-20,80)
+            php=php+randomthingy
+        elif itemchoice=='fire_gem_ciclet' and fire_gem_circlet in items:
+            pdex=pdex+50
+            pint=pint+150
+        elif itemchoice=='major_ring' and major_ring in items:
+            pstr=pstr+50
+            pa=pa+50
+            pdex=pdex+50
+            pint=pint+50
+            print('its over 9000')
+        elif itemchoice=='binding_cranium_crab' and binding_cranium_crab in items:
+            edex=edex-27
+        elif itemchoice=='swiss_army_claymore' and swiss_army_claymore in items:
+            pstr=pstr+200
+        elif itemchoice=='arrow_target' and arrow_target in items:
+            pa=pa+57
+        elif itemchoice=='overpowered_stick' and overpowered_stick in items:
+            pstr=pstr+1000
+            pa=pa+1000
+            pdex=pdex+1000
+            pint=pint+1000
+            items.remove(overpowered_stick)
+        elif itemchoice=='boss_sheild' and boss_sheild in items:
+            estr=estr-50
+        elif itemchoice=='sleepy_stick' and sleepy_stick in items:
+            vairable1=random.randint(1,10)
+            if vairable1==1:
+                estr=0
+                print('your enemy is sleeping')
+            else:
+                print('it does not work')
+        elif itemchoice=="lol" and lol in items:
+            print('lol')
+        elif itemchoice=='necrotic_bone' and necrotic_bone in items:
+            ehp=ehp+50
+        elif itemchoice=='ring_of_random_change' and ring_of_random_change in items:
+            vairable1=randint(0,4)
+            if vairable1==0:
+                ehp=0
+                print('congratulations, it killed your enemy!!!!!!!!!!')
+            elif vairable1==1:
+                php=php-50
+                print('it did not work, you lost health')
+            elif vairable1==2:
                 pint=pint+50
-                print('its over 9000')
-            if input=='binding_cranium_crab' and binding_cranium_crab in items:
-                edex=edex-27
-            if input=='swiss_army_claymore' and swiss_army_claymore in items:
-                pstr=pstr+200
-            if input=='arrow_target' and arrow_target:
-                pa=pa+57
-            if input=='overpowered_stick' and overpowered_stick in items:
-                pstr=pstr+1000
-                pa=pa+1000
-                pdex=pdex+1000
-                pint=pint+1000
-                items.remove(overpowered_stick)
-            if input=='boss_sheild' and boss_sheild in items:
-                estr=estr-50
-            if input=='sleepy_stick' and sleepy_stick in items:
-                vairable1=random.randint(1,10)
-                if vairable1==1:
-                    estr=0
-                    print('your enemy is sleeping')
-                else:
-                    print('it does not work')
-            if input=='lol' and lol items:
-                print('lol')
-            if input=='necrotic_bone' and necrotic_bone in items:
-                ehp=ehp+50
-            if input=='ring_of_random_change' and ring_of_random_change in items:
-                vairable1=randint(0,4)
-                if vairable1==0:
-                    ehp=0
-                    print('congratulations, it killed your enemy!!!!!!!!!!')
-                if vairable1==1:
-                    php=php-50
-                    print('it did not work, you lost health')
-                if vairable1==2:
-                    pint=pint+50
-                    print('this was almost an itelligence pill')
-                else:
-                    print('congratulations, it did nothing at all')
-            if input=='mr_tiddles' and mr_tiddles in items:
-                pa=pa+50
+                print('this was almost an itelligence pill')
+            else:
+                print('congratulations, it did nothing at all')
+        elif itemchoice=='mr_tiddles' and mr_tiddles in items:
+            pa=pa+50
+        else:
+            p("Either you do not own this item or you entered its name incorectly")
+
+        #p("You don't have any spells")
     elif pchoice == "run":
         p("You try to run")
         run = random.randint(1,10)
@@ -538,7 +563,7 @@ def turn (player,darkness):
                 print("You miss")
                 enemyturn()
         elif pchoice == "spell":
-            p("You don't have any spells")
+            spellcheck(player)
         elif pchoice == "run":
             p("You try to run")
             run = random.randint(1,10)
@@ -609,6 +634,13 @@ def app_():
             print("Attack")
             pchoice="attack"
             root.destroy()
+
+        def say_hi3(self):
+            global pchoice
+            print("Item")
+            pchoice="item"
+            root.destroy()
+
         def createWidgets(self):
             self.run = Button(self)
             self.run["text"] = "Run",
@@ -625,6 +657,12 @@ def app_():
             self.attack = Button(self)
             self.attack["text"] = "Attack",
             self.attack["command"] = self.say_hi2
+
+            self.attack.pack({"side": "left"})
+
+            self.attack = Button(self)
+            self.attack["text"] = "Item",
+            self.attack["command"] = self.say_hi3
 
             self.attack.pack({"side": "left"})
 
@@ -695,7 +733,7 @@ def new_map(direction, playert):
         img=pygame.image.load(image_path)
         #screen=pygame.display.set_mode((0,0))
         screen.blit(img,(0,0))
-    p("area",str(player[15]))
+    p(message="area"&str(player[15]))
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 #funtion to display text
 def text_objects(text, font, colour):
@@ -758,7 +796,8 @@ def menu_close():
 def new_game():
     global menu1, image
     print("menu removed")
-    menu1=FALSE
+    #menu1=FALSE
+    menu_close()
     image=classselect(classes,lancer,archer,necromancer,warrior,mage,paladin,barbarian,samurai,ninja)
     save() #save a base copy of the game so that the deafult money and locations to load the save is created
 
@@ -816,7 +855,8 @@ def options():
         time.sleep(0.1)
 
 def save():
-    global player_class,mana,mana_use
+    global player_class,mana,mana_use, money
+    money=[]
     save_name=input("enter save name")
     filename = str(save_name)
     if not os.path.exists(os.path.join("Saves",filename)):
