@@ -31,3 +31,8 @@ FPSCLOCK = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
 pygame.display.set_caption('test')
+
+screen.fill(WHITE)
+time.sleep(2)
+pygame.quit()
+sys.exit()
