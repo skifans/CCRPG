@@ -1588,7 +1588,7 @@ clock = pygame.time.Clock()
 hight=3
 running=True
 start_menu()
-debug("game started",player)
+debug("game started", player)
 print(player)
 while running:
     for event in pygame.event.get():
@@ -1841,7 +1841,7 @@ while running:
                     if mana_use >= 10:
                         print(mana_use)
                         mana_use -= 10
-                        global player, map_number, mana, mana_use
+
                         map_number = 1
                         player[15] = 1
                         image_path="map"+str(player[15])+".gif"
