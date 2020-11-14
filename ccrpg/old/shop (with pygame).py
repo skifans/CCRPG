@@ -235,7 +235,7 @@ def pickUpItem(obj):
     if obj[5] == "clothing":
         clothing.insert(obj[4])
         print(pickUpMessage+obj[4] + ".")
-        return invent
+        return clothing
     elif obj[5] == 1:
         armour.append(obj)
         print(pickUpMessage+obj[4] + ".")
